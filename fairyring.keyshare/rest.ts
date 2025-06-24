@@ -724,25 +724,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryPubKey = (params: RequestParams = {}) =>
     this.request<
       {
-        active_pubkey?: {
-          public_key?: string;
+        activePubKey?: {
+          publicKey?: string;
           creator?: string;
           expiry?: string;
-          number_of_validators?: string;
-          encrypted_keyshares?: { data?: string; validator?: string }[];
+          numberOfValidators?: string;
+          encryptedKeyShares?: { data?: string; validator?: string }[];
         };
-        queued_pubkey?: {
-          public_key?: string;
+        queuedPubKey?: {
+          publicKey?: string;
           creator?: string;
           expiry?: string;
-          number_of_validators?: string;
-          encrypted_keyshares?: { data?: string; validator?: string }[];
+          numberOfValidators?: string;
+          encryptedKeyShares?: { data?: string; validator?: string }[];
         };
       },
-      { code?: number; message?: string; details?: { '@type'?: string }[] }
+      { code?: number; message?: string; details?: { "@type"?: string }[] }
     >({
-      path: `/fairyring/keyshare/pubkey`,
-      method: 'GET',
+      path: `/fairyring/keyshare/pub_key`,
+      method: "GET",
       ...params,
     });
 
