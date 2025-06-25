@@ -3,6 +3,10 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "fairyring.keyshare";
 
+/**
+ * ValidatorSet defines the structure for storing the list of
+ * validators who will be eligible to send keyshares
+ */
 export interface ValidatorSet {
   index: string;
   validator: string;

@@ -1,12 +1,11 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { AggregatedKeyShare } from "./aggregated_key_share";
 import { AuthorizedAddress } from "./authorized_address";
-import { GeneralKeyShare } from "./general_key_share";
-import { KeyShare } from "./key_share";
+import { DecryptionKey } from "./decryption_key";
+import { GeneralKeyshare, Keyshare } from "./keyshare";
 import { Params } from "./params";
-import { ActivePubKey, QueuedPubKey } from "./pub_key";
+import { ActivePubkey, QueuedPubkey } from "./pubkey";
 import { ValidatorSet } from "./validator_set";
 
 export const protobufPackage = "fairyring.keyshare";
@@ -17,14 +16,13 @@ export interface GenesisState {
   params: Params | undefined;
   portId: string;
   validatorSetList: ValidatorSet[];
-  keyShareList: KeyShare[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
-  aggregatedKeyShareList: AggregatedKeyShare[];
-  activePubKey: ActivePubKey | undefined;
-  queuedPubKey: QueuedPubKey | undefined;
+  keyshareList: Keyshare[];
+  decryptionKeyList: DecryptionKey[];
+  activePubkey: ActivePubkey | undefined;
+  queuedPubkey: QueuedPubkey | undefined;
   authorizedAddressList: AuthorizedAddress[];
   requestCount: number;
-  generalKeyShareList: GeneralKeyShare[];
+  generalKeyshareList: GeneralKeyshare[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -32,13 +30,13 @@ function createBaseGenesisState(): GenesisState {
     params: undefined,
     portId: "",
     validatorSetList: [],
-    keyShareList: [],
-    aggregatedKeyShareList: [],
-    activePubKey: undefined,
-    queuedPubKey: undefined,
+    keyshareList: [],
+    decryptionKeyList: [],
+    activePubkey: undefined,
+    queuedPubkey: undefined,
     authorizedAddressList: [],
     requestCount: 0,
-    generalKeyShareList: [],
+    generalKeyshareList: [],
   };
 }
 
@@ -53,17 +51,17 @@ export const GenesisState = {
     for (const v of message.validatorSetList) {
       ValidatorSet.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    for (const v of message.keyShareList) {
-      KeyShare.encode(v!, writer.uint32(34).fork()).ldelim();
+    for (const v of message.keyshareList) {
+      Keyshare.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.aggregatedKeyShareList) {
-      AggregatedKeyShare.encode(v!, writer.uint32(42).fork()).ldelim();
+    for (const v of message.decryptionKeyList) {
+      DecryptionKey.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    if (message.activePubKey !== undefined) {
-      ActivePubKey.encode(message.activePubKey, writer.uint32(50).fork()).ldelim();
+    if (message.activePubkey !== undefined) {
+      ActivePubkey.encode(message.activePubkey, writer.uint32(50).fork()).ldelim();
     }
-    if (message.queuedPubKey !== undefined) {
-      QueuedPubKey.encode(message.queuedPubKey, writer.uint32(58).fork()).ldelim();
+    if (message.queuedPubkey !== undefined) {
+      QueuedPubkey.encode(message.queuedPubkey, writer.uint32(58).fork()).ldelim();
     }
     for (const v of message.authorizedAddressList) {
       AuthorizedAddress.encode(v!, writer.uint32(66).fork()).ldelim();
@@ -71,8 +69,8 @@ export const GenesisState = {
     if (message.requestCount !== 0) {
       writer.uint32(72).uint64(message.requestCount);
     }
-    for (const v of message.generalKeyShareList) {
-      GeneralKeyShare.encode(v!, writer.uint32(82).fork()).ldelim();
+    for (const v of message.generalKeyshareList) {
+      GeneralKeyshare.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -110,28 +108,28 @@ export const GenesisState = {
             break;
           }
 
-          message.keyShareList.push(KeyShare.decode(reader, reader.uint32()));
+          message.keyshareList.push(Keyshare.decode(reader, reader.uint32()));
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
 
-          message.aggregatedKeyShareList.push(AggregatedKeyShare.decode(reader, reader.uint32()));
+          message.decryptionKeyList.push(DecryptionKey.decode(reader, reader.uint32()));
           continue;
         case 6:
           if (tag !== 50) {
             break;
           }
 
-          message.activePubKey = ActivePubKey.decode(reader, reader.uint32());
+          message.activePubkey = ActivePubkey.decode(reader, reader.uint32());
           continue;
         case 7:
           if (tag !== 58) {
             break;
           }
 
-          message.queuedPubKey = QueuedPubKey.decode(reader, reader.uint32());
+          message.queuedPubkey = QueuedPubkey.decode(reader, reader.uint32());
           continue;
         case 8:
           if (tag !== 66) {
@@ -152,7 +150,7 @@ export const GenesisState = {
             break;
           }
 
-          message.generalKeyShareList.push(GeneralKeyShare.decode(reader, reader.uint32()));
+          message.generalKeyshareList.push(GeneralKeyshare.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -170,20 +168,20 @@ export const GenesisState = {
       validatorSetList: Array.isArray(object?.validatorSetList)
         ? object.validatorSetList.map((e: any) => ValidatorSet.fromJSON(e))
         : [],
-      keyShareList: Array.isArray(object?.keyShareList)
-        ? object.keyShareList.map((e: any) => KeyShare.fromJSON(e))
+      keyshareList: Array.isArray(object?.keyshareList)
+        ? object.keyshareList.map((e: any) => Keyshare.fromJSON(e))
         : [],
-      aggregatedKeyShareList: Array.isArray(object?.aggregatedKeyShareList)
-        ? object.aggregatedKeyShareList.map((e: any) => AggregatedKeyShare.fromJSON(e))
+      decryptionKeyList: Array.isArray(object?.decryptionKeyList)
+        ? object.decryptionKeyList.map((e: any) => DecryptionKey.fromJSON(e))
         : [],
-      activePubKey: isSet(object.activePubKey) ? ActivePubKey.fromJSON(object.activePubKey) : undefined,
-      queuedPubKey: isSet(object.queuedPubKey) ? QueuedPubKey.fromJSON(object.queuedPubKey) : undefined,
+      activePubkey: isSet(object.activePubkey) ? ActivePubkey.fromJSON(object.activePubkey) : undefined,
+      queuedPubkey: isSet(object.queuedPubkey) ? QueuedPubkey.fromJSON(object.queuedPubkey) : undefined,
       authorizedAddressList: Array.isArray(object?.authorizedAddressList)
         ? object.authorizedAddressList.map((e: any) => AuthorizedAddress.fromJSON(e))
         : [],
       requestCount: isSet(object.requestCount) ? Number(object.requestCount) : 0,
-      generalKeyShareList: Array.isArray(object?.generalKeyShareList)
-        ? object.generalKeyShareList.map((e: any) => GeneralKeyShare.fromJSON(e))
+      generalKeyshareList: Array.isArray(object?.generalKeyshareList)
+        ? object.generalKeyshareList.map((e: any) => GeneralKeyshare.fromJSON(e))
         : [],
     };
   },
@@ -199,17 +197,17 @@ export const GenesisState = {
     if (message.validatorSetList?.length) {
       obj.validatorSetList = message.validatorSetList.map((e) => ValidatorSet.toJSON(e));
     }
-    if (message.keyShareList?.length) {
-      obj.keyShareList = message.keyShareList.map((e) => KeyShare.toJSON(e));
+    if (message.keyshareList?.length) {
+      obj.keyshareList = message.keyshareList.map((e) => Keyshare.toJSON(e));
     }
-    if (message.aggregatedKeyShareList?.length) {
-      obj.aggregatedKeyShareList = message.aggregatedKeyShareList.map((e) => AggregatedKeyShare.toJSON(e));
+    if (message.decryptionKeyList?.length) {
+      obj.decryptionKeyList = message.decryptionKeyList.map((e) => DecryptionKey.toJSON(e));
     }
-    if (message.activePubKey !== undefined) {
-      obj.activePubKey = ActivePubKey.toJSON(message.activePubKey);
+    if (message.activePubkey !== undefined) {
+      obj.activePubkey = ActivePubkey.toJSON(message.activePubkey);
     }
-    if (message.queuedPubKey !== undefined) {
-      obj.queuedPubKey = QueuedPubKey.toJSON(message.queuedPubKey);
+    if (message.queuedPubkey !== undefined) {
+      obj.queuedPubkey = QueuedPubkey.toJSON(message.queuedPubkey);
     }
     if (message.authorizedAddressList?.length) {
       obj.authorizedAddressList = message.authorizedAddressList.map((e) => AuthorizedAddress.toJSON(e));
@@ -217,8 +215,8 @@ export const GenesisState = {
     if (message.requestCount !== 0) {
       obj.requestCount = Math.round(message.requestCount);
     }
-    if (message.generalKeyShareList?.length) {
-      obj.generalKeyShareList = message.generalKeyShareList.map((e) => GeneralKeyShare.toJSON(e));
+    if (message.generalKeyshareList?.length) {
+      obj.generalKeyshareList = message.generalKeyshareList.map((e) => GeneralKeyshare.toJSON(e));
     }
     return obj;
   },
@@ -233,17 +231,17 @@ export const GenesisState = {
       : undefined;
     message.portId = object.portId ?? "";
     message.validatorSetList = object.validatorSetList?.map((e) => ValidatorSet.fromPartial(e)) || [];
-    message.keyShareList = object.keyShareList?.map((e) => KeyShare.fromPartial(e)) || [];
-    message.aggregatedKeyShareList = object.aggregatedKeyShareList?.map((e) => AggregatedKeyShare.fromPartial(e)) || [];
-    message.activePubKey = (object.activePubKey !== undefined && object.activePubKey !== null)
-      ? ActivePubKey.fromPartial(object.activePubKey)
+    message.keyshareList = object.keyshareList?.map((e) => Keyshare.fromPartial(e)) || [];
+    message.decryptionKeyList = object.decryptionKeyList?.map((e) => DecryptionKey.fromPartial(e)) || [];
+    message.activePubkey = (object.activePubkey !== undefined && object.activePubkey !== null)
+      ? ActivePubkey.fromPartial(object.activePubkey)
       : undefined;
-    message.queuedPubKey = (object.queuedPubKey !== undefined && object.queuedPubKey !== null)
-      ? QueuedPubKey.fromPartial(object.queuedPubKey)
+    message.queuedPubkey = (object.queuedPubkey !== undefined && object.queuedPubkey !== null)
+      ? QueuedPubkey.fromPartial(object.queuedPubkey)
       : undefined;
     message.authorizedAddressList = object.authorizedAddressList?.map((e) => AuthorizedAddress.fromPartial(e)) || [];
     message.requestCount = object.requestCount ?? 0;
-    message.generalKeyShareList = object.generalKeyShareList?.map((e) => GeneralKeyShare.fromPartial(e)) || [];
+    message.generalKeyshareList = object.generalKeyshareList?.map((e) => GeneralKeyshare.fromPartial(e)) || [];
     return message;
   },
 };

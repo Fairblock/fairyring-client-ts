@@ -4,33 +4,39 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "fairyring.keyshare";
 
-export interface EncryptedKeyShare {
+/**
+ * EncryptedKeyshare defines the structure for storing
+ * the keyshare of the master secret key distributed to the validators
+ */
+export interface EncryptedKeyshare {
   data: string;
   validator: string;
 }
 
-export interface ActivePubKey {
+/** ActivePubkey defines the structure of the active public key */
+export interface ActivePubkey {
   publicKey: string;
   creator: string;
   expiry: number;
   numberOfValidators: number;
-  encryptedKeyShares: EncryptedKeyShare[];
+  encryptedKeyshares: EncryptedKeyshare[];
 }
 
-export interface QueuedPubKey {
+/** QueuedPubkey defines the structure of the queued public key */
+export interface QueuedPubkey {
   publicKey: string;
   creator: string;
   expiry: number;
   numberOfValidators: number;
-  encryptedKeyShares: EncryptedKeyShare[];
+  encryptedKeyshares: EncryptedKeyshare[];
 }
 
-function createBaseEncryptedKeyShare(): EncryptedKeyShare {
+function createBaseEncryptedKeyshare(): EncryptedKeyshare {
   return { data: "", validator: "" };
 }
 
-export const EncryptedKeyShare = {
-  encode(message: EncryptedKeyShare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const EncryptedKeyshare = {
+  encode(message: EncryptedKeyshare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.data !== "") {
       writer.uint32(10).string(message.data);
     }
@@ -40,10 +46,10 @@ export const EncryptedKeyShare = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): EncryptedKeyShare {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EncryptedKeyshare {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEncryptedKeyShare();
+    const message = createBaseEncryptedKeyshare();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -70,14 +76,14 @@ export const EncryptedKeyShare = {
     return message;
   },
 
-  fromJSON(object: any): EncryptedKeyShare {
+  fromJSON(object: any): EncryptedKeyshare {
     return {
       data: isSet(object.data) ? String(object.data) : "",
       validator: isSet(object.validator) ? String(object.validator) : "",
     };
   },
 
-  toJSON(message: EncryptedKeyShare): unknown {
+  toJSON(message: EncryptedKeyshare): unknown {
     const obj: any = {};
     if (message.data !== "") {
       obj.data = message.data;
@@ -88,23 +94,23 @@ export const EncryptedKeyShare = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<EncryptedKeyShare>, I>>(base?: I): EncryptedKeyShare {
-    return EncryptedKeyShare.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<EncryptedKeyshare>, I>>(base?: I): EncryptedKeyshare {
+    return EncryptedKeyshare.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<EncryptedKeyShare>, I>>(object: I): EncryptedKeyShare {
-    const message = createBaseEncryptedKeyShare();
+  fromPartial<I extends Exact<DeepPartial<EncryptedKeyshare>, I>>(object: I): EncryptedKeyshare {
+    const message = createBaseEncryptedKeyshare();
     message.data = object.data ?? "";
     message.validator = object.validator ?? "";
     return message;
   },
 };
 
-function createBaseActivePubKey(): ActivePubKey {
-  return { publicKey: "", creator: "", expiry: 0, numberOfValidators: 0, encryptedKeyShares: [] };
+function createBaseActivePubkey(): ActivePubkey {
+  return { publicKey: "", creator: "", expiry: 0, numberOfValidators: 0, encryptedKeyshares: [] };
 }
 
-export const ActivePubKey = {
-  encode(message: ActivePubKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const ActivePubkey = {
+  encode(message: ActivePubkey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.publicKey !== "") {
       writer.uint32(10).string(message.publicKey);
     }
@@ -117,16 +123,16 @@ export const ActivePubKey = {
     if (message.numberOfValidators !== 0) {
       writer.uint32(32).uint64(message.numberOfValidators);
     }
-    for (const v of message.encryptedKeyShares) {
-      EncryptedKeyShare.encode(v!, writer.uint32(42).fork()).ldelim();
+    for (const v of message.encryptedKeyshares) {
+      EncryptedKeyshare.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ActivePubKey {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ActivePubkey {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseActivePubKey();
+    const message = createBaseActivePubkey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -163,7 +169,7 @@ export const ActivePubKey = {
             break;
           }
 
-          message.encryptedKeyShares.push(EncryptedKeyShare.decode(reader, reader.uint32()));
+          message.encryptedKeyshares.push(EncryptedKeyshare.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -174,19 +180,19 @@ export const ActivePubKey = {
     return message;
   },
 
-  fromJSON(object: any): ActivePubKey {
+  fromJSON(object: any): ActivePubkey {
     return {
       publicKey: isSet(object.publicKey) ? String(object.publicKey) : "",
       creator: isSet(object.creator) ? String(object.creator) : "",
       expiry: isSet(object.expiry) ? Number(object.expiry) : 0,
       numberOfValidators: isSet(object.numberOfValidators) ? Number(object.numberOfValidators) : 0,
-      encryptedKeyShares: Array.isArray(object?.encryptedKeyShares)
-        ? object.encryptedKeyShares.map((e: any) => EncryptedKeyShare.fromJSON(e))
+      encryptedKeyshares: Array.isArray(object?.encryptedKeyshares)
+        ? object.encryptedKeyshares.map((e: any) => EncryptedKeyshare.fromJSON(e))
         : [],
     };
   },
 
-  toJSON(message: ActivePubKey): unknown {
+  toJSON(message: ActivePubkey): unknown {
     const obj: any = {};
     if (message.publicKey !== "") {
       obj.publicKey = message.publicKey;
@@ -200,32 +206,32 @@ export const ActivePubKey = {
     if (message.numberOfValidators !== 0) {
       obj.numberOfValidators = Math.round(message.numberOfValidators);
     }
-    if (message.encryptedKeyShares?.length) {
-      obj.encryptedKeyShares = message.encryptedKeyShares.map((e) => EncryptedKeyShare.toJSON(e));
+    if (message.encryptedKeyshares?.length) {
+      obj.encryptedKeyshares = message.encryptedKeyshares.map((e) => EncryptedKeyshare.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ActivePubKey>, I>>(base?: I): ActivePubKey {
-    return ActivePubKey.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<ActivePubkey>, I>>(base?: I): ActivePubkey {
+    return ActivePubkey.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ActivePubKey>, I>>(object: I): ActivePubKey {
-    const message = createBaseActivePubKey();
+  fromPartial<I extends Exact<DeepPartial<ActivePubkey>, I>>(object: I): ActivePubkey {
+    const message = createBaseActivePubkey();
     message.publicKey = object.publicKey ?? "";
     message.creator = object.creator ?? "";
     message.expiry = object.expiry ?? 0;
     message.numberOfValidators = object.numberOfValidators ?? 0;
-    message.encryptedKeyShares = object.encryptedKeyShares?.map((e) => EncryptedKeyShare.fromPartial(e)) || [];
+    message.encryptedKeyshares = object.encryptedKeyshares?.map((e) => EncryptedKeyshare.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseQueuedPubKey(): QueuedPubKey {
-  return { publicKey: "", creator: "", expiry: 0, numberOfValidators: 0, encryptedKeyShares: [] };
+function createBaseQueuedPubkey(): QueuedPubkey {
+  return { publicKey: "", creator: "", expiry: 0, numberOfValidators: 0, encryptedKeyshares: [] };
 }
 
-export const QueuedPubKey = {
-  encode(message: QueuedPubKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueuedPubkey = {
+  encode(message: QueuedPubkey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.publicKey !== "") {
       writer.uint32(10).string(message.publicKey);
     }
@@ -238,16 +244,16 @@ export const QueuedPubKey = {
     if (message.numberOfValidators !== 0) {
       writer.uint32(32).uint64(message.numberOfValidators);
     }
-    for (const v of message.encryptedKeyShares) {
-      EncryptedKeyShare.encode(v!, writer.uint32(42).fork()).ldelim();
+    for (const v of message.encryptedKeyshares) {
+      EncryptedKeyshare.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueuedPubKey {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueuedPubkey {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueuedPubKey();
+    const message = createBaseQueuedPubkey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -284,7 +290,7 @@ export const QueuedPubKey = {
             break;
           }
 
-          message.encryptedKeyShares.push(EncryptedKeyShare.decode(reader, reader.uint32()));
+          message.encryptedKeyshares.push(EncryptedKeyshare.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -295,19 +301,19 @@ export const QueuedPubKey = {
     return message;
   },
 
-  fromJSON(object: any): QueuedPubKey {
+  fromJSON(object: any): QueuedPubkey {
     return {
       publicKey: isSet(object.publicKey) ? String(object.publicKey) : "",
       creator: isSet(object.creator) ? String(object.creator) : "",
       expiry: isSet(object.expiry) ? Number(object.expiry) : 0,
       numberOfValidators: isSet(object.numberOfValidators) ? Number(object.numberOfValidators) : 0,
-      encryptedKeyShares: Array.isArray(object?.encryptedKeyShares)
-        ? object.encryptedKeyShares.map((e: any) => EncryptedKeyShare.fromJSON(e))
+      encryptedKeyshares: Array.isArray(object?.encryptedKeyshares)
+        ? object.encryptedKeyshares.map((e: any) => EncryptedKeyshare.fromJSON(e))
         : [],
     };
   },
 
-  toJSON(message: QueuedPubKey): unknown {
+  toJSON(message: QueuedPubkey): unknown {
     const obj: any = {};
     if (message.publicKey !== "") {
       obj.publicKey = message.publicKey;
@@ -321,22 +327,22 @@ export const QueuedPubKey = {
     if (message.numberOfValidators !== 0) {
       obj.numberOfValidators = Math.round(message.numberOfValidators);
     }
-    if (message.encryptedKeyShares?.length) {
-      obj.encryptedKeyShares = message.encryptedKeyShares.map((e) => EncryptedKeyShare.toJSON(e));
+    if (message.encryptedKeyshares?.length) {
+      obj.encryptedKeyshares = message.encryptedKeyshares.map((e) => EncryptedKeyshare.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueuedPubKey>, I>>(base?: I): QueuedPubKey {
-    return QueuedPubKey.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueuedPubkey>, I>>(base?: I): QueuedPubkey {
+    return QueuedPubkey.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueuedPubKey>, I>>(object: I): QueuedPubKey {
-    const message = createBaseQueuedPubKey();
+  fromPartial<I extends Exact<DeepPartial<QueuedPubkey>, I>>(object: I): QueuedPubkey {
+    const message = createBaseQueuedPubkey();
     message.publicKey = object.publicKey ?? "";
     message.creator = object.creator ?? "";
     message.expiry = object.expiry ?? 0;
     message.numberOfValidators = object.numberOfValidators ?? 0;
-    message.encryptedKeyShares = object.encryptedKeyShares?.map((e) => EncryptedKeyShare.fromPartial(e)) || [];
+    message.encryptedKeyshares = object.encryptedKeyshares?.map((e) => EncryptedKeyshare.fromPartial(e)) || [];
     return message;
   },
 };

@@ -4,6 +4,10 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "fairyring.pep";
 
+/**
+ * PepNonce defines the nonce of an account to send encrypted transactions.
+ * It is incremanted seperately from the nonce maintained by the auth module
+ */
 export interface PepNonce {
   address: string;
   nonce: number;

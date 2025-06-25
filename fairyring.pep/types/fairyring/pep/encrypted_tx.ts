@@ -5,6 +5,10 @@ import { Coin } from "../../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "fairyring.pep";
 
+/**
+ * EncryptedTx defines the structure to store an encrypted transaction
+ * by execution height
+ */
 export interface EncryptedTx {
   targetHeight: number;
   index: number;
@@ -15,10 +19,15 @@ export interface EncryptedTx {
   expired: boolean;
 }
 
+/** EncryptedTxArray defines a list of EncryptedTx */
 export interface EncryptedTxArray {
-  encryptedTx: EncryptedTx[];
+  encryptedTxs: EncryptedTx[];
 }
 
+/**
+ * GeneralEncryptedTx defines the structure to store a
+ * general encrypted transaction by identity
+ */
 export interface GeneralEncryptedTx {
   identity: string;
   index: number;
@@ -27,17 +36,22 @@ export interface GeneralEncryptedTx {
   chargedGas: Coin | undefined;
 }
 
+/** GeneralEncryptedTxArray defines a list of GeneralEncryptedTx */
 export interface GeneralEncryptedTxArray {
-  encryptedTx: GeneralEncryptedTx[];
+  encryptedTxs: GeneralEncryptedTx[];
 }
 
-export interface GenEncTxExecutionQueue {
+/**
+ * IdentityExecutionEntry defines the structure to queue up
+ * identities that have decryption keys available and
+ * are ready to execute any associated contracts or encrypted transactions
+ */
+export interface IdentityExecutionEntry {
   creator: string;
-  requestId: string;
   identity: string;
   pubkey: string;
   txList: GeneralEncryptedTxArray | undefined;
-  aggrKeyshare: string;
+  decryptionKey: string;
 }
 
 function createBaseEncryptedTx(): EncryptedTx {
@@ -200,12 +214,12 @@ export const EncryptedTx = {
 };
 
 function createBaseEncryptedTxArray(): EncryptedTxArray {
-  return { encryptedTx: [] };
+  return { encryptedTxs: [] };
 }
 
 export const EncryptedTxArray = {
   encode(message: EncryptedTxArray, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.encryptedTx) {
+    for (const v of message.encryptedTxs) {
       EncryptedTx.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
@@ -223,7 +237,7 @@ export const EncryptedTxArray = {
             break;
           }
 
-          message.encryptedTx.push(EncryptedTx.decode(reader, reader.uint32()));
+          message.encryptedTxs.push(EncryptedTx.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -236,16 +250,16 @@ export const EncryptedTxArray = {
 
   fromJSON(object: any): EncryptedTxArray {
     return {
-      encryptedTx: Array.isArray(object?.encryptedTx)
-        ? object.encryptedTx.map((e: any) => EncryptedTx.fromJSON(e))
+      encryptedTxs: Array.isArray(object?.encryptedTxs)
+        ? object.encryptedTxs.map((e: any) => EncryptedTx.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: EncryptedTxArray): unknown {
     const obj: any = {};
-    if (message.encryptedTx?.length) {
-      obj.encryptedTx = message.encryptedTx.map((e) => EncryptedTx.toJSON(e));
+    if (message.encryptedTxs?.length) {
+      obj.encryptedTxs = message.encryptedTxs.map((e) => EncryptedTx.toJSON(e));
     }
     return obj;
   },
@@ -255,7 +269,7 @@ export const EncryptedTxArray = {
   },
   fromPartial<I extends Exact<DeepPartial<EncryptedTxArray>, I>>(object: I): EncryptedTxArray {
     const message = createBaseEncryptedTxArray();
-    message.encryptedTx = object.encryptedTx?.map((e) => EncryptedTx.fromPartial(e)) || [];
+    message.encryptedTxs = object.encryptedTxs?.map((e) => EncryptedTx.fromPartial(e)) || [];
     return message;
   },
 };
@@ -382,12 +396,12 @@ export const GeneralEncryptedTx = {
 };
 
 function createBaseGeneralEncryptedTxArray(): GeneralEncryptedTxArray {
-  return { encryptedTx: [] };
+  return { encryptedTxs: [] };
 }
 
 export const GeneralEncryptedTxArray = {
   encode(message: GeneralEncryptedTxArray, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.encryptedTx) {
+    for (const v of message.encryptedTxs) {
       GeneralEncryptedTx.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
@@ -405,7 +419,7 @@ export const GeneralEncryptedTxArray = {
             break;
           }
 
-          message.encryptedTx.push(GeneralEncryptedTx.decode(reader, reader.uint32()));
+          message.encryptedTxs.push(GeneralEncryptedTx.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -418,16 +432,16 @@ export const GeneralEncryptedTxArray = {
 
   fromJSON(object: any): GeneralEncryptedTxArray {
     return {
-      encryptedTx: Array.isArray(object?.encryptedTx)
-        ? object.encryptedTx.map((e: any) => GeneralEncryptedTx.fromJSON(e))
+      encryptedTxs: Array.isArray(object?.encryptedTxs)
+        ? object.encryptedTxs.map((e: any) => GeneralEncryptedTx.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: GeneralEncryptedTxArray): unknown {
     const obj: any = {};
-    if (message.encryptedTx?.length) {
-      obj.encryptedTx = message.encryptedTx.map((e) => GeneralEncryptedTx.toJSON(e));
+    if (message.encryptedTxs?.length) {
+      obj.encryptedTxs = message.encryptedTxs.map((e) => GeneralEncryptedTx.toJSON(e));
     }
     return obj;
   },
@@ -437,22 +451,19 @@ export const GeneralEncryptedTxArray = {
   },
   fromPartial<I extends Exact<DeepPartial<GeneralEncryptedTxArray>, I>>(object: I): GeneralEncryptedTxArray {
     const message = createBaseGeneralEncryptedTxArray();
-    message.encryptedTx = object.encryptedTx?.map((e) => GeneralEncryptedTx.fromPartial(e)) || [];
+    message.encryptedTxs = object.encryptedTxs?.map((e) => GeneralEncryptedTx.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseGenEncTxExecutionQueue(): GenEncTxExecutionQueue {
-  return { creator: "", requestId: "", identity: "", pubkey: "", txList: undefined, aggrKeyshare: "" };
+function createBaseIdentityExecutionEntry(): IdentityExecutionEntry {
+  return { creator: "", identity: "", pubkey: "", txList: undefined, decryptionKey: "" };
 }
 
-export const GenEncTxExecutionQueue = {
-  encode(message: GenEncTxExecutionQueue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const IdentityExecutionEntry = {
+  encode(message: IdentityExecutionEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
-    }
-    if (message.requestId !== "") {
-      writer.uint32(18).string(message.requestId);
     }
     if (message.identity !== "") {
       writer.uint32(26).string(message.identity);
@@ -463,16 +474,16 @@ export const GenEncTxExecutionQueue = {
     if (message.txList !== undefined) {
       GeneralEncryptedTxArray.encode(message.txList, writer.uint32(42).fork()).ldelim();
     }
-    if (message.aggrKeyshare !== "") {
-      writer.uint32(50).string(message.aggrKeyshare);
+    if (message.decryptionKey !== "") {
+      writer.uint32(50).string(message.decryptionKey);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenEncTxExecutionQueue {
+  decode(input: _m0.Reader | Uint8Array, length?: number): IdentityExecutionEntry {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGenEncTxExecutionQueue();
+    const message = createBaseIdentityExecutionEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -482,13 +493,6 @@ export const GenEncTxExecutionQueue = {
           }
 
           message.creator = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.requestId = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
@@ -516,7 +520,7 @@ export const GenEncTxExecutionQueue = {
             break;
           }
 
-          message.aggrKeyshare = reader.string();
+          message.decryptionKey = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -527,24 +531,20 @@ export const GenEncTxExecutionQueue = {
     return message;
   },
 
-  fromJSON(object: any): GenEncTxExecutionQueue {
+  fromJSON(object: any): IdentityExecutionEntry {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      requestId: isSet(object.requestId) ? String(object.requestId) : "",
       identity: isSet(object.identity) ? String(object.identity) : "",
       pubkey: isSet(object.pubkey) ? String(object.pubkey) : "",
       txList: isSet(object.txList) ? GeneralEncryptedTxArray.fromJSON(object.txList) : undefined,
-      aggrKeyshare: isSet(object.aggrKeyshare) ? String(object.aggrKeyshare) : "",
+      decryptionKey: isSet(object.decryptionKey) ? String(object.decryptionKey) : "",
     };
   },
 
-  toJSON(message: GenEncTxExecutionQueue): unknown {
+  toJSON(message: IdentityExecutionEntry): unknown {
     const obj: any = {};
     if (message.creator !== "") {
       obj.creator = message.creator;
-    }
-    if (message.requestId !== "") {
-      obj.requestId = message.requestId;
     }
     if (message.identity !== "") {
       obj.identity = message.identity;
@@ -555,25 +555,24 @@ export const GenEncTxExecutionQueue = {
     if (message.txList !== undefined) {
       obj.txList = GeneralEncryptedTxArray.toJSON(message.txList);
     }
-    if (message.aggrKeyshare !== "") {
-      obj.aggrKeyshare = message.aggrKeyshare;
+    if (message.decryptionKey !== "") {
+      obj.decryptionKey = message.decryptionKey;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GenEncTxExecutionQueue>, I>>(base?: I): GenEncTxExecutionQueue {
-    return GenEncTxExecutionQueue.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<IdentityExecutionEntry>, I>>(base?: I): IdentityExecutionEntry {
+    return IdentityExecutionEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GenEncTxExecutionQueue>, I>>(object: I): GenEncTxExecutionQueue {
-    const message = createBaseGenEncTxExecutionQueue();
+  fromPartial<I extends Exact<DeepPartial<IdentityExecutionEntry>, I>>(object: I): IdentityExecutionEntry {
+    const message = createBaseIdentityExecutionEntry();
     message.creator = object.creator ?? "";
-    message.requestId = object.requestId ?? "";
     message.identity = object.identity ?? "";
     message.pubkey = object.pubkey ?? "";
     message.txList = (object.txList !== undefined && object.txList !== null)
       ? GeneralEncryptedTxArray.fromPartial(object.txList)
       : undefined;
-    message.aggrKeyshare = object.aggrKeyshare ?? "";
+    message.decryptionKey = object.decryptionKey ?? "";
     return message;
   },
 };

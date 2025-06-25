@@ -3,6 +3,7 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "fairyring.keyshare";
 
+/** AuthorizedAddress defines if an address is authorized to submit keyshares */
 export interface AuthorizedAddress {
   target: string;
   isAuthorized: boolean;

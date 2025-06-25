@@ -6,159 +6,91 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { QueryAllGeneralKeyShareRequest } from "./types/fairyring/keyshare/query";
-import { MsgDeRegisterValidator } from "./types/fairyring/keyshare/tx";
-import { QueryGetValidatorSetRequest } from "./types/fairyring/keyshare/query";
-import { QueryGetValidatorSetResponse } from "./types/fairyring/keyshare/query";
-import { QueryAllValidatorSetRequest } from "./types/fairyring/keyshare/query";
-import { MsgOverrideLatestPubKey } from "./types/fairyring/keyshare/tx";
-import { MsgCreateAuthorizedAddressResponse } from "./types/fairyring/keyshare/tx";
-import { MsgCreateAuthorizedAddress } from "./types/fairyring/keyshare/tx";
-import { MsgCreateLatestPubKeyResponse } from "./types/fairyring/keyshare/tx";
-import { ValidatorSet } from "./types/fairyring/keyshare/validator_set";
-import { CounterPartyIBCInfo } from "./types/fairyring/keyshare/requested_keyshare";
-import { AggregatedKeyShare } from "./types/fairyring/keyshare/aggregated_key_share";
-import { MsgUpdateParamsResponse } from "./types/fairyring/keyshare/tx";
 import { MsgUpdateAuthorizedAddressResponse } from "./types/fairyring/keyshare/tx";
 import { MsgDeleteAuthorizedAddressResponse } from "./types/fairyring/keyshare/tx";
-import { RequestAggrKeysharePacketData } from "./types/fairyring/keyshare/packet";
-import { QueryVerifiableRandomnessQuery } from "./types/fairyring/keyshare/query";
-import { QueryPubKeyResponse } from "./types/fairyring/keyshare/query";
-import { MsgRegisterValidator } from "./types/fairyring/keyshare/tx";
-import { KeysharePacketData } from "./types/fairyring/keyshare/packet";
-import { RequestAggrKeysharePacketAck } from "./types/fairyring/keyshare/packet";
-import { EncryptedKeyShare } from "./types/fairyring/keyshare/pub_key";
-import { QueryGetKeyShareResponse } from "./types/fairyring/keyshare/query";
-import { QueryGetAuthorizedAddressResponse } from "./types/fairyring/keyshare/query";
-import { Commitments } from "./types/fairyring/keyshare/commitments";
-import { KeyShare } from "./types/fairyring/keyshare/key_share";
-import { KeyShareRequest } from "./types/fairyring/keyshare/requested_keyshare";
-import { QueryCommitmentsResponse } from "./types/fairyring/keyshare/query";
-import { QueryAllAggregatedKeyShareResponse } from "./types/fairyring/keyshare/query";
-import { QueryAllGeneralKeyShareResponse } from "./types/fairyring/keyshare/query";
-import { MsgDeleteAuthorizedAddress } from "./types/fairyring/keyshare/tx";
-import { NoData } from "./types/fairyring/keyshare/packet";
-import { CurrentKeysPacketData } from "./types/fairyring/keyshare/packet";
-import { QueryAllKeyShareResponse } from "./types/fairyring/keyshare/query";
-import { QueryGetGeneralKeyShareRequest } from "./types/fairyring/keyshare/query";
-import { MsgSendKeyshare } from "./types/fairyring/keyshare/tx";
-import { MsgOverrideLatestPubKeyResponse } from "./types/fairyring/keyshare/tx";
-import { QueryVerifiableRandomnessResponse } from "./types/fairyring/keyshare/query";
-import { QueryParamsResponse } from "./types/fairyring/keyshare/query";
-import { GetAggrKeysharePacketData } from "./types/fairyring/keyshare/packet";
+import { MsgSubmitEncryptedKeyshareResponse } from "./types/fairyring/keyshare/tx";
+import { RequestDecryptionKeyPacketAck } from "./types/fairyring/keyshare/packet";
 import { CurrentKeysPacketAck } from "./types/fairyring/keyshare/packet";
-import { GenesisState } from "./types/fairyring/keyshare/genesis";
-import { QueryCommitmentsRequest } from "./types/fairyring/keyshare/query";
-import { QueryGetKeyShareRequest } from "./types/fairyring/keyshare/query";
-import { QueryGetAggregatedKeyShareResponse } from "./types/fairyring/keyshare/query";
-import { MsgDeRegisterValidatorResponse } from "./types/fairyring/keyshare/tx";
-import { QueryAllValidatorSetResponse } from "./types/fairyring/keyshare/query";
-import { QueryAllKeyShareRequest } from "./types/fairyring/keyshare/query";
-import { QueryAllAuthorizedAddressResponse } from "./types/fairyring/keyshare/query";
-import { QueryGetAuthorizedAddressRequest } from "./types/fairyring/keyshare/query";
-import { QueryAllAuthorizedAddressRequest } from "./types/fairyring/keyshare/query";
-import { AggrKeyshareDataPacketAck } from "./types/fairyring/keyshare/packet";
+import { MsgDeleteAuthorizedAddress } from "./types/fairyring/keyshare/tx";
 import { MsgSendKeyshareResponse } from "./types/fairyring/keyshare/tx";
-import { MsgCreateGeneralKeyShare } from "./types/fairyring/keyshare/tx";
-import { QueryParamsRequest } from "./types/fairyring/keyshare/query";
-import { QueryGetAggregatedKeyShareRequest } from "./types/fairyring/keyshare/query";
-import { ActivePubKey } from "./types/fairyring/keyshare/pub_key";
-import { MsgRegisterValidatorResponse } from "./types/fairyring/keyshare/tx";
-import { MsgCreateGeneralKeyShareResponse } from "./types/fairyring/keyshare/tx";
-import { AggrKeyshareDataPacketData } from "./types/fairyring/keyshare/packet";
-import { QueryGetGeneralKeyShareResponse } from "./types/fairyring/keyshare/query";
-import { MsgUpdateParams } from "./types/fairyring/keyshare/tx";
-import { QueryPubKeyRequest } from "./types/fairyring/keyshare/query";
+import { QueryKeyshareAllResponse } from "./types/fairyring/keyshare/query";
+import { QueryDecryptionKeyRequest } from "./types/fairyring/keyshare/query";
+import { IBCInfo } from "./types/fairyring/keyshare/requested_decryption_key";
+import { MsgCreateLatestPubkeyResponse } from "./types/fairyring/keyshare/tx";
+import { MsgSubmitGeneralKeyshare } from "./types/fairyring/keyshare/tx";
+import { GetDecryptionKeyPacketAck } from "./types/fairyring/keyshare/packet";
+import { QueryValidatorSetAllRequest } from "./types/fairyring/keyshare/query";
+import { QueryKeyshareRequest } from "./types/fairyring/keyshare/query";
+import { MsgRegisterValidator } from "./types/fairyring/keyshare/tx";
+import { RequestDecryptionKeyPacketData } from "./types/fairyring/keyshare/packet";
+import { Commitments } from "./types/fairyring/keyshare/commitments";
+import { DecryptionKeyDataPacketData } from "./types/fairyring/keyshare/packet";
+import { DecryptionKeyRequest } from "./types/fairyring/keyshare/requested_decryption_key";
+import { MsgCreateAuthorizedAddressResponse } from "./types/fairyring/keyshare/tx";
+import { ValidatorSet } from "./types/fairyring/keyshare/validator_set";
+import { RequestPrivateDecryptionKeyPacketAck } from "./types/fairyring/keyshare/packet";
+import { QueryValidatorSetResponse } from "./types/fairyring/keyshare/query";
+import { GetPrivateDecryptionKeyPacketData } from "./types/fairyring/keyshare/packet";
+import { MsgDeRegisterValidator } from "./types/fairyring/keyshare/tx";
+import { MsgOverrideLatestPubkeyResponse } from "./types/fairyring/keyshare/tx";
+import { NoData } from "./types/fairyring/keyshare/packet";
+import { QueryVerifiableRandomnessResponse } from "./types/fairyring/keyshare/query";
+import { QueryPubkeyRequest } from "./types/fairyring/keyshare/query";
+import { GenesisState } from "./types/fairyring/keyshare/genesis";
+import { MsgCreateAuthorizedAddress } from "./types/fairyring/keyshare/tx";
+import { QueryAuthorizedAddressResponse } from "./types/fairyring/keyshare/query";
+import { MsgUpdateParamsResponse } from "./types/fairyring/keyshare/tx";
+import { MsgDeRegisterValidatorResponse } from "./types/fairyring/keyshare/tx";
+import { Keyshare } from "./types/fairyring/keyshare/keyshare";
+import { QueryValidatorSetAllResponse } from "./types/fairyring/keyshare/query";
+import { QueryAuthorizedAddressAllResponse } from "./types/fairyring/keyshare/query";
 import { MsgUpdateAuthorizedAddress } from "./types/fairyring/keyshare/tx";
-import { GeneralKeyShare } from "./types/fairyring/keyshare/general_key_share";
-import { Params } from "./types/fairyring/keyshare/params";
-import { IBCInfo } from "./types/fairyring/keyshare/requested_keyshare";
 import { AuthorizedAddress } from "./types/fairyring/keyshare/authorized_address";
-import { QueuedPubKey } from "./types/fairyring/keyshare/pub_key";
-import { QueryAllAggregatedKeyShareRequest } from "./types/fairyring/keyshare/query";
-import { GetAggrKeysharePacketAck } from "./types/fairyring/keyshare/packet";
-import { MsgCreateLatestPubKey } from "./types/fairyring/keyshare/tx";
+import { PrivateDecryptionKeyPacketAck } from "./types/fairyring/keyshare/packet";
+import { QueryCommitmentsResponse } from "./types/fairyring/keyshare/query";
+import { QueryPubkeyResponse } from "./types/fairyring/keyshare/query";
+import { CurrentKeysPacketData } from "./types/fairyring/keyshare/packet";
+import { EncryptedKeyshare } from "./types/fairyring/keyshare/pubkey";
+import { MsgOverrideLatestPubkey } from "./types/fairyring/keyshare/tx";
+import { ActivePubkey } from "./types/fairyring/keyshare/pubkey";
+import { QueryVerifiableRandomnessRequest } from "./types/fairyring/keyshare/query";
+import { QueryAuthorizedAddressAllRequest } from "./types/fairyring/keyshare/query";
+import { QueryGeneralKeyshareAllResponse } from "./types/fairyring/keyshare/query";
+import { RequestPrivateDecryptionKeyPacketData } from "./types/fairyring/keyshare/packet";
+import { MsgSubmitEncryptedKeyshare } from "./types/fairyring/keyshare/tx";
+import { QueuedPubkey } from "./types/fairyring/keyshare/pubkey";
+import { DecryptionKeyPacketAck } from "./types/fairyring/keyshare/packet";
+import { QueryGeneralKeyshareResponse } from "./types/fairyring/keyshare/query";
+import { PrivateDecryptionKeyDataPacketData } from "./types/fairyring/keyshare/packet";
+import { MsgUpdateParams } from "./types/fairyring/keyshare/tx";
+import { QueryGeneralKeyshareRequest } from "./types/fairyring/keyshare/query";
+import { QueryDecryptionKeyAllRequest } from "./types/fairyring/keyshare/query";
+import { QueryAuthorizedAddressRequest } from "./types/fairyring/keyshare/query";
+import { DecryptionKey } from "./types/fairyring/keyshare/decryption_key";
+import { QueryValidatorSetRequest } from "./types/fairyring/keyshare/query";
+import { QueryDecryptionKeyAllResponse } from "./types/fairyring/keyshare/query";
+import { QueryGeneralKeyshareAllRequest } from "./types/fairyring/keyshare/query";
+import { CounterPartyIBCInfo } from "./types/fairyring/keyshare/requested_decryption_key";
+import { MsgSendKeyshare } from "./types/fairyring/keyshare/tx";
+import { QueryDecryptionKeyResponse } from "./types/fairyring/keyshare/query";
+import { Params } from "./types/fairyring/keyshare/params";
+import { PrivateDecryptionKeyRequest } from "./types/fairyring/keyshare/requested_decryption_key";
+import { QueryCommitmentsRequest } from "./types/fairyring/keyshare/query";
+import { QueryKeyshareAllRequest } from "./types/fairyring/keyshare/query";
+import { GetDecryptionKeyPacketData } from "./types/fairyring/keyshare/packet";
+import { MsgSubmitGeneralKeyshareResponse } from "./types/fairyring/keyshare/tx";
+import { GeneralKeyshare } from "./types/fairyring/keyshare/keyshare";
+import { QueryParamsRequest } from "./types/fairyring/keyshare/query";
+import { QueryParamsResponse } from "./types/fairyring/keyshare/query";
+import { QueryKeyshareResponse } from "./types/fairyring/keyshare/query";
+import { MsgRegisterValidatorResponse } from "./types/fairyring/keyshare/tx";
+import { MsgCreateLatestPubkey } from "./types/fairyring/keyshare/tx";
+import { GetPrivateDecryptionKeyPacketAck } from "./types/fairyring/keyshare/packet";
+import { ValidatorEncryptedKeyshare } from "./types/fairyring/keyshare/keyshare";
+import { KeysharePacketData } from "./types/fairyring/keyshare/packet";
 
 
-export { QueryAllGeneralKeyShareRequest, MsgDeRegisterValidator, QueryGetValidatorSetRequest, QueryGetValidatorSetResponse, QueryAllValidatorSetRequest, MsgOverrideLatestPubKey, MsgCreateAuthorizedAddressResponse, MsgCreateAuthorizedAddress, MsgCreateLatestPubKeyResponse, ValidatorSet, CounterPartyIBCInfo, AggregatedKeyShare, MsgUpdateParamsResponse, MsgUpdateAuthorizedAddressResponse, MsgDeleteAuthorizedAddressResponse, RequestAggrKeysharePacketData, QueryVerifiableRandomnessQuery, QueryPubKeyResponse, MsgRegisterValidator, KeysharePacketData, RequestAggrKeysharePacketAck, EncryptedKeyShare, QueryGetKeyShareResponse, QueryGetAuthorizedAddressResponse, Commitments, KeyShare, KeyShareRequest, QueryCommitmentsResponse, QueryAllAggregatedKeyShareResponse, QueryAllGeneralKeyShareResponse, MsgDeleteAuthorizedAddress, NoData, CurrentKeysPacketData, QueryAllKeyShareResponse, QueryGetGeneralKeyShareRequest, MsgSendKeyshare, MsgOverrideLatestPubKeyResponse, QueryVerifiableRandomnessResponse, QueryParamsResponse, GetAggrKeysharePacketData, CurrentKeysPacketAck, GenesisState, QueryCommitmentsRequest, QueryGetKeyShareRequest, QueryGetAggregatedKeyShareResponse, MsgDeRegisterValidatorResponse, QueryAllValidatorSetResponse, QueryAllKeyShareRequest, QueryAllAuthorizedAddressResponse, QueryGetAuthorizedAddressRequest, QueryAllAuthorizedAddressRequest, AggrKeyshareDataPacketAck, MsgSendKeyshareResponse, MsgCreateGeneralKeyShare, QueryParamsRequest, QueryGetAggregatedKeyShareRequest, ActivePubKey, MsgRegisterValidatorResponse, MsgCreateGeneralKeyShareResponse, AggrKeyshareDataPacketData, QueryGetGeneralKeyShareResponse, MsgUpdateParams, QueryPubKeyRequest, MsgUpdateAuthorizedAddress, GeneralKeyShare, Params, IBCInfo, AuthorizedAddress, QueuedPubKey, QueryAllAggregatedKeyShareRequest, GetAggrKeysharePacketAck, MsgCreateLatestPubKey };
-
-type sendQueryAllGeneralKeyShareRequestParams = {
-  value: QueryAllGeneralKeyShareRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgDeRegisterValidatorParams = {
-  value: MsgDeRegisterValidator,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetValidatorSetRequestParams = {
-  value: QueryGetValidatorSetRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetValidatorSetResponseParams = {
-  value: QueryGetValidatorSetResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllValidatorSetRequestParams = {
-  value: QueryAllValidatorSetRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgOverrideLatestPubKeyParams = {
-  value: MsgOverrideLatestPubKey,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCreateAuthorizedAddressResponseParams = {
-  value: MsgCreateAuthorizedAddressResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCreateAuthorizedAddressParams = {
-  value: MsgCreateAuthorizedAddress,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCreateLatestPubKeyResponseParams = {
-  value: MsgCreateLatestPubKeyResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendValidatorSetParams = {
-  value: ValidatorSet,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendCounterPartyIBCInfoParams = {
-  value: CounterPartyIBCInfo,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendAggregatedKeyShareParams = {
-  value: AggregatedKeyShare,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgUpdateAuthorizedAddressResponse, MsgDeleteAuthorizedAddressResponse, MsgSubmitEncryptedKeyshareResponse, RequestDecryptionKeyPacketAck, CurrentKeysPacketAck, MsgDeleteAuthorizedAddress, MsgSendKeyshareResponse, QueryKeyshareAllResponse, QueryDecryptionKeyRequest, IBCInfo, MsgCreateLatestPubkeyResponse, MsgSubmitGeneralKeyshare, GetDecryptionKeyPacketAck, QueryValidatorSetAllRequest, QueryKeyshareRequest, MsgRegisterValidator, RequestDecryptionKeyPacketData, Commitments, DecryptionKeyDataPacketData, DecryptionKeyRequest, MsgCreateAuthorizedAddressResponse, ValidatorSet, RequestPrivateDecryptionKeyPacketAck, QueryValidatorSetResponse, GetPrivateDecryptionKeyPacketData, MsgDeRegisterValidator, MsgOverrideLatestPubkeyResponse, NoData, QueryVerifiableRandomnessResponse, QueryPubkeyRequest, GenesisState, MsgCreateAuthorizedAddress, QueryAuthorizedAddressResponse, MsgUpdateParamsResponse, MsgDeRegisterValidatorResponse, Keyshare, QueryValidatorSetAllResponse, QueryAuthorizedAddressAllResponse, MsgUpdateAuthorizedAddress, AuthorizedAddress, PrivateDecryptionKeyPacketAck, QueryCommitmentsResponse, QueryPubkeyResponse, CurrentKeysPacketData, EncryptedKeyshare, MsgOverrideLatestPubkey, ActivePubkey, QueryVerifiableRandomnessRequest, QueryAuthorizedAddressAllRequest, QueryGeneralKeyshareAllResponse, RequestPrivateDecryptionKeyPacketData, MsgSubmitEncryptedKeyshare, QueuedPubkey, DecryptionKeyPacketAck, QueryGeneralKeyshareResponse, PrivateDecryptionKeyDataPacketData, MsgUpdateParams, QueryGeneralKeyshareRequest, QueryDecryptionKeyAllRequest, QueryAuthorizedAddressRequest, DecryptionKey, QueryValidatorSetRequest, QueryDecryptionKeyAllResponse, QueryGeneralKeyshareAllRequest, CounterPartyIBCInfo, MsgSendKeyshare, QueryDecryptionKeyResponse, Params, PrivateDecryptionKeyRequest, QueryCommitmentsRequest, QueryKeyshareAllRequest, GetDecryptionKeyPacketData, MsgSubmitGeneralKeyshareResponse, GeneralKeyshare, QueryParamsRequest, QueryParamsResponse, QueryKeyshareResponse, MsgRegisterValidatorResponse, MsgCreateLatestPubkey, GetPrivateDecryptionKeyPacketAck, ValidatorEncryptedKeyshare, KeysharePacketData };
 
 type sendMsgUpdateAuthorizedAddressResponseParams = {
   value: MsgUpdateAuthorizedAddressResponse,
@@ -172,152 +104,14 @@ type sendMsgDeleteAuthorizedAddressResponseParams = {
   memo?: string
 };
 
-type sendRequestAggrKeysharePacketDataParams = {
-  value: RequestAggrKeysharePacketData,
+type sendMsgSubmitEncryptedKeyshareResponseParams = {
+  value: MsgSubmitEncryptedKeyshareResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryVerifiableRandomnessQueryParams = {
-  value: QueryVerifiableRandomnessQuery,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryPubKeyResponseParams = {
-  value: QueryPubKeyResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRegisterValidatorParams = {
-  value: MsgRegisterValidator,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendKeysharePacketDataParams = {
-  value: KeysharePacketData,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendRequestAggrKeysharePacketAckParams = {
-  value: RequestAggrKeysharePacketAck,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendEncryptedKeyShareParams = {
-  value: EncryptedKeyShare,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetKeyShareResponseParams = {
-  value: QueryGetKeyShareResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetAuthorizedAddressResponseParams = {
-  value: QueryGetAuthorizedAddressResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendCommitmentsParams = {
-  value: Commitments,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendKeyShareParams = {
-  value: KeyShare,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendKeyShareRequestParams = {
-  value: KeyShareRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryCommitmentsResponseParams = {
-  value: QueryCommitmentsResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllAggregatedKeyShareResponseParams = {
-  value: QueryAllAggregatedKeyShareResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllGeneralKeyShareResponseParams = {
-  value: QueryAllGeneralKeyShareResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgDeleteAuthorizedAddressParams = {
-  value: MsgDeleteAuthorizedAddress,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendNoDataParams = {
-  value: NoData,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendCurrentKeysPacketDataParams = {
-  value: CurrentKeysPacketData,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllKeyShareResponseParams = {
-  value: QueryAllKeyShareResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetGeneralKeyShareRequestParams = {
-  value: QueryGetGeneralKeyShareRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSendKeyshareParams = {
-  value: MsgSendKeyshare,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgOverrideLatestPubKeyResponseParams = {
-  value: MsgOverrideLatestPubKeyResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryVerifiableRandomnessResponseParams = {
-  value: QueryVerifiableRandomnessResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryParamsResponseParams = {
-  value: QueryParamsResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendGetAggrKeysharePacketDataParams = {
-  value: GetAggrKeysharePacketData,
+type sendRequestDecryptionKeyPacketAckParams = {
+  value: RequestDecryptionKeyPacketAck,
   fee?: StdFee,
   memo?: string
 };
@@ -328,68 +122,8 @@ type sendCurrentKeysPacketAckParams = {
   memo?: string
 };
 
-type sendGenesisStateParams = {
-  value: GenesisState,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryCommitmentsRequestParams = {
-  value: QueryCommitmentsRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetKeyShareRequestParams = {
-  value: QueryGetKeyShareRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetAggregatedKeyShareResponseParams = {
-  value: QueryGetAggregatedKeyShareResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgDeRegisterValidatorResponseParams = {
-  value: MsgDeRegisterValidatorResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllValidatorSetResponseParams = {
-  value: QueryAllValidatorSetResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllKeyShareRequestParams = {
-  value: QueryAllKeyShareRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllAuthorizedAddressResponseParams = {
-  value: QueryAllAuthorizedAddressResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetAuthorizedAddressRequestParams = {
-  value: QueryGetAuthorizedAddressRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllAuthorizedAddressRequestParams = {
-  value: QueryAllAuthorizedAddressRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendAggrKeyshareDataPacketAckParams = {
-  value: AggrKeyshareDataPacketAck,
+type sendMsgDeleteAuthorizedAddressParams = {
+  value: MsgDeleteAuthorizedAddress,
   fee?: StdFee,
   memo?: string
 };
@@ -400,80 +134,14 @@ type sendMsgSendKeyshareResponseParams = {
   memo?: string
 };
 
-type sendMsgCreateGeneralKeyShareParams = {
-  value: MsgCreateGeneralKeyShare,
+type sendQueryKeyshareAllResponseParams = {
+  value: QueryKeyshareAllResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryParamsRequestParams = {
-  value: QueryParamsRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetAggregatedKeyShareRequestParams = {
-  value: QueryGetAggregatedKeyShareRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendActivePubKeyParams = {
-  value: ActivePubKey,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRegisterValidatorResponseParams = {
-  value: MsgRegisterValidatorResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCreateGeneralKeyShareResponseParams = {
-  value: MsgCreateGeneralKeyShareResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendAggrKeyshareDataPacketDataParams = {
-  value: AggrKeyshareDataPacketData,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetGeneralKeyShareResponseParams = {
-  value: QueryGetGeneralKeyShareResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateParamsParams = {
-  value: MsgUpdateParams,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryPubKeyRequestParams = {
-  value: QueryPubKeyRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateAuthorizedAddressParams = {
-  value: MsgUpdateAuthorizedAddress,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendGeneralKeyShareParams = {
-  value: GeneralKeyShare,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendParamsParams = {
-  value: Params,
+type sendQueryDecryptionKeyRequestParams = {
+  value: QueryDecryptionKeyRequest,
   fee?: StdFee,
   memo?: string
 };
@@ -484,88 +152,438 @@ type sendIBCInfoParams = {
   memo?: string
 };
 
+type sendMsgCreateLatestPubkeyResponseParams = {
+  value: MsgCreateLatestPubkeyResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSubmitGeneralKeyshareParams = {
+  value: MsgSubmitGeneralKeyshare,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGetDecryptionKeyPacketAckParams = {
+  value: GetDecryptionKeyPacketAck,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryValidatorSetAllRequestParams = {
+  value: QueryValidatorSetAllRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryKeyshareRequestParams = {
+  value: QueryKeyshareRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRegisterValidatorParams = {
+  value: MsgRegisterValidator,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendRequestDecryptionKeyPacketDataParams = {
+  value: RequestDecryptionKeyPacketData,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendCommitmentsParams = {
+  value: Commitments,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendDecryptionKeyDataPacketDataParams = {
+  value: DecryptionKeyDataPacketData,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendDecryptionKeyRequestParams = {
+  value: DecryptionKeyRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgCreateAuthorizedAddressResponseParams = {
+  value: MsgCreateAuthorizedAddressResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendValidatorSetParams = {
+  value: ValidatorSet,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendRequestPrivateDecryptionKeyPacketAckParams = {
+  value: RequestPrivateDecryptionKeyPacketAck,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryValidatorSetResponseParams = {
+  value: QueryValidatorSetResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGetPrivateDecryptionKeyPacketDataParams = {
+  value: GetPrivateDecryptionKeyPacketData,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgDeRegisterValidatorParams = {
+  value: MsgDeRegisterValidator,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgOverrideLatestPubkeyResponseParams = {
+  value: MsgOverrideLatestPubkeyResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendNoDataParams = {
+  value: NoData,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryVerifiableRandomnessResponseParams = {
+  value: QueryVerifiableRandomnessResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryPubkeyRequestParams = {
+  value: QueryPubkeyRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGenesisStateParams = {
+  value: GenesisState,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgCreateAuthorizedAddressParams = {
+  value: MsgCreateAuthorizedAddress,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryAuthorizedAddressResponseParams = {
+  value: QueryAuthorizedAddressResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgDeRegisterValidatorResponseParams = {
+  value: MsgDeRegisterValidatorResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendKeyshareParams = {
+  value: Keyshare,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryValidatorSetAllResponseParams = {
+  value: QueryValidatorSetAllResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryAuthorizedAddressAllResponseParams = {
+  value: QueryAuthorizedAddressAllResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateAuthorizedAddressParams = {
+  value: MsgUpdateAuthorizedAddress,
+  fee?: StdFee,
+  memo?: string
+};
+
 type sendAuthorizedAddressParams = {
   value: AuthorizedAddress,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueuedPubKeyParams = {
-  value: QueuedPubKey,
+type sendPrivateDecryptionKeyPacketAckParams = {
+  value: PrivateDecryptionKeyPacketAck,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryAllAggregatedKeyShareRequestParams = {
-  value: QueryAllAggregatedKeyShareRequest,
+type sendQueryCommitmentsResponseParams = {
+  value: QueryCommitmentsResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendGetAggrKeysharePacketAckParams = {
-  value: GetAggrKeysharePacketAck,
+type sendQueryPubkeyResponseParams = {
+  value: QueryPubkeyResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgCreateLatestPubKeyParams = {
-  value: MsgCreateLatestPubKey,
+type sendCurrentKeysPacketDataParams = {
+  value: CurrentKeysPacketData,
   fee?: StdFee,
   memo?: string
 };
 
-
-type queryAllGeneralKeyShareRequestParams = {
-  value: QueryAllGeneralKeyShareRequest,
+type sendEncryptedKeyshareParams = {
+  value: EncryptedKeyshare,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgDeRegisterValidatorParams = {
-  value: MsgDeRegisterValidator,
+type sendMsgOverrideLatestPubkeyParams = {
+  value: MsgOverrideLatestPubkey,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryGetValidatorSetRequestParams = {
-  value: QueryGetValidatorSetRequest,
+type sendActivePubkeyParams = {
+  value: ActivePubkey,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryGetValidatorSetResponseParams = {
-  value: QueryGetValidatorSetResponse,
+type sendQueryVerifiableRandomnessRequestParams = {
+  value: QueryVerifiableRandomnessRequest,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryAllValidatorSetRequestParams = {
-  value: QueryAllValidatorSetRequest,
+type sendQueryAuthorizedAddressAllRequestParams = {
+  value: QueryAuthorizedAddressAllRequest,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgOverrideLatestPubKeyParams = {
-  value: MsgOverrideLatestPubKey,
+type sendQueryGeneralKeyshareAllResponseParams = {
+  value: QueryGeneralKeyshareAllResponse,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgCreateAuthorizedAddressResponseParams = {
-  value: MsgCreateAuthorizedAddressResponse,
+type sendRequestPrivateDecryptionKeyPacketDataParams = {
+  value: RequestPrivateDecryptionKeyPacketData,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgCreateAuthorizedAddressParams = {
-  value: MsgCreateAuthorizedAddress,
+type sendMsgSubmitEncryptedKeyshareParams = {
+  value: MsgSubmitEncryptedKeyshare,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgCreateLatestPubKeyResponseParams = {
-  value: MsgCreateLatestPubKeyResponse,
+type sendQueuedPubkeyParams = {
+  value: QueuedPubkey,
+  fee?: StdFee,
+  memo?: string
 };
 
-type validatorSetParams = {
-  value: ValidatorSet,
+type sendDecryptionKeyPacketAckParams = {
+  value: DecryptionKeyPacketAck,
+  fee?: StdFee,
+  memo?: string
 };
 
-type counterPartyIbcinfoParams = {
+type sendQueryGeneralKeyshareResponseParams = {
+  value: QueryGeneralKeyshareResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendPrivateDecryptionKeyDataPacketDataParams = {
+  value: PrivateDecryptionKeyDataPacketData,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateParamsParams = {
+  value: MsgUpdateParams,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryGeneralKeyshareRequestParams = {
+  value: QueryGeneralKeyshareRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryDecryptionKeyAllRequestParams = {
+  value: QueryDecryptionKeyAllRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryAuthorizedAddressRequestParams = {
+  value: QueryAuthorizedAddressRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendDecryptionKeyParams = {
+  value: DecryptionKey,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryValidatorSetRequestParams = {
+  value: QueryValidatorSetRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryDecryptionKeyAllResponseParams = {
+  value: QueryDecryptionKeyAllResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryGeneralKeyshareAllRequestParams = {
+  value: QueryGeneralKeyshareAllRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendCounterPartyIBCInfoParams = {
   value: CounterPartyIBCInfo,
+  fee?: StdFee,
+  memo?: string
 };
 
-type aggregatedKeyShareParams = {
-  value: AggregatedKeyShare,
+type sendMsgSendKeyshareParams = {
+  value: MsgSendKeyshare,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
+type sendQueryDecryptionKeyResponseParams = {
+  value: QueryDecryptionKeyResponse,
+  fee?: StdFee,
+  memo?: string
 };
+
+type sendParamsParams = {
+  value: Params,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendPrivateDecryptionKeyRequestParams = {
+  value: PrivateDecryptionKeyRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryCommitmentsRequestParams = {
+  value: QueryCommitmentsRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryKeyshareAllRequestParams = {
+  value: QueryKeyshareAllRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGetDecryptionKeyPacketDataParams = {
+  value: GetDecryptionKeyPacketData,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSubmitGeneralKeyshareResponseParams = {
+  value: MsgSubmitGeneralKeyshareResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGeneralKeyshareParams = {
+  value: GeneralKeyshare,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryParamsRequestParams = {
+  value: QueryParamsRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryParamsResponseParams = {
+  value: QueryParamsResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryKeyshareResponseParams = {
+  value: QueryKeyshareResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRegisterValidatorResponseParams = {
+  value: MsgRegisterValidatorResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgCreateLatestPubkeyParams = {
+  value: MsgCreateLatestPubkey,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGetPrivateDecryptionKeyPacketAckParams = {
+  value: GetPrivateDecryptionKeyPacketAck,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendValidatorEncryptedKeyshareParams = {
+  value: ValidatorEncryptedKeyshare,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendKeysharePacketDataParams = {
+  value: KeysharePacketData,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type msgUpdateAuthorizedAddressResponseParams = {
   value: MsgUpdateAuthorizedAddressResponse,
@@ -575,232 +593,324 @@ type msgDeleteAuthorizedAddressResponseParams = {
   value: MsgDeleteAuthorizedAddressResponse,
 };
 
-type requestAggrKeysharePacketDataParams = {
-  value: RequestAggrKeysharePacketData,
+type msgSubmitEncryptedKeyshareResponseParams = {
+  value: MsgSubmitEncryptedKeyshareResponse,
 };
 
-type queryVerifiableRandomnessQueryParams = {
-  value: QueryVerifiableRandomnessQuery,
-};
-
-type queryPubKeyResponseParams = {
-  value: QueryPubKeyResponse,
-};
-
-type msgRegisterValidatorParams = {
-  value: MsgRegisterValidator,
-};
-
-type keysharePacketDataParams = {
-  value: KeysharePacketData,
-};
-
-type requestAggrKeysharePacketAckParams = {
-  value: RequestAggrKeysharePacketAck,
-};
-
-type encryptedKeyShareParams = {
-  value: EncryptedKeyShare,
-};
-
-type queryGetKeyShareResponseParams = {
-  value: QueryGetKeyShareResponse,
-};
-
-type queryGetAuthorizedAddressResponseParams = {
-  value: QueryGetAuthorizedAddressResponse,
-};
-
-type commitmentsParams = {
-  value: Commitments,
-};
-
-type keyShareParams = {
-  value: KeyShare,
-};
-
-type keyShareRequestParams = {
-  value: KeyShareRequest,
-};
-
-type queryCommitmentsResponseParams = {
-  value: QueryCommitmentsResponse,
-};
-
-type queryAllAggregatedKeyShareResponseParams = {
-  value: QueryAllAggregatedKeyShareResponse,
-};
-
-type queryAllGeneralKeyShareResponseParams = {
-  value: QueryAllGeneralKeyShareResponse,
-};
-
-type msgDeleteAuthorizedAddressParams = {
-  value: MsgDeleteAuthorizedAddress,
-};
-
-type noDataParams = {
-  value: NoData,
-};
-
-type currentKeysPacketDataParams = {
-  value: CurrentKeysPacketData,
-};
-
-type queryAllKeyShareResponseParams = {
-  value: QueryAllKeyShareResponse,
-};
-
-type queryGetGeneralKeyShareRequestParams = {
-  value: QueryGetGeneralKeyShareRequest,
-};
-
-type msgSendKeyshareParams = {
-  value: MsgSendKeyshare,
-};
-
-type msgOverrideLatestPubKeyResponseParams = {
-  value: MsgOverrideLatestPubKeyResponse,
-};
-
-type queryVerifiableRandomnessResponseParams = {
-  value: QueryVerifiableRandomnessResponse,
-};
-
-type queryParamsResponseParams = {
-  value: QueryParamsResponse,
-};
-
-type getAggrKeysharePacketDataParams = {
-  value: GetAggrKeysharePacketData,
+type requestDecryptionKeyPacketAckParams = {
+  value: RequestDecryptionKeyPacketAck,
 };
 
 type currentKeysPacketAckParams = {
   value: CurrentKeysPacketAck,
 };
 
-type genesisStateParams = {
-  value: GenesisState,
-};
-
-type queryCommitmentsRequestParams = {
-  value: QueryCommitmentsRequest,
-};
-
-type queryGetKeyShareRequestParams = {
-  value: QueryGetKeyShareRequest,
-};
-
-type queryGetAggregatedKeyShareResponseParams = {
-  value: QueryGetAggregatedKeyShareResponse,
-};
-
-type msgDeRegisterValidatorResponseParams = {
-  value: MsgDeRegisterValidatorResponse,
-};
-
-type queryAllValidatorSetResponseParams = {
-  value: QueryAllValidatorSetResponse,
-};
-
-type queryAllKeyShareRequestParams = {
-  value: QueryAllKeyShareRequest,
-};
-
-type queryAllAuthorizedAddressResponseParams = {
-  value: QueryAllAuthorizedAddressResponse,
-};
-
-type queryGetAuthorizedAddressRequestParams = {
-  value: QueryGetAuthorizedAddressRequest,
-};
-
-type queryAllAuthorizedAddressRequestParams = {
-  value: QueryAllAuthorizedAddressRequest,
-};
-
-type aggrKeyshareDataPacketAckParams = {
-  value: AggrKeyshareDataPacketAck,
+type msgDeleteAuthorizedAddressParams = {
+  value: MsgDeleteAuthorizedAddress,
 };
 
 type msgSendKeyshareResponseParams = {
   value: MsgSendKeyshareResponse,
 };
 
-type msgCreateGeneralKeyShareParams = {
-  value: MsgCreateGeneralKeyShare,
+type queryKeyshareAllResponseParams = {
+  value: QueryKeyshareAllResponse,
 };
 
-type queryParamsRequestParams = {
-  value: QueryParamsRequest,
-};
-
-type queryGetAggregatedKeyShareRequestParams = {
-  value: QueryGetAggregatedKeyShareRequest,
-};
-
-type activePubKeyParams = {
-  value: ActivePubKey,
-};
-
-type msgRegisterValidatorResponseParams = {
-  value: MsgRegisterValidatorResponse,
-};
-
-type msgCreateGeneralKeyShareResponseParams = {
-  value: MsgCreateGeneralKeyShareResponse,
-};
-
-type aggrKeyshareDataPacketDataParams = {
-  value: AggrKeyshareDataPacketData,
-};
-
-type queryGetGeneralKeyShareResponseParams = {
-  value: QueryGetGeneralKeyShareResponse,
-};
-
-type msgUpdateParamsParams = {
-  value: MsgUpdateParams,
-};
-
-type queryPubKeyRequestParams = {
-  value: QueryPubKeyRequest,
-};
-
-type msgUpdateAuthorizedAddressParams = {
-  value: MsgUpdateAuthorizedAddress,
-};
-
-type generalKeyShareParams = {
-  value: GeneralKeyShare,
-};
-
-type paramsParams = {
-  value: Params,
+type queryDecryptionKeyRequestParams = {
+  value: QueryDecryptionKeyRequest,
 };
 
 type ibcinfoParams = {
   value: IBCInfo,
 };
 
+type msgCreateLatestPubkeyResponseParams = {
+  value: MsgCreateLatestPubkeyResponse,
+};
+
+type msgSubmitGeneralKeyshareParams = {
+  value: MsgSubmitGeneralKeyshare,
+};
+
+type getDecryptionKeyPacketAckParams = {
+  value: GetDecryptionKeyPacketAck,
+};
+
+type queryValidatorSetAllRequestParams = {
+  value: QueryValidatorSetAllRequest,
+};
+
+type queryKeyshareRequestParams = {
+  value: QueryKeyshareRequest,
+};
+
+type msgRegisterValidatorParams = {
+  value: MsgRegisterValidator,
+};
+
+type requestDecryptionKeyPacketDataParams = {
+  value: RequestDecryptionKeyPacketData,
+};
+
+type commitmentsParams = {
+  value: Commitments,
+};
+
+type decryptionKeyDataPacketDataParams = {
+  value: DecryptionKeyDataPacketData,
+};
+
+type decryptionKeyRequestParams = {
+  value: DecryptionKeyRequest,
+};
+
+type msgCreateAuthorizedAddressResponseParams = {
+  value: MsgCreateAuthorizedAddressResponse,
+};
+
+type validatorSetParams = {
+  value: ValidatorSet,
+};
+
+type requestPrivateDecryptionKeyPacketAckParams = {
+  value: RequestPrivateDecryptionKeyPacketAck,
+};
+
+type queryValidatorSetResponseParams = {
+  value: QueryValidatorSetResponse,
+};
+
+type getPrivateDecryptionKeyPacketDataParams = {
+  value: GetPrivateDecryptionKeyPacketData,
+};
+
+type msgDeRegisterValidatorParams = {
+  value: MsgDeRegisterValidator,
+};
+
+type msgOverrideLatestPubkeyResponseParams = {
+  value: MsgOverrideLatestPubkeyResponse,
+};
+
+type noDataParams = {
+  value: NoData,
+};
+
+type queryVerifiableRandomnessResponseParams = {
+  value: QueryVerifiableRandomnessResponse,
+};
+
+type queryPubkeyRequestParams = {
+  value: QueryPubkeyRequest,
+};
+
+type genesisStateParams = {
+  value: GenesisState,
+};
+
+type msgCreateAuthorizedAddressParams = {
+  value: MsgCreateAuthorizedAddress,
+};
+
+type queryAuthorizedAddressResponseParams = {
+  value: QueryAuthorizedAddressResponse,
+};
+
+type msgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
+};
+
+type msgDeRegisterValidatorResponseParams = {
+  value: MsgDeRegisterValidatorResponse,
+};
+
+type keyshareParams = {
+  value: Keyshare,
+};
+
+type queryValidatorSetAllResponseParams = {
+  value: QueryValidatorSetAllResponse,
+};
+
+type queryAuthorizedAddressAllResponseParams = {
+  value: QueryAuthorizedAddressAllResponse,
+};
+
+type msgUpdateAuthorizedAddressParams = {
+  value: MsgUpdateAuthorizedAddress,
+};
+
 type authorizedAddressParams = {
   value: AuthorizedAddress,
 };
 
-type queuedPubKeyParams = {
-  value: QueuedPubKey,
+type privateDecryptionKeyPacketAckParams = {
+  value: PrivateDecryptionKeyPacketAck,
 };
 
-type queryAllAggregatedKeyShareRequestParams = {
-  value: QueryAllAggregatedKeyShareRequest,
+type queryCommitmentsResponseParams = {
+  value: QueryCommitmentsResponse,
 };
 
-type getAggrKeysharePacketAckParams = {
-  value: GetAggrKeysharePacketAck,
+type queryPubkeyResponseParams = {
+  value: QueryPubkeyResponse,
 };
 
-type msgCreateLatestPubKeyParams = {
-  value: MsgCreateLatestPubKey,
+type currentKeysPacketDataParams = {
+  value: CurrentKeysPacketData,
+};
+
+type encryptedKeyshareParams = {
+  value: EncryptedKeyshare,
+};
+
+type msgOverrideLatestPubkeyParams = {
+  value: MsgOverrideLatestPubkey,
+};
+
+type activePubkeyParams = {
+  value: ActivePubkey,
+};
+
+type queryVerifiableRandomnessRequestParams = {
+  value: QueryVerifiableRandomnessRequest,
+};
+
+type queryAuthorizedAddressAllRequestParams = {
+  value: QueryAuthorizedAddressAllRequest,
+};
+
+type queryGeneralKeyshareAllResponseParams = {
+  value: QueryGeneralKeyshareAllResponse,
+};
+
+type requestPrivateDecryptionKeyPacketDataParams = {
+  value: RequestPrivateDecryptionKeyPacketData,
+};
+
+type msgSubmitEncryptedKeyshareParams = {
+  value: MsgSubmitEncryptedKeyshare,
+};
+
+type queuedPubkeyParams = {
+  value: QueuedPubkey,
+};
+
+type decryptionKeyPacketAckParams = {
+  value: DecryptionKeyPacketAck,
+};
+
+type queryGeneralKeyshareResponseParams = {
+  value: QueryGeneralKeyshareResponse,
+};
+
+type privateDecryptionKeyDataPacketDataParams = {
+  value: PrivateDecryptionKeyDataPacketData,
+};
+
+type msgUpdateParamsParams = {
+  value: MsgUpdateParams,
+};
+
+type queryGeneralKeyshareRequestParams = {
+  value: QueryGeneralKeyshareRequest,
+};
+
+type queryDecryptionKeyAllRequestParams = {
+  value: QueryDecryptionKeyAllRequest,
+};
+
+type queryAuthorizedAddressRequestParams = {
+  value: QueryAuthorizedAddressRequest,
+};
+
+type decryptionKeyParams = {
+  value: DecryptionKey,
+};
+
+type queryValidatorSetRequestParams = {
+  value: QueryValidatorSetRequest,
+};
+
+type queryDecryptionKeyAllResponseParams = {
+  value: QueryDecryptionKeyAllResponse,
+};
+
+type queryGeneralKeyshareAllRequestParams = {
+  value: QueryGeneralKeyshareAllRequest,
+};
+
+type counterPartyIbcinfoParams = {
+  value: CounterPartyIBCInfo,
+};
+
+type msgSendKeyshareParams = {
+  value: MsgSendKeyshare,
+};
+
+type queryDecryptionKeyResponseParams = {
+  value: QueryDecryptionKeyResponse,
+};
+
+type paramsParams = {
+  value: Params,
+};
+
+type privateDecryptionKeyRequestParams = {
+  value: PrivateDecryptionKeyRequest,
+};
+
+type queryCommitmentsRequestParams = {
+  value: QueryCommitmentsRequest,
+};
+
+type queryKeyshareAllRequestParams = {
+  value: QueryKeyshareAllRequest,
+};
+
+type getDecryptionKeyPacketDataParams = {
+  value: GetDecryptionKeyPacketData,
+};
+
+type msgSubmitGeneralKeyshareResponseParams = {
+  value: MsgSubmitGeneralKeyshareResponse,
+};
+
+type generalKeyshareParams = {
+  value: GeneralKeyshare,
+};
+
+type queryParamsRequestParams = {
+  value: QueryParamsRequest,
+};
+
+type queryParamsResponseParams = {
+  value: QueryParamsResponse,
+};
+
+type queryKeyshareResponseParams = {
+  value: QueryKeyshareResponse,
+};
+
+type msgRegisterValidatorResponseParams = {
+  value: MsgRegisterValidatorResponse,
+};
+
+type msgCreateLatestPubkeyParams = {
+  value: MsgCreateLatestPubkey,
+};
+
+type getPrivateDecryptionKeyPacketAckParams = {
+  value: GetPrivateDecryptionKeyPacketAck,
+};
+
+type validatorEncryptedKeyshareParams = {
+  value: ValidatorEncryptedKeyshare,
+};
+
+type keysharePacketDataParams = {
+  value: KeysharePacketData,
 };
 
 
@@ -833,188 +943,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendQueryAllGeneralKeyShareRequest({ value, fee, memo }: sendQueryAllGeneralKeyShareRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllGeneralKeyShareRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllGeneralKeyShareRequest({ value: QueryAllGeneralKeyShareRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllGeneralKeyShareRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgDeRegisterValidator({ value, fee, memo }: sendMsgDeRegisterValidatorParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDeRegisterValidator: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgDeRegisterValidator({ value: MsgDeRegisterValidator.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDeRegisterValidator: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetValidatorSetRequest({ value, fee, memo }: sendQueryGetValidatorSetRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetValidatorSetRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetValidatorSetRequest({ value: QueryGetValidatorSetRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetValidatorSetRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetValidatorSetResponse({ value, fee, memo }: sendQueryGetValidatorSetResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetValidatorSetResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetValidatorSetResponse({ value: QueryGetValidatorSetResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetValidatorSetResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllValidatorSetRequest({ value, fee, memo }: sendQueryAllValidatorSetRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllValidatorSetRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllValidatorSetRequest({ value: QueryAllValidatorSetRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllValidatorSetRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgOverrideLatestPubKey({ value, fee, memo }: sendMsgOverrideLatestPubKeyParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgOverrideLatestPubKey: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgOverrideLatestPubKey({ value: MsgOverrideLatestPubKey.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgOverrideLatestPubKey: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCreateAuthorizedAddressResponse({ value, fee, memo }: sendMsgCreateAuthorizedAddressResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateAuthorizedAddressResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgCreateAuthorizedAddressResponse({ value: MsgCreateAuthorizedAddressResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateAuthorizedAddressResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCreateAuthorizedAddress({ value, fee, memo }: sendMsgCreateAuthorizedAddressParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateAuthorizedAddress: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgCreateAuthorizedAddress({ value: MsgCreateAuthorizedAddress.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateAuthorizedAddress: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCreateLatestPubKeyResponse({ value, fee, memo }: sendMsgCreateLatestPubKeyResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateLatestPubKeyResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgCreateLatestPubKeyResponse({ value: MsgCreateLatestPubKeyResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateLatestPubKeyResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendValidatorSet({ value, fee, memo }: sendValidatorSetParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendValidatorSet: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.validatorSet({ value: ValidatorSet.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendValidatorSet: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendCounterPartyIBCInfo({ value, fee, memo }: sendCounterPartyIBCInfoParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendCounterPartyIBCInfo: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.counterPartyIbcinfo({ value: CounterPartyIBCInfo.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendCounterPartyIBCInfo: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendAggregatedKeyShare({ value, fee, memo }: sendAggregatedKeyShareParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendAggregatedKeyShare: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.aggregatedKeyShare({ value: AggregatedKeyShare.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendAggregatedKeyShare: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgUpdateAuthorizedAddressResponse({ value, fee, memo }: sendMsgUpdateAuthorizedAddressResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgUpdateAuthorizedAddressResponse: Unable to sign Tx. Signer is not present.')
@@ -1043,353 +971,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendRequestAggrKeysharePacketData({ value, fee, memo }: sendRequestAggrKeysharePacketDataParams): Promise<DeliverTxResponse> {
+		async sendMsgSubmitEncryptedKeyshareResponse({ value, fee, memo }: sendMsgSubmitEncryptedKeyshareResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendRequestAggrKeysharePacketData: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgSubmitEncryptedKeyshareResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.requestAggrKeysharePacketData({ value: RequestAggrKeysharePacketData.fromPartial(value) })
+				let msg = this.msgSubmitEncryptedKeyshareResponse({ value: MsgSubmitEncryptedKeyshareResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendRequestAggrKeysharePacketData: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgSubmitEncryptedKeyshareResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryVerifiableRandomnessQuery({ value, fee, memo }: sendQueryVerifiableRandomnessQueryParams): Promise<DeliverTxResponse> {
+		async sendRequestDecryptionKeyPacketAck({ value, fee, memo }: sendRequestDecryptionKeyPacketAckParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryVerifiableRandomnessQuery: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendRequestDecryptionKeyPacketAck: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryVerifiableRandomnessQuery({ value: QueryVerifiableRandomnessQuery.fromPartial(value) })
+				let msg = this.requestDecryptionKeyPacketAck({ value: RequestDecryptionKeyPacketAck.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryVerifiableRandomnessQuery: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryPubKeyResponse({ value, fee, memo }: sendQueryPubKeyResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryPubKeyResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryPubKeyResponse({ value: QueryPubKeyResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryPubKeyResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRegisterValidator({ value, fee, memo }: sendMsgRegisterValidatorParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRegisterValidator: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRegisterValidator({ value: MsgRegisterValidator.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRegisterValidator: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendKeysharePacketData({ value, fee, memo }: sendKeysharePacketDataParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendKeysharePacketData: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.keysharePacketData({ value: KeysharePacketData.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendKeysharePacketData: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendRequestAggrKeysharePacketAck({ value, fee, memo }: sendRequestAggrKeysharePacketAckParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendRequestAggrKeysharePacketAck: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.requestAggrKeysharePacketAck({ value: RequestAggrKeysharePacketAck.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendRequestAggrKeysharePacketAck: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendEncryptedKeyShare({ value, fee, memo }: sendEncryptedKeyShareParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendEncryptedKeyShare: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.encryptedKeyShare({ value: EncryptedKeyShare.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendEncryptedKeyShare: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetKeyShareResponse({ value, fee, memo }: sendQueryGetKeyShareResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetKeyShareResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetKeyShareResponse({ value: QueryGetKeyShareResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetKeyShareResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetAuthorizedAddressResponse({ value, fee, memo }: sendQueryGetAuthorizedAddressResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetAuthorizedAddressResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetAuthorizedAddressResponse({ value: QueryGetAuthorizedAddressResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetAuthorizedAddressResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendCommitments({ value, fee, memo }: sendCommitmentsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendCommitments: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.commitments({ value: Commitments.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendCommitments: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendKeyShare({ value, fee, memo }: sendKeyShareParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendKeyShare: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.keyShare({ value: KeyShare.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendKeyShare: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendKeyShareRequest({ value, fee, memo }: sendKeyShareRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendKeyShareRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.keyShareRequest({ value: KeyShareRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendKeyShareRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryCommitmentsResponse({ value, fee, memo }: sendQueryCommitmentsResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryCommitmentsResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryCommitmentsResponse({ value: QueryCommitmentsResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryCommitmentsResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllAggregatedKeyShareResponse({ value, fee, memo }: sendQueryAllAggregatedKeyShareResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllAggregatedKeyShareResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllAggregatedKeyShareResponse({ value: QueryAllAggregatedKeyShareResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllAggregatedKeyShareResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllGeneralKeyShareResponse({ value, fee, memo }: sendQueryAllGeneralKeyShareResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllGeneralKeyShareResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllGeneralKeyShareResponse({ value: QueryAllGeneralKeyShareResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllGeneralKeyShareResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgDeleteAuthorizedAddress({ value, fee, memo }: sendMsgDeleteAuthorizedAddressParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDeleteAuthorizedAddress: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgDeleteAuthorizedAddress({ value: MsgDeleteAuthorizedAddress.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDeleteAuthorizedAddress: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendNoData({ value, fee, memo }: sendNoDataParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendNoData: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.noData({ value: NoData.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendNoData: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendCurrentKeysPacketData({ value, fee, memo }: sendCurrentKeysPacketDataParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendCurrentKeysPacketData: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.currentKeysPacketData({ value: CurrentKeysPacketData.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendCurrentKeysPacketData: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllKeyShareResponse({ value, fee, memo }: sendQueryAllKeyShareResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllKeyShareResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllKeyShareResponse({ value: QueryAllKeyShareResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllKeyShareResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetGeneralKeyShareRequest({ value, fee, memo }: sendQueryGetGeneralKeyShareRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetGeneralKeyShareRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetGeneralKeyShareRequest({ value: QueryGetGeneralKeyShareRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetGeneralKeyShareRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSendKeyshare({ value, fee, memo }: sendMsgSendKeyshareParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSendKeyshare: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgSendKeyshare({ value: MsgSendKeyshare.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSendKeyshare: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgOverrideLatestPubKeyResponse({ value, fee, memo }: sendMsgOverrideLatestPubKeyResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgOverrideLatestPubKeyResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgOverrideLatestPubKeyResponse({ value: MsgOverrideLatestPubKeyResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgOverrideLatestPubKeyResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryVerifiableRandomnessResponse({ value, fee, memo }: sendQueryVerifiableRandomnessResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryVerifiableRandomnessResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryVerifiableRandomnessResponse({ value: QueryVerifiableRandomnessResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryVerifiableRandomnessResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryParamsResponse({ value, fee, memo }: sendQueryParamsResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryParamsResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryParamsResponse({ value: QueryParamsResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryParamsResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendGetAggrKeysharePacketData({ value, fee, memo }: sendGetAggrKeysharePacketDataParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendGetAggrKeysharePacketData: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.getAggrKeysharePacketData({ value: GetAggrKeysharePacketData.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendGetAggrKeysharePacketData: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendRequestDecryptionKeyPacketAck: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1407,157 +1013,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
+		async sendMsgDeleteAuthorizedAddress({ value, fee, memo }: sendMsgDeleteAuthorizedAddressParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgDeleteAuthorizedAddress: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
+				let msg = this.msgDeleteAuthorizedAddress({ value: MsgDeleteAuthorizedAddress.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryCommitmentsRequest({ value, fee, memo }: sendQueryCommitmentsRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryCommitmentsRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryCommitmentsRequest({ value: QueryCommitmentsRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryCommitmentsRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetKeyShareRequest({ value, fee, memo }: sendQueryGetKeyShareRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetKeyShareRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetKeyShareRequest({ value: QueryGetKeyShareRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetKeyShareRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetAggregatedKeyShareResponse({ value, fee, memo }: sendQueryGetAggregatedKeyShareResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetAggregatedKeyShareResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetAggregatedKeyShareResponse({ value: QueryGetAggregatedKeyShareResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetAggregatedKeyShareResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgDeRegisterValidatorResponse({ value, fee, memo }: sendMsgDeRegisterValidatorResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDeRegisterValidatorResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgDeRegisterValidatorResponse({ value: MsgDeRegisterValidatorResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDeRegisterValidatorResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllValidatorSetResponse({ value, fee, memo }: sendQueryAllValidatorSetResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllValidatorSetResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllValidatorSetResponse({ value: QueryAllValidatorSetResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllValidatorSetResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllKeyShareRequest({ value, fee, memo }: sendQueryAllKeyShareRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllKeyShareRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllKeyShareRequest({ value: QueryAllKeyShareRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllKeyShareRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllAuthorizedAddressResponse({ value, fee, memo }: sendQueryAllAuthorizedAddressResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllAuthorizedAddressResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllAuthorizedAddressResponse({ value: QueryAllAuthorizedAddressResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllAuthorizedAddressResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetAuthorizedAddressRequest({ value, fee, memo }: sendQueryGetAuthorizedAddressRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetAuthorizedAddressRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetAuthorizedAddressRequest({ value: QueryGetAuthorizedAddressRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetAuthorizedAddressRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllAuthorizedAddressRequest({ value, fee, memo }: sendQueryAllAuthorizedAddressRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllAuthorizedAddressRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllAuthorizedAddressRequest({ value: QueryAllAuthorizedAddressRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllAuthorizedAddressRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendAggrKeyshareDataPacketAck({ value, fee, memo }: sendAggrKeyshareDataPacketAckParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendAggrKeyshareDataPacketAck: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.aggrKeyshareDataPacketAck({ value: AggrKeyshareDataPacketAck.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendAggrKeyshareDataPacketAck: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgDeleteAuthorizedAddress: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1575,185 +1041,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgCreateGeneralKeyShare({ value, fee, memo }: sendMsgCreateGeneralKeyShareParams): Promise<DeliverTxResponse> {
+		async sendQueryKeyshareAllResponse({ value, fee, memo }: sendQueryKeyshareAllResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateGeneralKeyShare: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryKeyshareAllResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgCreateGeneralKeyShare({ value: MsgCreateGeneralKeyShare.fromPartial(value) })
+				let msg = this.queryKeyshareAllResponse({ value: QueryKeyshareAllResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateGeneralKeyShare: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryKeyshareAllResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryParamsRequest({ value, fee, memo }: sendQueryParamsRequestParams): Promise<DeliverTxResponse> {
+		async sendQueryDecryptionKeyRequest({ value, fee, memo }: sendQueryDecryptionKeyRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryParamsRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryDecryptionKeyRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryParamsRequest({ value: QueryParamsRequest.fromPartial(value) })
+				let msg = this.queryDecryptionKeyRequest({ value: QueryDecryptionKeyRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryParamsRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetAggregatedKeyShareRequest({ value, fee, memo }: sendQueryGetAggregatedKeyShareRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetAggregatedKeyShareRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetAggregatedKeyShareRequest({ value: QueryGetAggregatedKeyShareRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetAggregatedKeyShareRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendActivePubKey({ value, fee, memo }: sendActivePubKeyParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendActivePubKey: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.activePubKey({ value: ActivePubKey.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendActivePubKey: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRegisterValidatorResponse({ value, fee, memo }: sendMsgRegisterValidatorResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRegisterValidatorResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRegisterValidatorResponse({ value: MsgRegisterValidatorResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRegisterValidatorResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCreateGeneralKeyShareResponse({ value, fee, memo }: sendMsgCreateGeneralKeyShareResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateGeneralKeyShareResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgCreateGeneralKeyShareResponse({ value: MsgCreateGeneralKeyShareResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateGeneralKeyShareResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendAggrKeyshareDataPacketData({ value, fee, memo }: sendAggrKeyshareDataPacketDataParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendAggrKeyshareDataPacketData: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.aggrKeyshareDataPacketData({ value: AggrKeyshareDataPacketData.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendAggrKeyshareDataPacketData: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetGeneralKeyShareResponse({ value, fee, memo }: sendQueryGetGeneralKeyShareResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetGeneralKeyShareResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetGeneralKeyShareResponse({ value: QueryGetGeneralKeyShareResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetGeneralKeyShareResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryPubKeyRequest({ value, fee, memo }: sendQueryPubKeyRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryPubKeyRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryPubKeyRequest({ value: QueryPubKeyRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryPubKeyRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateAuthorizedAddress({ value, fee, memo }: sendMsgUpdateAuthorizedAddressParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateAuthorizedAddress: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateAuthorizedAddress({ value: MsgUpdateAuthorizedAddress.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateAuthorizedAddress: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendGeneralKeyShare({ value, fee, memo }: sendGeneralKeyShareParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendGeneralKeyShare: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.generalKeyShare({ value: GeneralKeyShare.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendGeneralKeyShare: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendParams({ value, fee, memo }: sendParamsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendParams: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.params({ value: Params.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendParams: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryDecryptionKeyRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1771,6 +1083,412 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgCreateLatestPubkeyResponse({ value, fee, memo }: sendMsgCreateLatestPubkeyResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateLatestPubkeyResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgCreateLatestPubkeyResponse({ value: MsgCreateLatestPubkeyResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCreateLatestPubkeyResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgSubmitGeneralKeyshare({ value, fee, memo }: sendMsgSubmitGeneralKeyshareParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSubmitGeneralKeyshare: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgSubmitGeneralKeyshare({ value: MsgSubmitGeneralKeyshare.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSubmitGeneralKeyshare: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGetDecryptionKeyPacketAck({ value, fee, memo }: sendGetDecryptionKeyPacketAckParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGetDecryptionKeyPacketAck: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.getDecryptionKeyPacketAck({ value: GetDecryptionKeyPacketAck.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGetDecryptionKeyPacketAck: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryValidatorSetAllRequest({ value, fee, memo }: sendQueryValidatorSetAllRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryValidatorSetAllRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryValidatorSetAllRequest({ value: QueryValidatorSetAllRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryValidatorSetAllRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryKeyshareRequest({ value, fee, memo }: sendQueryKeyshareRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryKeyshareRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryKeyshareRequest({ value: QueryKeyshareRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryKeyshareRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRegisterValidator({ value, fee, memo }: sendMsgRegisterValidatorParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRegisterValidator: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgRegisterValidator({ value: MsgRegisterValidator.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRegisterValidator: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendRequestDecryptionKeyPacketData({ value, fee, memo }: sendRequestDecryptionKeyPacketDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendRequestDecryptionKeyPacketData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.requestDecryptionKeyPacketData({ value: RequestDecryptionKeyPacketData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendRequestDecryptionKeyPacketData: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendCommitments({ value, fee, memo }: sendCommitmentsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendCommitments: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.commitments({ value: Commitments.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendCommitments: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendDecryptionKeyDataPacketData({ value, fee, memo }: sendDecryptionKeyDataPacketDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendDecryptionKeyDataPacketData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.decryptionKeyDataPacketData({ value: DecryptionKeyDataPacketData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendDecryptionKeyDataPacketData: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendDecryptionKeyRequest({ value, fee, memo }: sendDecryptionKeyRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendDecryptionKeyRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.decryptionKeyRequest({ value: DecryptionKeyRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendDecryptionKeyRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgCreateAuthorizedAddressResponse({ value, fee, memo }: sendMsgCreateAuthorizedAddressResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateAuthorizedAddressResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgCreateAuthorizedAddressResponse({ value: MsgCreateAuthorizedAddressResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCreateAuthorizedAddressResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendValidatorSet({ value, fee, memo }: sendValidatorSetParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendValidatorSet: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.validatorSet({ value: ValidatorSet.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendValidatorSet: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendRequestPrivateDecryptionKeyPacketAck({ value, fee, memo }: sendRequestPrivateDecryptionKeyPacketAckParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendRequestPrivateDecryptionKeyPacketAck: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.requestPrivateDecryptionKeyPacketAck({ value: RequestPrivateDecryptionKeyPacketAck.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendRequestPrivateDecryptionKeyPacketAck: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryValidatorSetResponse({ value, fee, memo }: sendQueryValidatorSetResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryValidatorSetResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryValidatorSetResponse({ value: QueryValidatorSetResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryValidatorSetResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGetPrivateDecryptionKeyPacketData({ value, fee, memo }: sendGetPrivateDecryptionKeyPacketDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGetPrivateDecryptionKeyPacketData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.getPrivateDecryptionKeyPacketData({ value: GetPrivateDecryptionKeyPacketData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGetPrivateDecryptionKeyPacketData: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgDeRegisterValidator({ value, fee, memo }: sendMsgDeRegisterValidatorParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgDeRegisterValidator: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgDeRegisterValidator({ value: MsgDeRegisterValidator.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgDeRegisterValidator: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgOverrideLatestPubkeyResponse({ value, fee, memo }: sendMsgOverrideLatestPubkeyResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgOverrideLatestPubkeyResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgOverrideLatestPubkeyResponse({ value: MsgOverrideLatestPubkeyResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgOverrideLatestPubkeyResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendNoData({ value, fee, memo }: sendNoDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendNoData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.noData({ value: NoData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendNoData: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryVerifiableRandomnessResponse({ value, fee, memo }: sendQueryVerifiableRandomnessResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryVerifiableRandomnessResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryVerifiableRandomnessResponse({ value: QueryVerifiableRandomnessResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryVerifiableRandomnessResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryPubkeyRequest({ value, fee, memo }: sendQueryPubkeyRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryPubkeyRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryPubkeyRequest({ value: QueryPubkeyRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryPubkeyRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgCreateAuthorizedAddress({ value, fee, memo }: sendMsgCreateAuthorizedAddressParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateAuthorizedAddress: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgCreateAuthorizedAddress({ value: MsgCreateAuthorizedAddress.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCreateAuthorizedAddress: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryAuthorizedAddressResponse({ value, fee, memo }: sendQueryAuthorizedAddressResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryAuthorizedAddressResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryAuthorizedAddressResponse({ value: QueryAuthorizedAddressResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryAuthorizedAddressResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgDeRegisterValidatorResponse({ value, fee, memo }: sendMsgDeRegisterValidatorResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgDeRegisterValidatorResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgDeRegisterValidatorResponse({ value: MsgDeRegisterValidatorResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgDeRegisterValidatorResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendKeyshare({ value, fee, memo }: sendKeyshareParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendKeyshare: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.keyshare({ value: Keyshare.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendKeyshare: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryValidatorSetAllResponse({ value, fee, memo }: sendQueryValidatorSetAllResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryValidatorSetAllResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryValidatorSetAllResponse({ value: QueryValidatorSetAllResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryValidatorSetAllResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryAuthorizedAddressAllResponse({ value, fee, memo }: sendQueryAuthorizedAddressAllResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryAuthorizedAddressAllResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryAuthorizedAddressAllResponse({ value: QueryAuthorizedAddressAllResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryAuthorizedAddressAllResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUpdateAuthorizedAddress({ value, fee, memo }: sendMsgUpdateAuthorizedAddressParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateAuthorizedAddress: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgUpdateAuthorizedAddress({ value: MsgUpdateAuthorizedAddress.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateAuthorizedAddress: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendAuthorizedAddress({ value, fee, memo }: sendAuthorizedAddressParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendAuthorizedAddress: Unable to sign Tx. Signer is not present.')
@@ -1785,166 +1503,594 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendQueuedPubKey({ value, fee, memo }: sendQueuedPubKeyParams): Promise<DeliverTxResponse> {
+		async sendPrivateDecryptionKeyPacketAck({ value, fee, memo }: sendPrivateDecryptionKeyPacketAckParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueuedPubKey: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendPrivateDecryptionKeyPacketAck: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queuedPubKey({ value: QueuedPubKey.fromPartial(value) })
+				let msg = this.privateDecryptionKeyPacketAck({ value: PrivateDecryptionKeyPacketAck.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueuedPubKey: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendPrivateDecryptionKeyPacketAck: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryAllAggregatedKeyShareRequest({ value, fee, memo }: sendQueryAllAggregatedKeyShareRequestParams): Promise<DeliverTxResponse> {
+		async sendQueryCommitmentsResponse({ value, fee, memo }: sendQueryCommitmentsResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryAllAggregatedKeyShareRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryCommitmentsResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllAggregatedKeyShareRequest({ value: QueryAllAggregatedKeyShareRequest.fromPartial(value) })
+				let msg = this.queryCommitmentsResponse({ value: QueryCommitmentsResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllAggregatedKeyShareRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryCommitmentsResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendGetAggrKeysharePacketAck({ value, fee, memo }: sendGetAggrKeysharePacketAckParams): Promise<DeliverTxResponse> {
+		async sendQueryPubkeyResponse({ value, fee, memo }: sendQueryPubkeyResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendGetAggrKeysharePacketAck: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryPubkeyResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.getAggrKeysharePacketAck({ value: GetAggrKeysharePacketAck.fromPartial(value) })
+				let msg = this.queryPubkeyResponse({ value: QueryPubkeyResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendGetAggrKeysharePacketAck: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryPubkeyResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendMsgCreateLatestPubKey({ value, fee, memo }: sendMsgCreateLatestPubKeyParams): Promise<DeliverTxResponse> {
+		async sendCurrentKeysPacketData({ value, fee, memo }: sendCurrentKeysPacketDataParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateLatestPubKey: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendCurrentKeysPacketData: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgCreateLatestPubKey({ value: MsgCreateLatestPubKey.fromPartial(value) })
+				let msg = this.currentKeysPacketData({ value: CurrentKeysPacketData.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateLatestPubKey: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendCurrentKeysPacketData: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		
-		queryAllGeneralKeyShareRequest({ value }: queryAllGeneralKeyShareRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllGeneralKeyShareRequest", value: QueryAllGeneralKeyShareRequest.fromPartial( value ) }  
+		async sendEncryptedKeyshare({ value, fee, memo }: sendEncryptedKeyshareParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendEncryptedKeyshare: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.encryptedKeyshare({ value: EncryptedKeyshare.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAllGeneralKeyShareRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendEncryptedKeyshare: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgDeRegisterValidator({ value }: msgDeRegisterValidatorParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgDeRegisterValidator", value: MsgDeRegisterValidator.fromPartial( value ) }  
+		async sendMsgOverrideLatestPubkey({ value, fee, memo }: sendMsgOverrideLatestPubkeyParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgOverrideLatestPubkey: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgOverrideLatestPubkey({ value: MsgOverrideLatestPubkey.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgDeRegisterValidator: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgOverrideLatestPubkey: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryGetValidatorSetRequest({ value }: queryGetValidatorSetRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetValidatorSetRequest", value: QueryGetValidatorSetRequest.fromPartial( value ) }  
+		async sendActivePubkey({ value, fee, memo }: sendActivePubkeyParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendActivePubkey: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.activePubkey({ value: ActivePubkey.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetValidatorSetRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendActivePubkey: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryGetValidatorSetResponse({ value }: queryGetValidatorSetResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetValidatorSetResponse", value: QueryGetValidatorSetResponse.fromPartial( value ) }  
+		async sendQueryVerifiableRandomnessRequest({ value, fee, memo }: sendQueryVerifiableRandomnessRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryVerifiableRandomnessRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryVerifiableRandomnessRequest({ value: QueryVerifiableRandomnessRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetValidatorSetResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryVerifiableRandomnessRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryAllValidatorSetRequest({ value }: queryAllValidatorSetRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllValidatorSetRequest", value: QueryAllValidatorSetRequest.fromPartial( value ) }  
+		async sendQueryAuthorizedAddressAllRequest({ value, fee, memo }: sendQueryAuthorizedAddressAllRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryAuthorizedAddressAllRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryAuthorizedAddressAllRequest({ value: QueryAuthorizedAddressAllRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAllValidatorSetRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryAuthorizedAddressAllRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgOverrideLatestPubKey({ value }: msgOverrideLatestPubKeyParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgOverrideLatestPubKey", value: MsgOverrideLatestPubKey.fromPartial( value ) }  
+		async sendQueryGeneralKeyshareAllResponse({ value, fee, memo }: sendQueryGeneralKeyshareAllResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGeneralKeyshareAllResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGeneralKeyshareAllResponse({ value: QueryGeneralKeyshareAllResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgOverrideLatestPubKey: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryGeneralKeyshareAllResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgCreateAuthorizedAddressResponse({ value }: msgCreateAuthorizedAddressResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgCreateAuthorizedAddressResponse", value: MsgCreateAuthorizedAddressResponse.fromPartial( value ) }  
+		async sendRequestPrivateDecryptionKeyPacketData({ value, fee, memo }: sendRequestPrivateDecryptionKeyPacketDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendRequestPrivateDecryptionKeyPacketData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.requestPrivateDecryptionKeyPacketData({ value: RequestPrivateDecryptionKeyPacketData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateAuthorizedAddressResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendRequestPrivateDecryptionKeyPacketData: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgCreateAuthorizedAddress({ value }: msgCreateAuthorizedAddressParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgCreateAuthorizedAddress", value: MsgCreateAuthorizedAddress.fromPartial( value ) }  
+		async sendMsgSubmitEncryptedKeyshare({ value, fee, memo }: sendMsgSubmitEncryptedKeyshareParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSubmitEncryptedKeyshare: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgSubmitEncryptedKeyshare({ value: MsgSubmitEncryptedKeyshare.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateAuthorizedAddress: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgSubmitEncryptedKeyshare: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgCreateLatestPubKeyResponse({ value }: msgCreateLatestPubKeyResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgCreateLatestPubKeyResponse", value: MsgCreateLatestPubKeyResponse.fromPartial( value ) }  
+		async sendQueuedPubkey({ value, fee, memo }: sendQueuedPubkeyParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueuedPubkey: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queuedPubkey({ value: QueuedPubkey.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateLatestPubKeyResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueuedPubkey: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		validatorSet({ value }: validatorSetParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.ValidatorSet", value: ValidatorSet.fromPartial( value ) }  
+		async sendDecryptionKeyPacketAck({ value, fee, memo }: sendDecryptionKeyPacketAckParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendDecryptionKeyPacketAck: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.decryptionKeyPacketAck({ value: DecryptionKeyPacketAck.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:ValidatorSet: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendDecryptionKeyPacketAck: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		counterPartyIbcinfo({ value }: counterPartyIbcinfoParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.CounterPartyIBCInfo", value: CounterPartyIBCInfo.fromPartial( value ) }  
+		async sendQueryGeneralKeyshareResponse({ value, fee, memo }: sendQueryGeneralKeyshareResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGeneralKeyshareResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGeneralKeyshareResponse({ value: QueryGeneralKeyshareResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:CounterPartyIBCInfo: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryGeneralKeyshareResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		aggregatedKeyShare({ value }: aggregatedKeyShareParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.AggregatedKeyShare", value: AggregatedKeyShare.fromPartial( value ) }  
+		async sendPrivateDecryptionKeyDataPacketData({ value, fee, memo }: sendPrivateDecryptionKeyDataPacketDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendPrivateDecryptionKeyDataPacketData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.privateDecryptionKeyDataPacketData({ value: PrivateDecryptionKeyDataPacketData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:AggregatedKeyShare: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendPrivateDecryptionKeyDataPacketData: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
+		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
+		async sendQueryGeneralKeyshareRequest({ value, fee, memo }: sendQueryGeneralKeyshareRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGeneralKeyshareRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGeneralKeyshareRequest({ value: QueryGeneralKeyshareRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryGeneralKeyshareRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryDecryptionKeyAllRequest({ value, fee, memo }: sendQueryDecryptionKeyAllRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryDecryptionKeyAllRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryDecryptionKeyAllRequest({ value: QueryDecryptionKeyAllRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryDecryptionKeyAllRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryAuthorizedAddressRequest({ value, fee, memo }: sendQueryAuthorizedAddressRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryAuthorizedAddressRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryAuthorizedAddressRequest({ value: QueryAuthorizedAddressRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryAuthorizedAddressRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendDecryptionKey({ value, fee, memo }: sendDecryptionKeyParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendDecryptionKey: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.decryptionKey({ value: DecryptionKey.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendDecryptionKey: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryValidatorSetRequest({ value, fee, memo }: sendQueryValidatorSetRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryValidatorSetRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryValidatorSetRequest({ value: QueryValidatorSetRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryValidatorSetRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryDecryptionKeyAllResponse({ value, fee, memo }: sendQueryDecryptionKeyAllResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryDecryptionKeyAllResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryDecryptionKeyAllResponse({ value: QueryDecryptionKeyAllResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryDecryptionKeyAllResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryGeneralKeyshareAllRequest({ value, fee, memo }: sendQueryGeneralKeyshareAllRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGeneralKeyshareAllRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGeneralKeyshareAllRequest({ value: QueryGeneralKeyshareAllRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryGeneralKeyshareAllRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendCounterPartyIBCInfo({ value, fee, memo }: sendCounterPartyIBCInfoParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendCounterPartyIBCInfo: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.counterPartyIbcinfo({ value: CounterPartyIBCInfo.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendCounterPartyIBCInfo: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgSendKeyshare({ value, fee, memo }: sendMsgSendKeyshareParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSendKeyshare: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgSendKeyshare({ value: MsgSendKeyshare.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSendKeyshare: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryDecryptionKeyResponse({ value, fee, memo }: sendQueryDecryptionKeyResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryDecryptionKeyResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryDecryptionKeyResponse({ value: QueryDecryptionKeyResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryDecryptionKeyResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendParams({ value, fee, memo }: sendParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.params({ value: Params.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendParams: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendPrivateDecryptionKeyRequest({ value, fee, memo }: sendPrivateDecryptionKeyRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendPrivateDecryptionKeyRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.privateDecryptionKeyRequest({ value: PrivateDecryptionKeyRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendPrivateDecryptionKeyRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryCommitmentsRequest({ value, fee, memo }: sendQueryCommitmentsRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryCommitmentsRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryCommitmentsRequest({ value: QueryCommitmentsRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryCommitmentsRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryKeyshareAllRequest({ value, fee, memo }: sendQueryKeyshareAllRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryKeyshareAllRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryKeyshareAllRequest({ value: QueryKeyshareAllRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryKeyshareAllRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGetDecryptionKeyPacketData({ value, fee, memo }: sendGetDecryptionKeyPacketDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGetDecryptionKeyPacketData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.getDecryptionKeyPacketData({ value: GetDecryptionKeyPacketData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGetDecryptionKeyPacketData: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgSubmitGeneralKeyshareResponse({ value, fee, memo }: sendMsgSubmitGeneralKeyshareResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSubmitGeneralKeyshareResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgSubmitGeneralKeyshareResponse({ value: MsgSubmitGeneralKeyshareResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSubmitGeneralKeyshareResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGeneralKeyshare({ value, fee, memo }: sendGeneralKeyshareParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGeneralKeyshare: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.generalKeyshare({ value: GeneralKeyshare.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGeneralKeyshare: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryParamsRequest({ value, fee, memo }: sendQueryParamsRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryParamsRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryParamsRequest({ value: QueryParamsRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryParamsRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryParamsResponse({ value, fee, memo }: sendQueryParamsResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryParamsResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryParamsResponse({ value: QueryParamsResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryParamsResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryKeyshareResponse({ value, fee, memo }: sendQueryKeyshareResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryKeyshareResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryKeyshareResponse({ value: QueryKeyshareResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryKeyshareResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRegisterValidatorResponse({ value, fee, memo }: sendMsgRegisterValidatorResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRegisterValidatorResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgRegisterValidatorResponse({ value: MsgRegisterValidatorResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRegisterValidatorResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgCreateLatestPubkey({ value, fee, memo }: sendMsgCreateLatestPubkeyParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateLatestPubkey: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgCreateLatestPubkey({ value: MsgCreateLatestPubkey.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCreateLatestPubkey: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGetPrivateDecryptionKeyPacketAck({ value, fee, memo }: sendGetPrivateDecryptionKeyPacketAckParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGetPrivateDecryptionKeyPacketAck: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.getPrivateDecryptionKeyPacketAck({ value: GetPrivateDecryptionKeyPacketAck.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGetPrivateDecryptionKeyPacketAck: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendValidatorEncryptedKeyshare({ value, fee, memo }: sendValidatorEncryptedKeyshareParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendValidatorEncryptedKeyshare: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.validatorEncryptedKeyshare({ value: ValidatorEncryptedKeyshare.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendValidatorEncryptedKeyshare: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendKeysharePacketData({ value, fee, memo }: sendKeysharePacketDataParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendKeysharePacketData: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.keysharePacketData({ value: KeysharePacketData.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendKeysharePacketData: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		
 		msgUpdateAuthorizedAddressResponse({ value }: msgUpdateAuthorizedAddressResponseParams): EncodeObject {
 			try {
@@ -1962,203 +2108,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		requestAggrKeysharePacketData({ value }: requestAggrKeysharePacketDataParams): EncodeObject {
+		msgSubmitEncryptedKeyshareResponse({ value }: msgSubmitEncryptedKeyshareResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.RequestAggrKeysharePacketData", value: RequestAggrKeysharePacketData.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.MsgSubmitEncryptedKeyshareResponse", value: MsgSubmitEncryptedKeyshareResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:RequestAggrKeysharePacketData: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgSubmitEncryptedKeyshareResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryVerifiableRandomnessQuery({ value }: queryVerifiableRandomnessQueryParams): EncodeObject {
+		requestDecryptionKeyPacketAck({ value }: requestDecryptionKeyPacketAckParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.QueryVerifiableRandomnessQuery", value: QueryVerifiableRandomnessQuery.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.RequestDecryptionKeyPacketAck", value: RequestDecryptionKeyPacketAck.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryVerifiableRandomnessQuery: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryPubKeyResponse({ value }: queryPubKeyResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryPubKeyResponse", value: QueryPubKeyResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryPubKeyResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgRegisterValidator({ value }: msgRegisterValidatorParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgRegisterValidator", value: MsgRegisterValidator.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgRegisterValidator: Could not create message: ' + e.message)
-			}
-		},
-		
-		keysharePacketData({ value }: keysharePacketDataParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.KeysharePacketData", value: KeysharePacketData.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:KeysharePacketData: Could not create message: ' + e.message)
-			}
-		},
-		
-		requestAggrKeysharePacketAck({ value }: requestAggrKeysharePacketAckParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.RequestAggrKeysharePacketAck", value: RequestAggrKeysharePacketAck.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:RequestAggrKeysharePacketAck: Could not create message: ' + e.message)
-			}
-		},
-		
-		encryptedKeyShare({ value }: encryptedKeyShareParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.EncryptedKeyShare", value: EncryptedKeyShare.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:EncryptedKeyShare: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetKeyShareResponse({ value }: queryGetKeyShareResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetKeyShareResponse", value: QueryGetKeyShareResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetKeyShareResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetAuthorizedAddressResponse({ value }: queryGetAuthorizedAddressResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetAuthorizedAddressResponse", value: QueryGetAuthorizedAddressResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetAuthorizedAddressResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		commitments({ value }: commitmentsParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.Commitments", value: Commitments.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:Commitments: Could not create message: ' + e.message)
-			}
-		},
-		
-		keyShare({ value }: keyShareParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.KeyShare", value: KeyShare.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:KeyShare: Could not create message: ' + e.message)
-			}
-		},
-		
-		keyShareRequest({ value }: keyShareRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.KeyShareRequest", value: KeyShareRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:KeyShareRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryCommitmentsResponse({ value }: queryCommitmentsResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryCommitmentsResponse", value: QueryCommitmentsResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryCommitmentsResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryAllAggregatedKeyShareResponse({ value }: queryAllAggregatedKeyShareResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllAggregatedKeyShareResponse", value: QueryAllAggregatedKeyShareResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryAllAggregatedKeyShareResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryAllGeneralKeyShareResponse({ value }: queryAllGeneralKeyShareResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllGeneralKeyShareResponse", value: QueryAllGeneralKeyShareResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryAllGeneralKeyShareResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgDeleteAuthorizedAddress({ value }: msgDeleteAuthorizedAddressParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgDeleteAuthorizedAddress", value: MsgDeleteAuthorizedAddress.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgDeleteAuthorizedAddress: Could not create message: ' + e.message)
-			}
-		},
-		
-		noData({ value }: noDataParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.NoData", value: NoData.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:NoData: Could not create message: ' + e.message)
-			}
-		},
-		
-		currentKeysPacketData({ value }: currentKeysPacketDataParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.CurrentKeysPacketData", value: CurrentKeysPacketData.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:CurrentKeysPacketData: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryAllKeyShareResponse({ value }: queryAllKeyShareResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllKeyShareResponse", value: QueryAllKeyShareResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryAllKeyShareResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetGeneralKeyShareRequest({ value }: queryGetGeneralKeyShareRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetGeneralKeyShareRequest", value: QueryGetGeneralKeyShareRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetGeneralKeyShareRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgSendKeyshare({ value }: msgSendKeyshareParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgSendKeyshare", value: MsgSendKeyshare.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgSendKeyshare: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgOverrideLatestPubKeyResponse({ value }: msgOverrideLatestPubKeyResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgOverrideLatestPubKeyResponse", value: MsgOverrideLatestPubKeyResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgOverrideLatestPubKeyResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryVerifiableRandomnessResponse({ value }: queryVerifiableRandomnessResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryVerifiableRandomnessResponse", value: QueryVerifiableRandomnessResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryVerifiableRandomnessResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryParamsResponse({ value }: queryParamsResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryParamsResponse", value: QueryParamsResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryParamsResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		getAggrKeysharePacketData({ value }: getAggrKeysharePacketDataParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.GetAggrKeysharePacketData", value: GetAggrKeysharePacketData.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:GetAggrKeysharePacketData: Could not create message: ' + e.message)
+				throw new Error('TxClient:RequestDecryptionKeyPacketAck: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -2170,91 +2132,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		genesisState({ value }: genesisStateParams): EncodeObject {
+		msgDeleteAuthorizedAddress({ value }: msgDeleteAuthorizedAddressParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.GenesisState", value: GenesisState.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.MsgDeleteAuthorizedAddress", value: MsgDeleteAuthorizedAddress.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryCommitmentsRequest({ value }: queryCommitmentsRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryCommitmentsRequest", value: QueryCommitmentsRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryCommitmentsRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetKeyShareRequest({ value }: queryGetKeyShareRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetKeyShareRequest", value: QueryGetKeyShareRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetKeyShareRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetAggregatedKeyShareResponse({ value }: queryGetAggregatedKeyShareResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetAggregatedKeyShareResponse", value: QueryGetAggregatedKeyShareResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetAggregatedKeyShareResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgDeRegisterValidatorResponse({ value }: msgDeRegisterValidatorResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgDeRegisterValidatorResponse", value: MsgDeRegisterValidatorResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgDeRegisterValidatorResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryAllValidatorSetResponse({ value }: queryAllValidatorSetResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllValidatorSetResponse", value: QueryAllValidatorSetResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryAllValidatorSetResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryAllKeyShareRequest({ value }: queryAllKeyShareRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllKeyShareRequest", value: QueryAllKeyShareRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryAllKeyShareRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryAllAuthorizedAddressResponse({ value }: queryAllAuthorizedAddressResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllAuthorizedAddressResponse", value: QueryAllAuthorizedAddressResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryAllAuthorizedAddressResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetAuthorizedAddressRequest({ value }: queryGetAuthorizedAddressRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetAuthorizedAddressRequest", value: QueryGetAuthorizedAddressRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetAuthorizedAddressRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryAllAuthorizedAddressRequest({ value }: queryAllAuthorizedAddressRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllAuthorizedAddressRequest", value: QueryAllAuthorizedAddressRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryAllAuthorizedAddressRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		aggrKeyshareDataPacketAck({ value }: aggrKeyshareDataPacketAckParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.AggrKeyshareDataPacketAck", value: AggrKeyshareDataPacketAck.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:AggrKeyshareDataPacketAck: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgDeleteAuthorizedAddress: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -2266,107 +2148,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgCreateGeneralKeyShare({ value }: msgCreateGeneralKeyShareParams): EncodeObject {
+		queryKeyshareAllResponse({ value }: queryKeyshareAllResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.MsgCreateGeneralKeyShare", value: MsgCreateGeneralKeyShare.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.QueryKeyshareAllResponse", value: QueryKeyshareAllResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateGeneralKeyShare: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryKeyshareAllResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryParamsRequest({ value }: queryParamsRequestParams): EncodeObject {
+		queryDecryptionKeyRequest({ value }: queryDecryptionKeyRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.QueryParamsRequest", value: QueryParamsRequest.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.QueryDecryptionKeyRequest", value: QueryDecryptionKeyRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryParamsRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetAggregatedKeyShareRequest({ value }: queryGetAggregatedKeyShareRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetAggregatedKeyShareRequest", value: QueryGetAggregatedKeyShareRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetAggregatedKeyShareRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		activePubKey({ value }: activePubKeyParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.ActivePubKey", value: ActivePubKey.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:ActivePubKey: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgRegisterValidatorResponse({ value }: msgRegisterValidatorResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgRegisterValidatorResponse", value: MsgRegisterValidatorResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgRegisterValidatorResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgCreateGeneralKeyShareResponse({ value }: msgCreateGeneralKeyShareResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgCreateGeneralKeyShareResponse", value: MsgCreateGeneralKeyShareResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateGeneralKeyShareResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		aggrKeyshareDataPacketData({ value }: aggrKeyshareDataPacketDataParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.AggrKeyshareDataPacketData", value: AggrKeyshareDataPacketData.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:AggrKeyshareDataPacketData: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetGeneralKeyShareResponse({ value }: queryGetGeneralKeyShareResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryGetGeneralKeyShareResponse", value: QueryGetGeneralKeyShareResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetGeneralKeyShareResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryPubKeyRequest({ value }: queryPubKeyRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.QueryPubKeyRequest", value: QueryPubKeyRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryPubKeyRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateAuthorizedAddress({ value }: msgUpdateAuthorizedAddressParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.MsgUpdateAuthorizedAddress", value: MsgUpdateAuthorizedAddress.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateAuthorizedAddress: Could not create message: ' + e.message)
-			}
-		},
-		
-		generalKeyShare({ value }: generalKeyShareParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.GeneralKeyShare", value: GeneralKeyShare.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:GeneralKeyShare: Could not create message: ' + e.message)
-			}
-		},
-		
-		params({ value }: paramsParams): EncodeObject {
-			try {
-				return { typeUrl: "/fairyring.keyshare.Params", value: Params.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:Params: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryDecryptionKeyRequest: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -2378,6 +2172,238 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgCreateLatestPubkeyResponse({ value }: msgCreateLatestPubkeyResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgCreateLatestPubkeyResponse", value: MsgCreateLatestPubkeyResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateLatestPubkeyResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSubmitGeneralKeyshare({ value }: msgSubmitGeneralKeyshareParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgSubmitGeneralKeyshare", value: MsgSubmitGeneralKeyshare.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSubmitGeneralKeyshare: Could not create message: ' + e.message)
+			}
+		},
+		
+		getDecryptionKeyPacketAck({ value }: getDecryptionKeyPacketAckParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.GetDecryptionKeyPacketAck", value: GetDecryptionKeyPacketAck.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GetDecryptionKeyPacketAck: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryValidatorSetAllRequest({ value }: queryValidatorSetAllRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryValidatorSetAllRequest", value: QueryValidatorSetAllRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryValidatorSetAllRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryKeyshareRequest({ value }: queryKeyshareRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryKeyshareRequest", value: QueryKeyshareRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryKeyshareRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRegisterValidator({ value }: msgRegisterValidatorParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgRegisterValidator", value: MsgRegisterValidator.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRegisterValidator: Could not create message: ' + e.message)
+			}
+		},
+		
+		requestDecryptionKeyPacketData({ value }: requestDecryptionKeyPacketDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.RequestDecryptionKeyPacketData", value: RequestDecryptionKeyPacketData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:RequestDecryptionKeyPacketData: Could not create message: ' + e.message)
+			}
+		},
+		
+		commitments({ value }: commitmentsParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.Commitments", value: Commitments.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:Commitments: Could not create message: ' + e.message)
+			}
+		},
+		
+		decryptionKeyDataPacketData({ value }: decryptionKeyDataPacketDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.DecryptionKeyDataPacketData", value: DecryptionKeyDataPacketData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:DecryptionKeyDataPacketData: Could not create message: ' + e.message)
+			}
+		},
+		
+		decryptionKeyRequest({ value }: decryptionKeyRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.DecryptionKeyRequest", value: DecryptionKeyRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:DecryptionKeyRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCreateAuthorizedAddressResponse({ value }: msgCreateAuthorizedAddressResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgCreateAuthorizedAddressResponse", value: MsgCreateAuthorizedAddressResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateAuthorizedAddressResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		validatorSet({ value }: validatorSetParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.ValidatorSet", value: ValidatorSet.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:ValidatorSet: Could not create message: ' + e.message)
+			}
+		},
+		
+		requestPrivateDecryptionKeyPacketAck({ value }: requestPrivateDecryptionKeyPacketAckParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.RequestPrivateDecryptionKeyPacketAck", value: RequestPrivateDecryptionKeyPacketAck.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:RequestPrivateDecryptionKeyPacketAck: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryValidatorSetResponse({ value }: queryValidatorSetResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryValidatorSetResponse", value: QueryValidatorSetResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryValidatorSetResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		getPrivateDecryptionKeyPacketData({ value }: getPrivateDecryptionKeyPacketDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.GetPrivateDecryptionKeyPacketData", value: GetPrivateDecryptionKeyPacketData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GetPrivateDecryptionKeyPacketData: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgDeRegisterValidator({ value }: msgDeRegisterValidatorParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgDeRegisterValidator", value: MsgDeRegisterValidator.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgDeRegisterValidator: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgOverrideLatestPubkeyResponse({ value }: msgOverrideLatestPubkeyResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgOverrideLatestPubkeyResponse", value: MsgOverrideLatestPubkeyResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgOverrideLatestPubkeyResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		noData({ value }: noDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.NoData", value: NoData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:NoData: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryVerifiableRandomnessResponse({ value }: queryVerifiableRandomnessResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryVerifiableRandomnessResponse", value: QueryVerifiableRandomnessResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryVerifiableRandomnessResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryPubkeyRequest({ value }: queryPubkeyRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryPubkeyRequest", value: QueryPubkeyRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryPubkeyRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		genesisState({ value }: genesisStateParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.GenesisState", value: GenesisState.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCreateAuthorizedAddress({ value }: msgCreateAuthorizedAddressParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgCreateAuthorizedAddress", value: MsgCreateAuthorizedAddress.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateAuthorizedAddress: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryAuthorizedAddressResponse({ value }: queryAuthorizedAddressResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryAuthorizedAddressResponse", value: QueryAuthorizedAddressResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryAuthorizedAddressResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgDeRegisterValidatorResponse({ value }: msgDeRegisterValidatorResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgDeRegisterValidatorResponse", value: MsgDeRegisterValidatorResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgDeRegisterValidatorResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		keyshare({ value }: keyshareParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.Keyshare", value: Keyshare.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:Keyshare: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryValidatorSetAllResponse({ value }: queryValidatorSetAllResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryValidatorSetAllResponse", value: QueryValidatorSetAllResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryValidatorSetAllResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryAuthorizedAddressAllResponse({ value }: queryAuthorizedAddressAllResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryAuthorizedAddressAllResponse", value: QueryAuthorizedAddressAllResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryAuthorizedAddressAllResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateAuthorizedAddress({ value }: msgUpdateAuthorizedAddressParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgUpdateAuthorizedAddress", value: MsgUpdateAuthorizedAddress.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateAuthorizedAddress: Could not create message: ' + e.message)
+			}
+		},
+		
 		authorizedAddress({ value }: authorizedAddressParams): EncodeObject {
 			try {
 				return { typeUrl: "/fairyring.keyshare.AuthorizedAddress", value: AuthorizedAddress.fromPartial( value ) }  
@@ -2386,35 +2412,339 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		queuedPubKey({ value }: queuedPubKeyParams): EncodeObject {
+		privateDecryptionKeyPacketAck({ value }: privateDecryptionKeyPacketAckParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.QueuedPubKey", value: QueuedPubKey.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.PrivateDecryptionKeyPacketAck", value: PrivateDecryptionKeyPacketAck.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueuedPubKey: Could not create message: ' + e.message)
+				throw new Error('TxClient:PrivateDecryptionKeyPacketAck: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryAllAggregatedKeyShareRequest({ value }: queryAllAggregatedKeyShareRequestParams): EncodeObject {
+		queryCommitmentsResponse({ value }: queryCommitmentsResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.QueryAllAggregatedKeyShareRequest", value: QueryAllAggregatedKeyShareRequest.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.QueryCommitmentsResponse", value: QueryCommitmentsResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAllAggregatedKeyShareRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryCommitmentsResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		getAggrKeysharePacketAck({ value }: getAggrKeysharePacketAckParams): EncodeObject {
+		queryPubkeyResponse({ value }: queryPubkeyResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.GetAggrKeysharePacketAck", value: GetAggrKeysharePacketAck.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.QueryPubkeyResponse", value: QueryPubkeyResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:GetAggrKeysharePacketAck: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryPubkeyResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		msgCreateLatestPubKey({ value }: msgCreateLatestPubKeyParams): EncodeObject {
+		currentKeysPacketData({ value }: currentKeysPacketDataParams): EncodeObject {
 			try {
-				return { typeUrl: "/fairyring.keyshare.MsgCreateLatestPubKey", value: MsgCreateLatestPubKey.fromPartial( value ) }  
+				return { typeUrl: "/fairyring.keyshare.CurrentKeysPacketData", value: CurrentKeysPacketData.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateLatestPubKey: Could not create message: ' + e.message)
+				throw new Error('TxClient:CurrentKeysPacketData: Could not create message: ' + e.message)
+			}
+		},
+		
+		encryptedKeyshare({ value }: encryptedKeyshareParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.EncryptedKeyshare", value: EncryptedKeyshare.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:EncryptedKeyshare: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgOverrideLatestPubkey({ value }: msgOverrideLatestPubkeyParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgOverrideLatestPubkey", value: MsgOverrideLatestPubkey.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgOverrideLatestPubkey: Could not create message: ' + e.message)
+			}
+		},
+		
+		activePubkey({ value }: activePubkeyParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.ActivePubkey", value: ActivePubkey.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:ActivePubkey: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryVerifiableRandomnessRequest({ value }: queryVerifiableRandomnessRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryVerifiableRandomnessRequest", value: QueryVerifiableRandomnessRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryVerifiableRandomnessRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryAuthorizedAddressAllRequest({ value }: queryAuthorizedAddressAllRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryAuthorizedAddressAllRequest", value: QueryAuthorizedAddressAllRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryAuthorizedAddressAllRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGeneralKeyshareAllResponse({ value }: queryGeneralKeyshareAllResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryGeneralKeyshareAllResponse", value: QueryGeneralKeyshareAllResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGeneralKeyshareAllResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		requestPrivateDecryptionKeyPacketData({ value }: requestPrivateDecryptionKeyPacketDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.RequestPrivateDecryptionKeyPacketData", value: RequestPrivateDecryptionKeyPacketData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:RequestPrivateDecryptionKeyPacketData: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSubmitEncryptedKeyshare({ value }: msgSubmitEncryptedKeyshareParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgSubmitEncryptedKeyshare", value: MsgSubmitEncryptedKeyshare.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSubmitEncryptedKeyshare: Could not create message: ' + e.message)
+			}
+		},
+		
+		queuedPubkey({ value }: queuedPubkeyParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueuedPubkey", value: QueuedPubkey.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueuedPubkey: Could not create message: ' + e.message)
+			}
+		},
+		
+		decryptionKeyPacketAck({ value }: decryptionKeyPacketAckParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.DecryptionKeyPacketAck", value: DecryptionKeyPacketAck.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:DecryptionKeyPacketAck: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGeneralKeyshareResponse({ value }: queryGeneralKeyshareResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryGeneralKeyshareResponse", value: QueryGeneralKeyshareResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGeneralKeyshareResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		privateDecryptionKeyDataPacketData({ value }: privateDecryptionKeyDataPacketDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.PrivateDecryptionKeyDataPacketData", value: PrivateDecryptionKeyDataPacketData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:PrivateDecryptionKeyDataPacketData: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGeneralKeyshareRequest({ value }: queryGeneralKeyshareRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryGeneralKeyshareRequest", value: QueryGeneralKeyshareRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGeneralKeyshareRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryDecryptionKeyAllRequest({ value }: queryDecryptionKeyAllRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryDecryptionKeyAllRequest", value: QueryDecryptionKeyAllRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryDecryptionKeyAllRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryAuthorizedAddressRequest({ value }: queryAuthorizedAddressRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryAuthorizedAddressRequest", value: QueryAuthorizedAddressRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryAuthorizedAddressRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		decryptionKey({ value }: decryptionKeyParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.DecryptionKey", value: DecryptionKey.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:DecryptionKey: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryValidatorSetRequest({ value }: queryValidatorSetRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryValidatorSetRequest", value: QueryValidatorSetRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryValidatorSetRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryDecryptionKeyAllResponse({ value }: queryDecryptionKeyAllResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryDecryptionKeyAllResponse", value: QueryDecryptionKeyAllResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryDecryptionKeyAllResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGeneralKeyshareAllRequest({ value }: queryGeneralKeyshareAllRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryGeneralKeyshareAllRequest", value: QueryGeneralKeyshareAllRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGeneralKeyshareAllRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		counterPartyIbcinfo({ value }: counterPartyIbcinfoParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.CounterPartyIBCInfo", value: CounterPartyIBCInfo.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:CounterPartyIBCInfo: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSendKeyshare({ value }: msgSendKeyshareParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgSendKeyshare", value: MsgSendKeyshare.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSendKeyshare: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryDecryptionKeyResponse({ value }: queryDecryptionKeyResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryDecryptionKeyResponse", value: QueryDecryptionKeyResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryDecryptionKeyResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		params({ value }: paramsParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.Params", value: Params.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:Params: Could not create message: ' + e.message)
+			}
+		},
+		
+		privateDecryptionKeyRequest({ value }: privateDecryptionKeyRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.PrivateDecryptionKeyRequest", value: PrivateDecryptionKeyRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:PrivateDecryptionKeyRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryCommitmentsRequest({ value }: queryCommitmentsRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryCommitmentsRequest", value: QueryCommitmentsRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryCommitmentsRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryKeyshareAllRequest({ value }: queryKeyshareAllRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryKeyshareAllRequest", value: QueryKeyshareAllRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryKeyshareAllRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		getDecryptionKeyPacketData({ value }: getDecryptionKeyPacketDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.GetDecryptionKeyPacketData", value: GetDecryptionKeyPacketData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GetDecryptionKeyPacketData: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSubmitGeneralKeyshareResponse({ value }: msgSubmitGeneralKeyshareResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgSubmitGeneralKeyshareResponse", value: MsgSubmitGeneralKeyshareResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSubmitGeneralKeyshareResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		generalKeyshare({ value }: generalKeyshareParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.GeneralKeyshare", value: GeneralKeyshare.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GeneralKeyshare: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryParamsRequest({ value }: queryParamsRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryParamsRequest", value: QueryParamsRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryParamsRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryParamsResponse({ value }: queryParamsResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryParamsResponse", value: QueryParamsResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryParamsResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryKeyshareResponse({ value }: queryKeyshareResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.QueryKeyshareResponse", value: QueryKeyshareResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryKeyshareResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRegisterValidatorResponse({ value }: msgRegisterValidatorResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgRegisterValidatorResponse", value: MsgRegisterValidatorResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRegisterValidatorResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCreateLatestPubkey({ value }: msgCreateLatestPubkeyParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.MsgCreateLatestPubkey", value: MsgCreateLatestPubkey.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateLatestPubkey: Could not create message: ' + e.message)
+			}
+		},
+		
+		getPrivateDecryptionKeyPacketAck({ value }: getPrivateDecryptionKeyPacketAckParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.GetPrivateDecryptionKeyPacketAck", value: GetPrivateDecryptionKeyPacketAck.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GetPrivateDecryptionKeyPacketAck: Could not create message: ' + e.message)
+			}
+		},
+		
+		validatorEncryptedKeyshare({ value }: validatorEncryptedKeyshareParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.ValidatorEncryptedKeyshare", value: ValidatorEncryptedKeyshare.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:ValidatorEncryptedKeyshare: Could not create message: ' + e.message)
+			}
+		},
+		
+		keysharePacketData({ value }: keysharePacketDataParams): EncodeObject {
+			try {
+				return { typeUrl: "/fairyring.keyshare.KeysharePacketData", value: KeysharePacketData.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:KeysharePacketData: Could not create message: ' + e.message)
 			}
 		},
 		

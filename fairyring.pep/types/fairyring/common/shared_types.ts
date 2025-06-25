@@ -5,55 +5,101 @@ import { Duration } from "../../google/protobuf/duration";
 
 export const protobufPackage = "fairyring.common";
 
-/** RequestAggrKeyshare defines a struct for the data payload */
-export interface RequestAggrKeyshare {
+/** RequestDecryptionKey defines a struct for the data payload */
+export interface RequestDecryptionKey {
   creator: string;
   proposalId?: string | undefined;
-  requestId?: string | undefined;
+  identity?: string | undefined;
   estimatedDelay: Duration | undefined;
 }
 
-export interface RequestAggrKeyshareResponse {
+/** RequestDecryptionKeyResponse defines the response to the RequestDecryptionKey message */
+export interface RequestDecryptionKeyResponse {
   identity: string;
   pubkey: string;
 }
 
-/** GetAggrKeyshare defines a struct for the data payload */
-export interface GetAggrKeyshare {
-  proposalId?: string | undefined;
-  requestId?: string | undefined;
+/** GetDecryptionKey defines a struct for the data payload */
+export interface GetDecryptionKey {
+  isGovernanceProposal: boolean;
+  proposalId: string;
   identity: string;
 }
 
-export interface GetAggrKeyshareResponse {
+/** GetDecryptionKeyResponse defines the response to the GetDecryptionKey message */
+export interface GetDecryptionKeyResponse {
 }
 
+/** GetPrivateDecryptionKey defines a struct for the data payload */
+export interface GetPrivateDecryptionKey {
+  identity: string;
+  requester: string;
+  secpPubkey: string;
+}
+
+/** GetPrivateDecryptionKeyResponse defines the response to the GetPrivateDecryptionKey message */
+export interface GetPrivateDecryptionKeyResponse {
+  pubkey: string;
+}
+
+/** ActivePublicKey defines the pubkey currently in use */
 export interface ActivePublicKey {
   publicKey: string;
   creator: string;
   expiry: number;
 }
 
+/**
+ * QueuedPublicKey defines the pubkey that (when set) will replace the acive pubkey
+ * when it expires
+ */
 export interface QueuedPublicKey {
   publicKey: string;
   creator: string;
   expiry: number;
 }
 
-function createBaseRequestAggrKeyshare(): RequestAggrKeyshare {
-  return { creator: "", proposalId: undefined, requestId: undefined, estimatedDelay: undefined };
+/**
+ * RequestPrivateDecryptionKey defines the structure to request for
+ * encrypted and unaggregated keyshares
+ */
+export interface RequestPrivateDecryptionKey {
+  creator: string;
+  identity: string;
 }
 
-export const RequestAggrKeyshare = {
-  encode(message: RequestAggrKeyshare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+/**
+ * PrivateDecryptionKey defines the storage structure for
+ * the list of encrypted keyshares (unaggregated)
+ */
+export interface PrivateDecryptionKey {
+  requester: string;
+  privateKeyshares: IndexedEncryptedKeyshare[];
+}
+
+/**
+ * IndexedEncryptedKeyshare defines the storage of submitted encrypted
+ * keyshares along with their indices (can be decrypted and aggregated)
+ */
+export interface IndexedEncryptedKeyshare {
+  encryptedKeyshareValue: string;
+  encryptedKeyshareIndex: number;
+}
+
+function createBaseRequestDecryptionKey(): RequestDecryptionKey {
+  return { creator: "", proposalId: undefined, identity: undefined, estimatedDelay: undefined };
+}
+
+export const RequestDecryptionKey = {
+  encode(message: RequestDecryptionKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
     if (message.proposalId !== undefined) {
       writer.uint32(18).string(message.proposalId);
     }
-    if (message.requestId !== undefined) {
-      writer.uint32(26).string(message.requestId);
+    if (message.identity !== undefined) {
+      writer.uint32(26).string(message.identity);
     }
     if (message.estimatedDelay !== undefined) {
       Duration.encode(message.estimatedDelay, writer.uint32(34).fork()).ldelim();
@@ -61,10 +107,10 @@ export const RequestAggrKeyshare = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RequestAggrKeyshare {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestDecryptionKey {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestAggrKeyshare();
+    const message = createBaseRequestDecryptionKey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -87,7 +133,7 @@ export const RequestAggrKeyshare = {
             break;
           }
 
-          message.requestId = reader.string();
+          message.identity = reader.string();
           continue;
         case 4:
           if (tag !== 34) {
@@ -105,16 +151,16 @@ export const RequestAggrKeyshare = {
     return message;
   },
 
-  fromJSON(object: any): RequestAggrKeyshare {
+  fromJSON(object: any): RequestDecryptionKey {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       proposalId: isSet(object.proposalId) ? String(object.proposalId) : undefined,
-      requestId: isSet(object.requestId) ? String(object.requestId) : undefined,
+      identity: isSet(object.identity) ? String(object.identity) : undefined,
       estimatedDelay: isSet(object.estimatedDelay) ? Duration.fromJSON(object.estimatedDelay) : undefined,
     };
   },
 
-  toJSON(message: RequestAggrKeyshare): unknown {
+  toJSON(message: RequestDecryptionKey): unknown {
     const obj: any = {};
     if (message.creator !== "") {
       obj.creator = message.creator;
@@ -122,8 +168,8 @@ export const RequestAggrKeyshare = {
     if (message.proposalId !== undefined) {
       obj.proposalId = message.proposalId;
     }
-    if (message.requestId !== undefined) {
-      obj.requestId = message.requestId;
+    if (message.identity !== undefined) {
+      obj.identity = message.identity;
     }
     if (message.estimatedDelay !== undefined) {
       obj.estimatedDelay = Duration.toJSON(message.estimatedDelay);
@@ -131,14 +177,14 @@ export const RequestAggrKeyshare = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RequestAggrKeyshare>, I>>(base?: I): RequestAggrKeyshare {
-    return RequestAggrKeyshare.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RequestDecryptionKey>, I>>(base?: I): RequestDecryptionKey {
+    return RequestDecryptionKey.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RequestAggrKeyshare>, I>>(object: I): RequestAggrKeyshare {
-    const message = createBaseRequestAggrKeyshare();
+  fromPartial<I extends Exact<DeepPartial<RequestDecryptionKey>, I>>(object: I): RequestDecryptionKey {
+    const message = createBaseRequestDecryptionKey();
     message.creator = object.creator ?? "";
     message.proposalId = object.proposalId ?? undefined;
-    message.requestId = object.requestId ?? undefined;
+    message.identity = object.identity ?? undefined;
     message.estimatedDelay = (object.estimatedDelay !== undefined && object.estimatedDelay !== null)
       ? Duration.fromPartial(object.estimatedDelay)
       : undefined;
@@ -146,12 +192,12 @@ export const RequestAggrKeyshare = {
   },
 };
 
-function createBaseRequestAggrKeyshareResponse(): RequestAggrKeyshareResponse {
+function createBaseRequestDecryptionKeyResponse(): RequestDecryptionKeyResponse {
   return { identity: "", pubkey: "" };
 }
 
-export const RequestAggrKeyshareResponse = {
-  encode(message: RequestAggrKeyshareResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const RequestDecryptionKeyResponse = {
+  encode(message: RequestDecryptionKeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.identity !== "") {
       writer.uint32(10).string(message.identity);
     }
@@ -161,10 +207,10 @@ export const RequestAggrKeyshareResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RequestAggrKeyshareResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestDecryptionKeyResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestAggrKeyshareResponse();
+    const message = createBaseRequestDecryptionKeyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -191,14 +237,14 @@ export const RequestAggrKeyshareResponse = {
     return message;
   },
 
-  fromJSON(object: any): RequestAggrKeyshareResponse {
+  fromJSON(object: any): RequestDecryptionKeyResponse {
     return {
       identity: isSet(object.identity) ? String(object.identity) : "",
       pubkey: isSet(object.pubkey) ? String(object.pubkey) : "",
     };
   },
 
-  toJSON(message: RequestAggrKeyshareResponse): unknown {
+  toJSON(message: RequestDecryptionKeyResponse): unknown {
     const obj: any = {};
     if (message.identity !== "") {
       obj.identity = message.identity;
@@ -209,28 +255,28 @@ export const RequestAggrKeyshareResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RequestAggrKeyshareResponse>, I>>(base?: I): RequestAggrKeyshareResponse {
-    return RequestAggrKeyshareResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RequestDecryptionKeyResponse>, I>>(base?: I): RequestDecryptionKeyResponse {
+    return RequestDecryptionKeyResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RequestAggrKeyshareResponse>, I>>(object: I): RequestAggrKeyshareResponse {
-    const message = createBaseRequestAggrKeyshareResponse();
+  fromPartial<I extends Exact<DeepPartial<RequestDecryptionKeyResponse>, I>>(object: I): RequestDecryptionKeyResponse {
+    const message = createBaseRequestDecryptionKeyResponse();
     message.identity = object.identity ?? "";
     message.pubkey = object.pubkey ?? "";
     return message;
   },
 };
 
-function createBaseGetAggrKeyshare(): GetAggrKeyshare {
-  return { proposalId: undefined, requestId: undefined, identity: "" };
+function createBaseGetDecryptionKey(): GetDecryptionKey {
+  return { isGovernanceProposal: false, proposalId: "", identity: "" };
 }
 
-export const GetAggrKeyshare = {
-  encode(message: GetAggrKeyshare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.proposalId !== undefined) {
-      writer.uint32(10).string(message.proposalId);
+export const GetDecryptionKey = {
+  encode(message: GetDecryptionKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.isGovernanceProposal === true) {
+      writer.uint32(8).bool(message.isGovernanceProposal);
     }
-    if (message.requestId !== undefined) {
-      writer.uint32(18).string(message.requestId);
+    if (message.proposalId !== "") {
+      writer.uint32(18).string(message.proposalId);
     }
     if (message.identity !== "") {
       writer.uint32(26).string(message.identity);
@@ -238,26 +284,26 @@ export const GetAggrKeyshare = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetAggrKeyshare {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetDecryptionKey {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetAggrKeyshare();
+    const message = createBaseGetDecryptionKey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
+          if (tag !== 8) {
             break;
           }
 
-          message.proposalId = reader.string();
+          message.isGovernanceProposal = reader.bool();
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
-          message.requestId = reader.string();
+          message.proposalId = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
@@ -275,21 +321,21 @@ export const GetAggrKeyshare = {
     return message;
   },
 
-  fromJSON(object: any): GetAggrKeyshare {
+  fromJSON(object: any): GetDecryptionKey {
     return {
-      proposalId: isSet(object.proposalId) ? String(object.proposalId) : undefined,
-      requestId: isSet(object.requestId) ? String(object.requestId) : undefined,
+      isGovernanceProposal: isSet(object.isGovernanceProposal) ? Boolean(object.isGovernanceProposal) : false,
+      proposalId: isSet(object.proposalId) ? String(object.proposalId) : "",
       identity: isSet(object.identity) ? String(object.identity) : "",
     };
   },
 
-  toJSON(message: GetAggrKeyshare): unknown {
+  toJSON(message: GetDecryptionKey): unknown {
     const obj: any = {};
-    if (message.proposalId !== undefined) {
-      obj.proposalId = message.proposalId;
+    if (message.isGovernanceProposal === true) {
+      obj.isGovernanceProposal = message.isGovernanceProposal;
     }
-    if (message.requestId !== undefined) {
-      obj.requestId = message.requestId;
+    if (message.proposalId !== "") {
+      obj.proposalId = message.proposalId;
     }
     if (message.identity !== "") {
       obj.identity = message.identity;
@@ -297,31 +343,31 @@ export const GetAggrKeyshare = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetAggrKeyshare>, I>>(base?: I): GetAggrKeyshare {
-    return GetAggrKeyshare.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<GetDecryptionKey>, I>>(base?: I): GetDecryptionKey {
+    return GetDecryptionKey.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetAggrKeyshare>, I>>(object: I): GetAggrKeyshare {
-    const message = createBaseGetAggrKeyshare();
-    message.proposalId = object.proposalId ?? undefined;
-    message.requestId = object.requestId ?? undefined;
+  fromPartial<I extends Exact<DeepPartial<GetDecryptionKey>, I>>(object: I): GetDecryptionKey {
+    const message = createBaseGetDecryptionKey();
+    message.isGovernanceProposal = object.isGovernanceProposal ?? false;
+    message.proposalId = object.proposalId ?? "";
     message.identity = object.identity ?? "";
     return message;
   },
 };
 
-function createBaseGetAggrKeyshareResponse(): GetAggrKeyshareResponse {
+function createBaseGetDecryptionKeyResponse(): GetDecryptionKeyResponse {
   return {};
 }
 
-export const GetAggrKeyshareResponse = {
-  encode(_: GetAggrKeyshareResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const GetDecryptionKeyResponse = {
+  encode(_: GetDecryptionKeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetAggrKeyshareResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetDecryptionKeyResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetAggrKeyshareResponse();
+    const message = createBaseGetDecryptionKeyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -334,20 +380,168 @@ export const GetAggrKeyshareResponse = {
     return message;
   },
 
-  fromJSON(_: any): GetAggrKeyshareResponse {
+  fromJSON(_: any): GetDecryptionKeyResponse {
     return {};
   },
 
-  toJSON(_: GetAggrKeyshareResponse): unknown {
+  toJSON(_: GetDecryptionKeyResponse): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetAggrKeyshareResponse>, I>>(base?: I): GetAggrKeyshareResponse {
-    return GetAggrKeyshareResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<GetDecryptionKeyResponse>, I>>(base?: I): GetDecryptionKeyResponse {
+    return GetDecryptionKeyResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetAggrKeyshareResponse>, I>>(_: I): GetAggrKeyshareResponse {
-    const message = createBaseGetAggrKeyshareResponse();
+  fromPartial<I extends Exact<DeepPartial<GetDecryptionKeyResponse>, I>>(_: I): GetDecryptionKeyResponse {
+    const message = createBaseGetDecryptionKeyResponse();
+    return message;
+  },
+};
+
+function createBaseGetPrivateDecryptionKey(): GetPrivateDecryptionKey {
+  return { identity: "", requester: "", secpPubkey: "" };
+}
+
+export const GetPrivateDecryptionKey = {
+  encode(message: GetPrivateDecryptionKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.identity !== "") {
+      writer.uint32(10).string(message.identity);
+    }
+    if (message.requester !== "") {
+      writer.uint32(18).string(message.requester);
+    }
+    if (message.secpPubkey !== "") {
+      writer.uint32(26).string(message.secpPubkey);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetPrivateDecryptionKey {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPrivateDecryptionKey();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.identity = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.requester = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.secpPubkey = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetPrivateDecryptionKey {
+    return {
+      identity: isSet(object.identity) ? String(object.identity) : "",
+      requester: isSet(object.requester) ? String(object.requester) : "",
+      secpPubkey: isSet(object.secpPubkey) ? String(object.secpPubkey) : "",
+    };
+  },
+
+  toJSON(message: GetPrivateDecryptionKey): unknown {
+    const obj: any = {};
+    if (message.identity !== "") {
+      obj.identity = message.identity;
+    }
+    if (message.requester !== "") {
+      obj.requester = message.requester;
+    }
+    if (message.secpPubkey !== "") {
+      obj.secpPubkey = message.secpPubkey;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetPrivateDecryptionKey>, I>>(base?: I): GetPrivateDecryptionKey {
+    return GetPrivateDecryptionKey.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetPrivateDecryptionKey>, I>>(object: I): GetPrivateDecryptionKey {
+    const message = createBaseGetPrivateDecryptionKey();
+    message.identity = object.identity ?? "";
+    message.requester = object.requester ?? "";
+    message.secpPubkey = object.secpPubkey ?? "";
+    return message;
+  },
+};
+
+function createBaseGetPrivateDecryptionKeyResponse(): GetPrivateDecryptionKeyResponse {
+  return { pubkey: "" };
+}
+
+export const GetPrivateDecryptionKeyResponse = {
+  encode(message: GetPrivateDecryptionKeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pubkey !== "") {
+      writer.uint32(10).string(message.pubkey);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetPrivateDecryptionKeyResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPrivateDecryptionKeyResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pubkey = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetPrivateDecryptionKeyResponse {
+    return { pubkey: isSet(object.pubkey) ? String(object.pubkey) : "" };
+  },
+
+  toJSON(message: GetPrivateDecryptionKeyResponse): unknown {
+    const obj: any = {};
+    if (message.pubkey !== "") {
+      obj.pubkey = message.pubkey;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetPrivateDecryptionKeyResponse>, I>>(base?: I): GetPrivateDecryptionKeyResponse {
+    return GetPrivateDecryptionKeyResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetPrivateDecryptionKeyResponse>, I>>(
+    object: I,
+  ): GetPrivateDecryptionKeyResponse {
+    const message = createBaseGetPrivateDecryptionKeyResponse();
+    message.pubkey = object.pubkey ?? "";
     return message;
   },
 };
@@ -526,6 +720,230 @@ export const QueuedPublicKey = {
     message.publicKey = object.publicKey ?? "";
     message.creator = object.creator ?? "";
     message.expiry = object.expiry ?? 0;
+    return message;
+  },
+};
+
+function createBaseRequestPrivateDecryptionKey(): RequestPrivateDecryptionKey {
+  return { creator: "", identity: "" };
+}
+
+export const RequestPrivateDecryptionKey = {
+  encode(message: RequestPrivateDecryptionKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.identity !== "") {
+      writer.uint32(18).string(message.identity);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestPrivateDecryptionKey {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestPrivateDecryptionKey();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.identity = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RequestPrivateDecryptionKey {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      identity: isSet(object.identity) ? String(object.identity) : "",
+    };
+  },
+
+  toJSON(message: RequestPrivateDecryptionKey): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.identity !== "") {
+      obj.identity = message.identity;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestPrivateDecryptionKey>, I>>(base?: I): RequestPrivateDecryptionKey {
+    return RequestPrivateDecryptionKey.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestPrivateDecryptionKey>, I>>(object: I): RequestPrivateDecryptionKey {
+    const message = createBaseRequestPrivateDecryptionKey();
+    message.creator = object.creator ?? "";
+    message.identity = object.identity ?? "";
+    return message;
+  },
+};
+
+function createBasePrivateDecryptionKey(): PrivateDecryptionKey {
+  return { requester: "", privateKeyshares: [] };
+}
+
+export const PrivateDecryptionKey = {
+  encode(message: PrivateDecryptionKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.requester !== "") {
+      writer.uint32(10).string(message.requester);
+    }
+    for (const v of message.privateKeyshares) {
+      IndexedEncryptedKeyshare.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): PrivateDecryptionKey {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePrivateDecryptionKey();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.requester = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.privateKeyshares.push(IndexedEncryptedKeyshare.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PrivateDecryptionKey {
+    return {
+      requester: isSet(object.requester) ? String(object.requester) : "",
+      privateKeyshares: Array.isArray(object?.privateKeyshares)
+        ? object.privateKeyshares.map((e: any) => IndexedEncryptedKeyshare.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: PrivateDecryptionKey): unknown {
+    const obj: any = {};
+    if (message.requester !== "") {
+      obj.requester = message.requester;
+    }
+    if (message.privateKeyshares?.length) {
+      obj.privateKeyshares = message.privateKeyshares.map((e) => IndexedEncryptedKeyshare.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<PrivateDecryptionKey>, I>>(base?: I): PrivateDecryptionKey {
+    return PrivateDecryptionKey.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<PrivateDecryptionKey>, I>>(object: I): PrivateDecryptionKey {
+    const message = createBasePrivateDecryptionKey();
+    message.requester = object.requester ?? "";
+    message.privateKeyshares = object.privateKeyshares?.map((e) => IndexedEncryptedKeyshare.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseIndexedEncryptedKeyshare(): IndexedEncryptedKeyshare {
+  return { encryptedKeyshareValue: "", encryptedKeyshareIndex: 0 };
+}
+
+export const IndexedEncryptedKeyshare = {
+  encode(message: IndexedEncryptedKeyshare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.encryptedKeyshareValue !== "") {
+      writer.uint32(10).string(message.encryptedKeyshareValue);
+    }
+    if (message.encryptedKeyshareIndex !== 0) {
+      writer.uint32(16).uint64(message.encryptedKeyshareIndex);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): IndexedEncryptedKeyshare {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIndexedEncryptedKeyshare();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.encryptedKeyshareValue = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.encryptedKeyshareIndex = longToNumber(reader.uint64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): IndexedEncryptedKeyshare {
+    return {
+      encryptedKeyshareValue: isSet(object.encryptedKeyshareValue) ? String(object.encryptedKeyshareValue) : "",
+      encryptedKeyshareIndex: isSet(object.encryptedKeyshareIndex) ? Number(object.encryptedKeyshareIndex) : 0,
+    };
+  },
+
+  toJSON(message: IndexedEncryptedKeyshare): unknown {
+    const obj: any = {};
+    if (message.encryptedKeyshareValue !== "") {
+      obj.encryptedKeyshareValue = message.encryptedKeyshareValue;
+    }
+    if (message.encryptedKeyshareIndex !== 0) {
+      obj.encryptedKeyshareIndex = Math.round(message.encryptedKeyshareIndex);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<IndexedEncryptedKeyshare>, I>>(base?: I): IndexedEncryptedKeyshare {
+    return IndexedEncryptedKeyshare.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<IndexedEncryptedKeyshare>, I>>(object: I): IndexedEncryptedKeyshare {
+    const message = createBaseIndexedEncryptedKeyshare();
+    message.encryptedKeyshareValue = object.encryptedKeyshareValue ?? "";
+    message.encryptedKeyshareIndex = object.encryptedKeyshareIndex ?? 0;
     return message;
   },
 };

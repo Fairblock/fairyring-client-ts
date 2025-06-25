@@ -2,10 +2,11 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { ActivePublicKey, QueuedPublicKey } from "../common/shared_types";
-import { AggregatedKeyShare } from "./aggregated_key_share";
+import { DecryptionKey } from "./decryption_key";
 import { EncryptedTxArray } from "./encrypted_tx";
 import { Params } from "./params";
 import { PepNonce } from "./pep_nonce";
+import { RequestId } from "./request_id";
 
 export const protobufPackage = "fairyring.pep";
 
@@ -16,11 +17,11 @@ export interface GenesisState {
   portId: string;
   encryptedTxArray: EncryptedTxArray[];
   pepNonceList: PepNonce[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
-  aggregatedKeyShareList: AggregatedKeyShare[];
-  activePubKey: ActivePublicKey | undefined;
-  queuedPubKey: QueuedPublicKey | undefined;
+  decryptionKeyList: DecryptionKey[];
+  activePubkey: ActivePublicKey | undefined;
+  queuedPubkey: QueuedPublicKey | undefined;
   requestCount: number;
+  requestIdList: RequestId[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -29,10 +30,11 @@ function createBaseGenesisState(): GenesisState {
     portId: "",
     encryptedTxArray: [],
     pepNonceList: [],
-    aggregatedKeyShareList: [],
-    activePubKey: undefined,
-    queuedPubKey: undefined,
+    decryptionKeyList: [],
+    activePubkey: undefined,
+    queuedPubkey: undefined,
     requestCount: 0,
+    requestIdList: [],
   };
 }
 
@@ -50,17 +52,20 @@ export const GenesisState = {
     for (const v of message.pepNonceList) {
       PepNonce.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.aggregatedKeyShareList) {
-      AggregatedKeyShare.encode(v!, writer.uint32(50).fork()).ldelim();
+    for (const v of message.decryptionKeyList) {
+      DecryptionKey.encode(v!, writer.uint32(50).fork()).ldelim();
     }
-    if (message.activePubKey !== undefined) {
-      ActivePublicKey.encode(message.activePubKey, writer.uint32(58).fork()).ldelim();
+    if (message.activePubkey !== undefined) {
+      ActivePublicKey.encode(message.activePubkey, writer.uint32(58).fork()).ldelim();
     }
-    if (message.queuedPubKey !== undefined) {
-      QueuedPublicKey.encode(message.queuedPubKey, writer.uint32(66).fork()).ldelim();
+    if (message.queuedPubkey !== undefined) {
+      QueuedPublicKey.encode(message.queuedPubkey, writer.uint32(66).fork()).ldelim();
     }
     if (message.requestCount !== 0) {
       writer.uint32(72).uint64(message.requestCount);
+    }
+    for (const v of message.requestIdList) {
+      RequestId.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -105,21 +110,21 @@ export const GenesisState = {
             break;
           }
 
-          message.aggregatedKeyShareList.push(AggregatedKeyShare.decode(reader, reader.uint32()));
+          message.decryptionKeyList.push(DecryptionKey.decode(reader, reader.uint32()));
           continue;
         case 7:
           if (tag !== 58) {
             break;
           }
 
-          message.activePubKey = ActivePublicKey.decode(reader, reader.uint32());
+          message.activePubkey = ActivePublicKey.decode(reader, reader.uint32());
           continue;
         case 8:
           if (tag !== 66) {
             break;
           }
 
-          message.queuedPubKey = QueuedPublicKey.decode(reader, reader.uint32());
+          message.queuedPubkey = QueuedPublicKey.decode(reader, reader.uint32());
           continue;
         case 9:
           if (tag !== 72) {
@@ -127,6 +132,13 @@ export const GenesisState = {
           }
 
           message.requestCount = longToNumber(reader.uint64() as Long);
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.requestIdList.push(RequestId.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -147,12 +159,15 @@ export const GenesisState = {
       pepNonceList: Array.isArray(object?.pepNonceList)
         ? object.pepNonceList.map((e: any) => PepNonce.fromJSON(e))
         : [],
-      aggregatedKeyShareList: Array.isArray(object?.aggregatedKeyShareList)
-        ? object.aggregatedKeyShareList.map((e: any) => AggregatedKeyShare.fromJSON(e))
+      decryptionKeyList: Array.isArray(object?.decryptionKeyList)
+        ? object.decryptionKeyList.map((e: any) => DecryptionKey.fromJSON(e))
         : [],
-      activePubKey: isSet(object.activePubKey) ? ActivePublicKey.fromJSON(object.activePubKey) : undefined,
-      queuedPubKey: isSet(object.queuedPubKey) ? QueuedPublicKey.fromJSON(object.queuedPubKey) : undefined,
+      activePubkey: isSet(object.activePubkey) ? ActivePublicKey.fromJSON(object.activePubkey) : undefined,
+      queuedPubkey: isSet(object.queuedPubkey) ? QueuedPublicKey.fromJSON(object.queuedPubkey) : undefined,
       requestCount: isSet(object.requestCount) ? Number(object.requestCount) : 0,
+      requestIdList: Array.isArray(object?.requestIdList)
+        ? object.requestIdList.map((e: any) => RequestId.fromJSON(e))
+        : [],
     };
   },
 
@@ -170,17 +185,20 @@ export const GenesisState = {
     if (message.pepNonceList?.length) {
       obj.pepNonceList = message.pepNonceList.map((e) => PepNonce.toJSON(e));
     }
-    if (message.aggregatedKeyShareList?.length) {
-      obj.aggregatedKeyShareList = message.aggregatedKeyShareList.map((e) => AggregatedKeyShare.toJSON(e));
+    if (message.decryptionKeyList?.length) {
+      obj.decryptionKeyList = message.decryptionKeyList.map((e) => DecryptionKey.toJSON(e));
     }
-    if (message.activePubKey !== undefined) {
-      obj.activePubKey = ActivePublicKey.toJSON(message.activePubKey);
+    if (message.activePubkey !== undefined) {
+      obj.activePubkey = ActivePublicKey.toJSON(message.activePubkey);
     }
-    if (message.queuedPubKey !== undefined) {
-      obj.queuedPubKey = QueuedPublicKey.toJSON(message.queuedPubKey);
+    if (message.queuedPubkey !== undefined) {
+      obj.queuedPubkey = QueuedPublicKey.toJSON(message.queuedPubkey);
     }
     if (message.requestCount !== 0) {
       obj.requestCount = Math.round(message.requestCount);
+    }
+    if (message.requestIdList?.length) {
+      obj.requestIdList = message.requestIdList.map((e) => RequestId.toJSON(e));
     }
     return obj;
   },
@@ -196,14 +214,15 @@ export const GenesisState = {
     message.portId = object.portId ?? "";
     message.encryptedTxArray = object.encryptedTxArray?.map((e) => EncryptedTxArray.fromPartial(e)) || [];
     message.pepNonceList = object.pepNonceList?.map((e) => PepNonce.fromPartial(e)) || [];
-    message.aggregatedKeyShareList = object.aggregatedKeyShareList?.map((e) => AggregatedKeyShare.fromPartial(e)) || [];
-    message.activePubKey = (object.activePubKey !== undefined && object.activePubKey !== null)
-      ? ActivePublicKey.fromPartial(object.activePubKey)
+    message.decryptionKeyList = object.decryptionKeyList?.map((e) => DecryptionKey.fromPartial(e)) || [];
+    message.activePubkey = (object.activePubkey !== undefined && object.activePubkey !== null)
+      ? ActivePublicKey.fromPartial(object.activePubkey)
       : undefined;
-    message.queuedPubKey = (object.queuedPubKey !== undefined && object.queuedPubKey !== null)
-      ? QueuedPublicKey.fromPartial(object.queuedPubKey)
+    message.queuedPubkey = (object.queuedPubkey !== undefined && object.queuedPubkey !== null)
+      ? QueuedPublicKey.fromPartial(object.queuedPubkey)
       : undefined;
     message.requestCount = object.requestCount ?? 0;
+    message.requestIdList = object.requestIdList?.map((e) => RequestId.fromPartial(e)) || [];
     return message;
   },
 };

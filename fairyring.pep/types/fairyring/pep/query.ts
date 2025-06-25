@@ -2,8 +2,8 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { PageRequest, PageResponse } from "../../cosmos/base/query/v1beta1/pagination";
-import { ActivePublicKey, QueuedPublicKey } from "../common/shared_types";
-import { EncryptedTx, EncryptedTxArray, GenEncTxExecutionQueue } from "./encrypted_tx";
+import { ActivePublicKey, PrivateDecryptionKey, QueuedPublicKey } from "../common/shared_types";
+import { EncryptedTx, EncryptedTxArray, IdentityExecutionEntry } from "./encrypted_tx";
 import { Params } from "./params";
 import { PepNonce } from "./pep_nonce";
 
@@ -19,79 +19,122 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
-export interface QueryKeyshareRequest {
-  reqId: string;
+/** QueryGeneralIdentityRequest is request type for the Query/GeneralIdentity RPC method. */
+export interface QueryGeneralIdentityRequest {
+  identity: string;
 }
 
-export interface QueryKeyshareResponse {
-  keyshare: GenEncTxExecutionQueue | undefined;
+/** QueryGeneralIdentityResponse is response type for the Query/GeneralIdentity RPC method. */
+export interface QueryGeneralIdentityResponse {
+  requestDetails: IdentityExecutionEntry | undefined;
 }
 
-export interface QueryAllKeyshareRequest {
+/** QueryGeneralIdentityAllRequest is request type for the Query/GeneralIdentityAll RPC method. */
+export interface QueryGeneralIdentityAllRequest {
   pagination: PageRequest | undefined;
 }
 
-export interface QueryAllKeyshareResponse {
-  keyshares: GenEncTxExecutionQueue[];
+/** QueryGeneralIdentityAllResponse is response type for the Query/GeneralIdentityAll RPC method. */
+export interface QueryGeneralIdentityAllResponse {
+  requestDetailsList: IdentityExecutionEntry[];
   pagination: PageResponse | undefined;
 }
 
-export interface QueryGetEncryptedTxRequest {
+/** QueryEncryptedTxRequest is request type for the Query/EncryptedTx RPC method. */
+export interface QueryEncryptedTxRequest {
   targetHeight: number;
   index: number;
 }
 
-export interface QueryGetEncryptedTxResponse {
+/** QueryEncryptedTxResponse is response type for the Query/EncryptedTx RPC method. */
+export interface QueryEncryptedTxResponse {
   encryptedTx: EncryptedTx | undefined;
 }
 
-export interface QueryAllEncryptedTxRequest {
+/** QueryEncryptedTxAllRequest is request type for the Query/EncryptedTxAll RPC method. */
+export interface QueryEncryptedTxAllRequest {
   pagination: PageRequest | undefined;
 }
 
-export interface QueryAllEncryptedTxResponse {
+/** QueryEncryptedTxAllResponse is response type for the Query/EncryptedTxAll RPC method. */
+export interface QueryEncryptedTxAllResponse {
   encryptedTxArray: EncryptedTxArray[];
   pagination: PageResponse | undefined;
 }
 
-export interface QueryAllEncryptedTxFromHeightRequest {
+/** QueryEncryptedTxAllFromHeightRequest is request type for the Query/EncryptedTxAllFromHeight RPC method. */
+export interface QueryEncryptedTxAllFromHeightRequest {
   targetHeight: number;
 }
 
-export interface QueryAllEncryptedTxFromHeightResponse {
+/** QueryEncryptedTxAllFromHeightResponse is response type for the Query/EncryptedTxAllFromHeight RPC method. */
+export interface QueryEncryptedTxAllFromHeightResponse {
   encryptedTxArray: EncryptedTxArray | undefined;
 }
 
+/** QueryLatestHeightRequest is request type for the Query/LatestHeight RPC method. */
 export interface QueryLatestHeightRequest {
 }
 
+/** QueryLatestHeightResponse is response type for the Query/LatestHeight RPC method. */
 export interface QueryLatestHeightResponse {
   height: number;
 }
 
-export interface QueryGetPepNonceRequest {
+/** QueryPepNonceRequest is request type for the Query/PepNonce RPC method. */
+export interface QueryPepNonceRequest {
   address: string;
 }
 
-export interface QueryGetPepNonceResponse {
+/** QueryPepNonceResponse is response type for the Query/PepNonce RPC method. */
+export interface QueryPepNonceResponse {
   pepNonce: PepNonce | undefined;
 }
 
-export interface QueryAllPepNonceRequest {
+/** QueryPepNonceAllRequest is request type for the Query/PepNonceAll RPC method. */
+export interface QueryPepNonceAllRequest {
   pagination: PageRequest | undefined;
 }
 
-export interface QueryAllPepNonceResponse {
+/** QueryPepNonceAllResponse is response type for the Query/PepNonceAll RPC method. */
+export interface QueryPepNonceAllResponse {
   pepNonce: PepNonce[];
   pagination: PageResponse | undefined;
 }
 
-export interface QueryPubKeyRequest {
+/** QueryPubkeyRequest is request type for the Query/Pubkey RPC method. */
+export interface QueryPubkeyRequest {
 }
 
-export interface QueryPubKeyResponse {
-  activePubKey: ActivePublicKey | undefined;
-  queuedPubKey: QueuedPublicKey | undefined;
+/** QueryPubkeyResponse is response type for the Query/Pubkey RPC method. */
+export interface QueryPubkeyResponse {
+  activePubkey: ActivePublicKey | undefined;
+  queuedPubkey: QueuedPublicKey | undefined;
+}
+
+/** QueryPrivateIdentityRequest is request type for the Query/PrivateIdentity RPC method. */
+export interface QueryPrivateIdentityRequest {
+  identity: string;
+}
+
+/** QueryPrivateIdentityResponse is response type for the Query/PrivateIdentity RPC method. */
+export interface QueryPrivateIdentityResponse {
+  creator: string;
+  identity: string;
+  pubkey: string;
+  privateDecryptionKeys: PrivateDecryptionKey[];
+}
+
+/** QueryDecryptDataRequest is request type for the Query/DecryptData RPC method. */
+export interface QueryDecryptDataRequest {
+  pubkey: string;
+  decryptionKey: string;
+  encryptedData: string;
+}
+
+/** QueryDecryptDataResponse is response type for the Query/DecryptData RPC method. */
+export interface QueryDecryptDataResponse {
+  decryptedData: string;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -196,22 +239,22 @@ export const QueryParamsResponse = {
   },
 };
 
-function createBaseQueryKeyshareRequest(): QueryKeyshareRequest {
-  return { reqId: "" };
+function createBaseQueryGeneralIdentityRequest(): QueryGeneralIdentityRequest {
+  return { identity: "" };
 }
 
-export const QueryKeyshareRequest = {
-  encode(message: QueryKeyshareRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.reqId !== "") {
-      writer.uint32(10).string(message.reqId);
+export const QueryGeneralIdentityRequest = {
+  encode(message: QueryGeneralIdentityRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.identity !== "") {
+      writer.uint32(10).string(message.identity);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryKeyshareRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGeneralIdentityRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryKeyshareRequest();
+    const message = createBaseQueryGeneralIdentityRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -220,7 +263,7 @@ export const QueryKeyshareRequest = {
             break;
           }
 
-          message.reqId = reader.string();
+          message.identity = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -231,44 +274,44 @@ export const QueryKeyshareRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryKeyshareRequest {
-    return { reqId: isSet(object.reqId) ? String(object.reqId) : "" };
+  fromJSON(object: any): QueryGeneralIdentityRequest {
+    return { identity: isSet(object.identity) ? String(object.identity) : "" };
   },
 
-  toJSON(message: QueryKeyshareRequest): unknown {
+  toJSON(message: QueryGeneralIdentityRequest): unknown {
     const obj: any = {};
-    if (message.reqId !== "") {
-      obj.reqId = message.reqId;
+    if (message.identity !== "") {
+      obj.identity = message.identity;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryKeyshareRequest>, I>>(base?: I): QueryKeyshareRequest {
-    return QueryKeyshareRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryGeneralIdentityRequest>, I>>(base?: I): QueryGeneralIdentityRequest {
+    return QueryGeneralIdentityRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryKeyshareRequest>, I>>(object: I): QueryKeyshareRequest {
-    const message = createBaseQueryKeyshareRequest();
-    message.reqId = object.reqId ?? "";
+  fromPartial<I extends Exact<DeepPartial<QueryGeneralIdentityRequest>, I>>(object: I): QueryGeneralIdentityRequest {
+    const message = createBaseQueryGeneralIdentityRequest();
+    message.identity = object.identity ?? "";
     return message;
   },
 };
 
-function createBaseQueryKeyshareResponse(): QueryKeyshareResponse {
-  return { keyshare: undefined };
+function createBaseQueryGeneralIdentityResponse(): QueryGeneralIdentityResponse {
+  return { requestDetails: undefined };
 }
 
-export const QueryKeyshareResponse = {
-  encode(message: QueryKeyshareResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.keyshare !== undefined) {
-      GenEncTxExecutionQueue.encode(message.keyshare, writer.uint32(10).fork()).ldelim();
+export const QueryGeneralIdentityResponse = {
+  encode(message: QueryGeneralIdentityResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.requestDetails !== undefined) {
+      IdentityExecutionEntry.encode(message.requestDetails, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryKeyshareResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGeneralIdentityResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryKeyshareResponse();
+    const message = createBaseQueryGeneralIdentityResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -277,7 +320,7 @@ export const QueryKeyshareResponse = {
             break;
           }
 
-          message.keyshare = GenEncTxExecutionQueue.decode(reader, reader.uint32());
+          message.requestDetails = IdentityExecutionEntry.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -288,46 +331,48 @@ export const QueryKeyshareResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryKeyshareResponse {
-    return { keyshare: isSet(object.keyshare) ? GenEncTxExecutionQueue.fromJSON(object.keyshare) : undefined };
+  fromJSON(object: any): QueryGeneralIdentityResponse {
+    return {
+      requestDetails: isSet(object.requestDetails) ? IdentityExecutionEntry.fromJSON(object.requestDetails) : undefined,
+    };
   },
 
-  toJSON(message: QueryKeyshareResponse): unknown {
+  toJSON(message: QueryGeneralIdentityResponse): unknown {
     const obj: any = {};
-    if (message.keyshare !== undefined) {
-      obj.keyshare = GenEncTxExecutionQueue.toJSON(message.keyshare);
+    if (message.requestDetails !== undefined) {
+      obj.requestDetails = IdentityExecutionEntry.toJSON(message.requestDetails);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryKeyshareResponse>, I>>(base?: I): QueryKeyshareResponse {
-    return QueryKeyshareResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryGeneralIdentityResponse>, I>>(base?: I): QueryGeneralIdentityResponse {
+    return QueryGeneralIdentityResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryKeyshareResponse>, I>>(object: I): QueryKeyshareResponse {
-    const message = createBaseQueryKeyshareResponse();
-    message.keyshare = (object.keyshare !== undefined && object.keyshare !== null)
-      ? GenEncTxExecutionQueue.fromPartial(object.keyshare)
+  fromPartial<I extends Exact<DeepPartial<QueryGeneralIdentityResponse>, I>>(object: I): QueryGeneralIdentityResponse {
+    const message = createBaseQueryGeneralIdentityResponse();
+    message.requestDetails = (object.requestDetails !== undefined && object.requestDetails !== null)
+      ? IdentityExecutionEntry.fromPartial(object.requestDetails)
       : undefined;
     return message;
   },
 };
 
-function createBaseQueryAllKeyshareRequest(): QueryAllKeyshareRequest {
+function createBaseQueryGeneralIdentityAllRequest(): QueryGeneralIdentityAllRequest {
   return { pagination: undefined };
 }
 
-export const QueryAllKeyshareRequest = {
-  encode(message: QueryAllKeyshareRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryGeneralIdentityAllRequest = {
+  encode(message: QueryGeneralIdentityAllRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllKeyshareRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGeneralIdentityAllRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllKeyshareRequest();
+    const message = createBaseQueryGeneralIdentityAllRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -347,11 +392,11 @@ export const QueryAllKeyshareRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllKeyshareRequest {
+  fromJSON(object: any): QueryGeneralIdentityAllRequest {
     return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
-  toJSON(message: QueryAllKeyshareRequest): unknown {
+  toJSON(message: QueryGeneralIdentityAllRequest): unknown {
     const obj: any = {};
     if (message.pagination !== undefined) {
       obj.pagination = PageRequest.toJSON(message.pagination);
@@ -359,11 +404,13 @@ export const QueryAllKeyshareRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllKeyshareRequest>, I>>(base?: I): QueryAllKeyshareRequest {
-    return QueryAllKeyshareRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryGeneralIdentityAllRequest>, I>>(base?: I): QueryGeneralIdentityAllRequest {
+    return QueryGeneralIdentityAllRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllKeyshareRequest>, I>>(object: I): QueryAllKeyshareRequest {
-    const message = createBaseQueryAllKeyshareRequest();
+  fromPartial<I extends Exact<DeepPartial<QueryGeneralIdentityAllRequest>, I>>(
+    object: I,
+  ): QueryGeneralIdentityAllRequest {
+    const message = createBaseQueryGeneralIdentityAllRequest();
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
@@ -371,14 +418,14 @@ export const QueryAllKeyshareRequest = {
   },
 };
 
-function createBaseQueryAllKeyshareResponse(): QueryAllKeyshareResponse {
-  return { keyshares: [], pagination: undefined };
+function createBaseQueryGeneralIdentityAllResponse(): QueryGeneralIdentityAllResponse {
+  return { requestDetailsList: [], pagination: undefined };
 }
 
-export const QueryAllKeyshareResponse = {
-  encode(message: QueryAllKeyshareResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.keyshares) {
-      GenEncTxExecutionQueue.encode(v!, writer.uint32(10).fork()).ldelim();
+export const QueryGeneralIdentityAllResponse = {
+  encode(message: QueryGeneralIdentityAllResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.requestDetailsList) {
+      IdentityExecutionEntry.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -386,10 +433,10 @@ export const QueryAllKeyshareResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllKeyshareResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGeneralIdentityAllResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllKeyshareResponse();
+    const message = createBaseQueryGeneralIdentityAllResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -398,7 +445,7 @@ export const QueryAllKeyshareResponse = {
             break;
           }
 
-          message.keyshares.push(GenEncTxExecutionQueue.decode(reader, reader.uint32()));
+          message.requestDetailsList.push(IdentityExecutionEntry.decode(reader, reader.uint32()));
           continue;
         case 2:
           if (tag !== 18) {
@@ -416,19 +463,19 @@ export const QueryAllKeyshareResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllKeyshareResponse {
+  fromJSON(object: any): QueryGeneralIdentityAllResponse {
     return {
-      keyshares: Array.isArray(object?.keyshares)
-        ? object.keyshares.map((e: any) => GenEncTxExecutionQueue.fromJSON(e))
+      requestDetailsList: Array.isArray(object?.requestDetailsList)
+        ? object.requestDetailsList.map((e: any) => IdentityExecutionEntry.fromJSON(e))
         : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
-  toJSON(message: QueryAllKeyshareResponse): unknown {
+  toJSON(message: QueryGeneralIdentityAllResponse): unknown {
     const obj: any = {};
-    if (message.keyshares?.length) {
-      obj.keyshares = message.keyshares.map((e) => GenEncTxExecutionQueue.toJSON(e));
+    if (message.requestDetailsList?.length) {
+      obj.requestDetailsList = message.requestDetailsList.map((e) => IdentityExecutionEntry.toJSON(e));
     }
     if (message.pagination !== undefined) {
       obj.pagination = PageResponse.toJSON(message.pagination);
@@ -436,12 +483,14 @@ export const QueryAllKeyshareResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllKeyshareResponse>, I>>(base?: I): QueryAllKeyshareResponse {
-    return QueryAllKeyshareResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryGeneralIdentityAllResponse>, I>>(base?: I): QueryGeneralIdentityAllResponse {
+    return QueryGeneralIdentityAllResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllKeyshareResponse>, I>>(object: I): QueryAllKeyshareResponse {
-    const message = createBaseQueryAllKeyshareResponse();
-    message.keyshares = object.keyshares?.map((e) => GenEncTxExecutionQueue.fromPartial(e)) || [];
+  fromPartial<I extends Exact<DeepPartial<QueryGeneralIdentityAllResponse>, I>>(
+    object: I,
+  ): QueryGeneralIdentityAllResponse {
+    const message = createBaseQueryGeneralIdentityAllResponse();
+    message.requestDetailsList = object.requestDetailsList?.map((e) => IdentityExecutionEntry.fromPartial(e)) || [];
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageResponse.fromPartial(object.pagination)
       : undefined;
@@ -449,12 +498,12 @@ export const QueryAllKeyshareResponse = {
   },
 };
 
-function createBaseQueryGetEncryptedTxRequest(): QueryGetEncryptedTxRequest {
+function createBaseQueryEncryptedTxRequest(): QueryEncryptedTxRequest {
   return { targetHeight: 0, index: 0 };
 }
 
-export const QueryGetEncryptedTxRequest = {
-  encode(message: QueryGetEncryptedTxRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryEncryptedTxRequest = {
+  encode(message: QueryEncryptedTxRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.targetHeight !== 0) {
       writer.uint32(8).uint64(message.targetHeight);
     }
@@ -464,10 +513,10 @@ export const QueryGetEncryptedTxRequest = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetEncryptedTxRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryEncryptedTxRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetEncryptedTxRequest();
+    const message = createBaseQueryEncryptedTxRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -494,14 +543,14 @@ export const QueryGetEncryptedTxRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetEncryptedTxRequest {
+  fromJSON(object: any): QueryEncryptedTxRequest {
     return {
       targetHeight: isSet(object.targetHeight) ? Number(object.targetHeight) : 0,
       index: isSet(object.index) ? Number(object.index) : 0,
     };
   },
 
-  toJSON(message: QueryGetEncryptedTxRequest): unknown {
+  toJSON(message: QueryEncryptedTxRequest): unknown {
     const obj: any = {};
     if (message.targetHeight !== 0) {
       obj.targetHeight = Math.round(message.targetHeight);
@@ -512,33 +561,33 @@ export const QueryGetEncryptedTxRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryGetEncryptedTxRequest>, I>>(base?: I): QueryGetEncryptedTxRequest {
-    return QueryGetEncryptedTxRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryEncryptedTxRequest>, I>>(base?: I): QueryEncryptedTxRequest {
+    return QueryEncryptedTxRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryGetEncryptedTxRequest>, I>>(object: I): QueryGetEncryptedTxRequest {
-    const message = createBaseQueryGetEncryptedTxRequest();
+  fromPartial<I extends Exact<DeepPartial<QueryEncryptedTxRequest>, I>>(object: I): QueryEncryptedTxRequest {
+    const message = createBaseQueryEncryptedTxRequest();
     message.targetHeight = object.targetHeight ?? 0;
     message.index = object.index ?? 0;
     return message;
   },
 };
 
-function createBaseQueryGetEncryptedTxResponse(): QueryGetEncryptedTxResponse {
+function createBaseQueryEncryptedTxResponse(): QueryEncryptedTxResponse {
   return { encryptedTx: undefined };
 }
 
-export const QueryGetEncryptedTxResponse = {
-  encode(message: QueryGetEncryptedTxResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryEncryptedTxResponse = {
+  encode(message: QueryEncryptedTxResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.encryptedTx !== undefined) {
       EncryptedTx.encode(message.encryptedTx, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetEncryptedTxResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryEncryptedTxResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetEncryptedTxResponse();
+    const message = createBaseQueryEncryptedTxResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -558,11 +607,11 @@ export const QueryGetEncryptedTxResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetEncryptedTxResponse {
+  fromJSON(object: any): QueryEncryptedTxResponse {
     return { encryptedTx: isSet(object.encryptedTx) ? EncryptedTx.fromJSON(object.encryptedTx) : undefined };
   },
 
-  toJSON(message: QueryGetEncryptedTxResponse): unknown {
+  toJSON(message: QueryEncryptedTxResponse): unknown {
     const obj: any = {};
     if (message.encryptedTx !== undefined) {
       obj.encryptedTx = EncryptedTx.toJSON(message.encryptedTx);
@@ -570,11 +619,11 @@ export const QueryGetEncryptedTxResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryGetEncryptedTxResponse>, I>>(base?: I): QueryGetEncryptedTxResponse {
-    return QueryGetEncryptedTxResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryEncryptedTxResponse>, I>>(base?: I): QueryEncryptedTxResponse {
+    return QueryEncryptedTxResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryGetEncryptedTxResponse>, I>>(object: I): QueryGetEncryptedTxResponse {
-    const message = createBaseQueryGetEncryptedTxResponse();
+  fromPartial<I extends Exact<DeepPartial<QueryEncryptedTxResponse>, I>>(object: I): QueryEncryptedTxResponse {
+    const message = createBaseQueryEncryptedTxResponse();
     message.encryptedTx = (object.encryptedTx !== undefined && object.encryptedTx !== null)
       ? EncryptedTx.fromPartial(object.encryptedTx)
       : undefined;
@@ -582,22 +631,22 @@ export const QueryGetEncryptedTxResponse = {
   },
 };
 
-function createBaseQueryAllEncryptedTxRequest(): QueryAllEncryptedTxRequest {
+function createBaseQueryEncryptedTxAllRequest(): QueryEncryptedTxAllRequest {
   return { pagination: undefined };
 }
 
-export const QueryAllEncryptedTxRequest = {
-  encode(message: QueryAllEncryptedTxRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryEncryptedTxAllRequest = {
+  encode(message: QueryEncryptedTxAllRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllEncryptedTxRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryEncryptedTxAllRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllEncryptedTxRequest();
+    const message = createBaseQueryEncryptedTxAllRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -617,11 +666,11 @@ export const QueryAllEncryptedTxRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllEncryptedTxRequest {
+  fromJSON(object: any): QueryEncryptedTxAllRequest {
     return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
-  toJSON(message: QueryAllEncryptedTxRequest): unknown {
+  toJSON(message: QueryEncryptedTxAllRequest): unknown {
     const obj: any = {};
     if (message.pagination !== undefined) {
       obj.pagination = PageRequest.toJSON(message.pagination);
@@ -629,11 +678,11 @@ export const QueryAllEncryptedTxRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllEncryptedTxRequest>, I>>(base?: I): QueryAllEncryptedTxRequest {
-    return QueryAllEncryptedTxRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryEncryptedTxAllRequest>, I>>(base?: I): QueryEncryptedTxAllRequest {
+    return QueryEncryptedTxAllRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllEncryptedTxRequest>, I>>(object: I): QueryAllEncryptedTxRequest {
-    const message = createBaseQueryAllEncryptedTxRequest();
+  fromPartial<I extends Exact<DeepPartial<QueryEncryptedTxAllRequest>, I>>(object: I): QueryEncryptedTxAllRequest {
+    const message = createBaseQueryEncryptedTxAllRequest();
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
@@ -641,12 +690,12 @@ export const QueryAllEncryptedTxRequest = {
   },
 };
 
-function createBaseQueryAllEncryptedTxResponse(): QueryAllEncryptedTxResponse {
+function createBaseQueryEncryptedTxAllResponse(): QueryEncryptedTxAllResponse {
   return { encryptedTxArray: [], pagination: undefined };
 }
 
-export const QueryAllEncryptedTxResponse = {
-  encode(message: QueryAllEncryptedTxResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryEncryptedTxAllResponse = {
+  encode(message: QueryEncryptedTxAllResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.encryptedTxArray) {
       EncryptedTxArray.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -656,10 +705,10 @@ export const QueryAllEncryptedTxResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllEncryptedTxResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryEncryptedTxAllResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllEncryptedTxResponse();
+    const message = createBaseQueryEncryptedTxAllResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -686,7 +735,7 @@ export const QueryAllEncryptedTxResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllEncryptedTxResponse {
+  fromJSON(object: any): QueryEncryptedTxAllResponse {
     return {
       encryptedTxArray: Array.isArray(object?.encryptedTxArray)
         ? object.encryptedTxArray.map((e: any) => EncryptedTxArray.fromJSON(e))
@@ -695,7 +744,7 @@ export const QueryAllEncryptedTxResponse = {
     };
   },
 
-  toJSON(message: QueryAllEncryptedTxResponse): unknown {
+  toJSON(message: QueryEncryptedTxAllResponse): unknown {
     const obj: any = {};
     if (message.encryptedTxArray?.length) {
       obj.encryptedTxArray = message.encryptedTxArray.map((e) => EncryptedTxArray.toJSON(e));
@@ -706,11 +755,11 @@ export const QueryAllEncryptedTxResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllEncryptedTxResponse>, I>>(base?: I): QueryAllEncryptedTxResponse {
-    return QueryAllEncryptedTxResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryEncryptedTxAllResponse>, I>>(base?: I): QueryEncryptedTxAllResponse {
+    return QueryEncryptedTxAllResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllEncryptedTxResponse>, I>>(object: I): QueryAllEncryptedTxResponse {
-    const message = createBaseQueryAllEncryptedTxResponse();
+  fromPartial<I extends Exact<DeepPartial<QueryEncryptedTxAllResponse>, I>>(object: I): QueryEncryptedTxAllResponse {
+    const message = createBaseQueryEncryptedTxAllResponse();
     message.encryptedTxArray = object.encryptedTxArray?.map((e) => EncryptedTxArray.fromPartial(e)) || [];
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageResponse.fromPartial(object.pagination)
@@ -719,22 +768,22 @@ export const QueryAllEncryptedTxResponse = {
   },
 };
 
-function createBaseQueryAllEncryptedTxFromHeightRequest(): QueryAllEncryptedTxFromHeightRequest {
+function createBaseQueryEncryptedTxAllFromHeightRequest(): QueryEncryptedTxAllFromHeightRequest {
   return { targetHeight: 0 };
 }
 
-export const QueryAllEncryptedTxFromHeightRequest = {
-  encode(message: QueryAllEncryptedTxFromHeightRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryEncryptedTxAllFromHeightRequest = {
+  encode(message: QueryEncryptedTxAllFromHeightRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.targetHeight !== 0) {
       writer.uint32(8).uint64(message.targetHeight);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllEncryptedTxFromHeightRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryEncryptedTxAllFromHeightRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllEncryptedTxFromHeightRequest();
+    const message = createBaseQueryEncryptedTxAllFromHeightRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -754,11 +803,11 @@ export const QueryAllEncryptedTxFromHeightRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllEncryptedTxFromHeightRequest {
+  fromJSON(object: any): QueryEncryptedTxAllFromHeightRequest {
     return { targetHeight: isSet(object.targetHeight) ? Number(object.targetHeight) : 0 };
   },
 
-  toJSON(message: QueryAllEncryptedTxFromHeightRequest): unknown {
+  toJSON(message: QueryEncryptedTxAllFromHeightRequest): unknown {
     const obj: any = {};
     if (message.targetHeight !== 0) {
       obj.targetHeight = Math.round(message.targetHeight);
@@ -766,36 +815,36 @@ export const QueryAllEncryptedTxFromHeightRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllEncryptedTxFromHeightRequest>, I>>(
+  create<I extends Exact<DeepPartial<QueryEncryptedTxAllFromHeightRequest>, I>>(
     base?: I,
-  ): QueryAllEncryptedTxFromHeightRequest {
-    return QueryAllEncryptedTxFromHeightRequest.fromPartial(base ?? ({} as any));
+  ): QueryEncryptedTxAllFromHeightRequest {
+    return QueryEncryptedTxAllFromHeightRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllEncryptedTxFromHeightRequest>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryEncryptedTxAllFromHeightRequest>, I>>(
     object: I,
-  ): QueryAllEncryptedTxFromHeightRequest {
-    const message = createBaseQueryAllEncryptedTxFromHeightRequest();
+  ): QueryEncryptedTxAllFromHeightRequest {
+    const message = createBaseQueryEncryptedTxAllFromHeightRequest();
     message.targetHeight = object.targetHeight ?? 0;
     return message;
   },
 };
 
-function createBaseQueryAllEncryptedTxFromHeightResponse(): QueryAllEncryptedTxFromHeightResponse {
+function createBaseQueryEncryptedTxAllFromHeightResponse(): QueryEncryptedTxAllFromHeightResponse {
   return { encryptedTxArray: undefined };
 }
 
-export const QueryAllEncryptedTxFromHeightResponse = {
-  encode(message: QueryAllEncryptedTxFromHeightResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryEncryptedTxAllFromHeightResponse = {
+  encode(message: QueryEncryptedTxAllFromHeightResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.encryptedTxArray !== undefined) {
       EncryptedTxArray.encode(message.encryptedTxArray, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllEncryptedTxFromHeightResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryEncryptedTxAllFromHeightResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllEncryptedTxFromHeightResponse();
+    const message = createBaseQueryEncryptedTxAllFromHeightResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -815,13 +864,13 @@ export const QueryAllEncryptedTxFromHeightResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllEncryptedTxFromHeightResponse {
+  fromJSON(object: any): QueryEncryptedTxAllFromHeightResponse {
     return {
       encryptedTxArray: isSet(object.encryptedTxArray) ? EncryptedTxArray.fromJSON(object.encryptedTxArray) : undefined,
     };
   },
 
-  toJSON(message: QueryAllEncryptedTxFromHeightResponse): unknown {
+  toJSON(message: QueryEncryptedTxAllFromHeightResponse): unknown {
     const obj: any = {};
     if (message.encryptedTxArray !== undefined) {
       obj.encryptedTxArray = EncryptedTxArray.toJSON(message.encryptedTxArray);
@@ -829,15 +878,15 @@ export const QueryAllEncryptedTxFromHeightResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllEncryptedTxFromHeightResponse>, I>>(
+  create<I extends Exact<DeepPartial<QueryEncryptedTxAllFromHeightResponse>, I>>(
     base?: I,
-  ): QueryAllEncryptedTxFromHeightResponse {
-    return QueryAllEncryptedTxFromHeightResponse.fromPartial(base ?? ({} as any));
+  ): QueryEncryptedTxAllFromHeightResponse {
+    return QueryEncryptedTxAllFromHeightResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllEncryptedTxFromHeightResponse>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryEncryptedTxAllFromHeightResponse>, I>>(
     object: I,
-  ): QueryAllEncryptedTxFromHeightResponse {
-    const message = createBaseQueryAllEncryptedTxFromHeightResponse();
+  ): QueryEncryptedTxAllFromHeightResponse {
+    const message = createBaseQueryEncryptedTxAllFromHeightResponse();
     message.encryptedTxArray = (object.encryptedTxArray !== undefined && object.encryptedTxArray !== null)
       ? EncryptedTxArray.fromPartial(object.encryptedTxArray)
       : undefined;
@@ -945,22 +994,22 @@ export const QueryLatestHeightResponse = {
   },
 };
 
-function createBaseQueryGetPepNonceRequest(): QueryGetPepNonceRequest {
+function createBaseQueryPepNonceRequest(): QueryPepNonceRequest {
   return { address: "" };
 }
 
-export const QueryGetPepNonceRequest = {
-  encode(message: QueryGetPepNonceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryPepNonceRequest = {
+  encode(message: QueryPepNonceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPepNonceRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPepNonceRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetPepNonceRequest();
+    const message = createBaseQueryPepNonceRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -980,11 +1029,11 @@ export const QueryGetPepNonceRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetPepNonceRequest {
+  fromJSON(object: any): QueryPepNonceRequest {
     return { address: isSet(object.address) ? String(object.address) : "" };
   },
 
-  toJSON(message: QueryGetPepNonceRequest): unknown {
+  toJSON(message: QueryPepNonceRequest): unknown {
     const obj: any = {};
     if (message.address !== "") {
       obj.address = message.address;
@@ -992,32 +1041,32 @@ export const QueryGetPepNonceRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryGetPepNonceRequest>, I>>(base?: I): QueryGetPepNonceRequest {
-    return QueryGetPepNonceRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryPepNonceRequest>, I>>(base?: I): QueryPepNonceRequest {
+    return QueryPepNonceRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryGetPepNonceRequest>, I>>(object: I): QueryGetPepNonceRequest {
-    const message = createBaseQueryGetPepNonceRequest();
+  fromPartial<I extends Exact<DeepPartial<QueryPepNonceRequest>, I>>(object: I): QueryPepNonceRequest {
+    const message = createBaseQueryPepNonceRequest();
     message.address = object.address ?? "";
     return message;
   },
 };
 
-function createBaseQueryGetPepNonceResponse(): QueryGetPepNonceResponse {
+function createBaseQueryPepNonceResponse(): QueryPepNonceResponse {
   return { pepNonce: undefined };
 }
 
-export const QueryGetPepNonceResponse = {
-  encode(message: QueryGetPepNonceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryPepNonceResponse = {
+  encode(message: QueryPepNonceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pepNonce !== undefined) {
       PepNonce.encode(message.pepNonce, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPepNonceResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPepNonceResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetPepNonceResponse();
+    const message = createBaseQueryPepNonceResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1037,11 +1086,11 @@ export const QueryGetPepNonceResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetPepNonceResponse {
+  fromJSON(object: any): QueryPepNonceResponse {
     return { pepNonce: isSet(object.pepNonce) ? PepNonce.fromJSON(object.pepNonce) : undefined };
   },
 
-  toJSON(message: QueryGetPepNonceResponse): unknown {
+  toJSON(message: QueryPepNonceResponse): unknown {
     const obj: any = {};
     if (message.pepNonce !== undefined) {
       obj.pepNonce = PepNonce.toJSON(message.pepNonce);
@@ -1049,11 +1098,11 @@ export const QueryGetPepNonceResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryGetPepNonceResponse>, I>>(base?: I): QueryGetPepNonceResponse {
-    return QueryGetPepNonceResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryPepNonceResponse>, I>>(base?: I): QueryPepNonceResponse {
+    return QueryPepNonceResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryGetPepNonceResponse>, I>>(object: I): QueryGetPepNonceResponse {
-    const message = createBaseQueryGetPepNonceResponse();
+  fromPartial<I extends Exact<DeepPartial<QueryPepNonceResponse>, I>>(object: I): QueryPepNonceResponse {
+    const message = createBaseQueryPepNonceResponse();
     message.pepNonce = (object.pepNonce !== undefined && object.pepNonce !== null)
       ? PepNonce.fromPartial(object.pepNonce)
       : undefined;
@@ -1061,22 +1110,22 @@ export const QueryGetPepNonceResponse = {
   },
 };
 
-function createBaseQueryAllPepNonceRequest(): QueryAllPepNonceRequest {
+function createBaseQueryPepNonceAllRequest(): QueryPepNonceAllRequest {
   return { pagination: undefined };
 }
 
-export const QueryAllPepNonceRequest = {
-  encode(message: QueryAllPepNonceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryPepNonceAllRequest = {
+  encode(message: QueryPepNonceAllRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPepNonceRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPepNonceAllRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllPepNonceRequest();
+    const message = createBaseQueryPepNonceAllRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1096,11 +1145,11 @@ export const QueryAllPepNonceRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllPepNonceRequest {
+  fromJSON(object: any): QueryPepNonceAllRequest {
     return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
   },
 
-  toJSON(message: QueryAllPepNonceRequest): unknown {
+  toJSON(message: QueryPepNonceAllRequest): unknown {
     const obj: any = {};
     if (message.pagination !== undefined) {
       obj.pagination = PageRequest.toJSON(message.pagination);
@@ -1108,11 +1157,11 @@ export const QueryAllPepNonceRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllPepNonceRequest>, I>>(base?: I): QueryAllPepNonceRequest {
-    return QueryAllPepNonceRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryPepNonceAllRequest>, I>>(base?: I): QueryPepNonceAllRequest {
+    return QueryPepNonceAllRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllPepNonceRequest>, I>>(object: I): QueryAllPepNonceRequest {
-    const message = createBaseQueryAllPepNonceRequest();
+  fromPartial<I extends Exact<DeepPartial<QueryPepNonceAllRequest>, I>>(object: I): QueryPepNonceAllRequest {
+    const message = createBaseQueryPepNonceAllRequest();
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
@@ -1120,12 +1169,12 @@ export const QueryAllPepNonceRequest = {
   },
 };
 
-function createBaseQueryAllPepNonceResponse(): QueryAllPepNonceResponse {
+function createBaseQueryPepNonceAllResponse(): QueryPepNonceAllResponse {
   return { pepNonce: [], pagination: undefined };
 }
 
-export const QueryAllPepNonceResponse = {
-  encode(message: QueryAllPepNonceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryPepNonceAllResponse = {
+  encode(message: QueryPepNonceAllResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.pepNonce) {
       PepNonce.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1135,10 +1184,10 @@ export const QueryAllPepNonceResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPepNonceResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPepNonceAllResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllPepNonceResponse();
+    const message = createBaseQueryPepNonceAllResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1165,14 +1214,14 @@ export const QueryAllPepNonceResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllPepNonceResponse {
+  fromJSON(object: any): QueryPepNonceAllResponse {
     return {
       pepNonce: Array.isArray(object?.pepNonce) ? object.pepNonce.map((e: any) => PepNonce.fromJSON(e)) : [],
       pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
-  toJSON(message: QueryAllPepNonceResponse): unknown {
+  toJSON(message: QueryPepNonceAllResponse): unknown {
     const obj: any = {};
     if (message.pepNonce?.length) {
       obj.pepNonce = message.pepNonce.map((e) => PepNonce.toJSON(e));
@@ -1183,11 +1232,11 @@ export const QueryAllPepNonceResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAllPepNonceResponse>, I>>(base?: I): QueryAllPepNonceResponse {
-    return QueryAllPepNonceResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryPepNonceAllResponse>, I>>(base?: I): QueryPepNonceAllResponse {
+    return QueryPepNonceAllResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAllPepNonceResponse>, I>>(object: I): QueryAllPepNonceResponse {
-    const message = createBaseQueryAllPepNonceResponse();
+  fromPartial<I extends Exact<DeepPartial<QueryPepNonceAllResponse>, I>>(object: I): QueryPepNonceAllResponse {
+    const message = createBaseQueryPepNonceAllResponse();
     message.pepNonce = object.pepNonce?.map((e) => PepNonce.fromPartial(e)) || [];
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageResponse.fromPartial(object.pagination)
@@ -1196,19 +1245,19 @@ export const QueryAllPepNonceResponse = {
   },
 };
 
-function createBaseQueryPubKeyRequest(): QueryPubKeyRequest {
+function createBaseQueryPubkeyRequest(): QueryPubkeyRequest {
   return {};
 }
 
-export const QueryPubKeyRequest = {
-  encode(_: QueryPubKeyRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const QueryPubkeyRequest = {
+  encode(_: QueryPubkeyRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPubKeyRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPubkeyRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPubKeyRequest();
+    const message = createBaseQueryPubkeyRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1221,43 +1270,43 @@ export const QueryPubKeyRequest = {
     return message;
   },
 
-  fromJSON(_: any): QueryPubKeyRequest {
+  fromJSON(_: any): QueryPubkeyRequest {
     return {};
   },
 
-  toJSON(_: QueryPubKeyRequest): unknown {
+  toJSON(_: QueryPubkeyRequest): unknown {
     const obj: any = {};
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryPubKeyRequest>, I>>(base?: I): QueryPubKeyRequest {
-    return QueryPubKeyRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryPubkeyRequest>, I>>(base?: I): QueryPubkeyRequest {
+    return QueryPubkeyRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryPubKeyRequest>, I>>(_: I): QueryPubKeyRequest {
-    const message = createBaseQueryPubKeyRequest();
+  fromPartial<I extends Exact<DeepPartial<QueryPubkeyRequest>, I>>(_: I): QueryPubkeyRequest {
+    const message = createBaseQueryPubkeyRequest();
     return message;
   },
 };
 
-function createBaseQueryPubKeyResponse(): QueryPubKeyResponse {
-  return { activePubKey: undefined, queuedPubKey: undefined };
+function createBaseQueryPubkeyResponse(): QueryPubkeyResponse {
+  return { activePubkey: undefined, queuedPubkey: undefined };
 }
 
-export const QueryPubKeyResponse = {
-  encode(message: QueryPubKeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.activePubKey !== undefined) {
-      ActivePublicKey.encode(message.activePubKey, writer.uint32(10).fork()).ldelim();
+export const QueryPubkeyResponse = {
+  encode(message: QueryPubkeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.activePubkey !== undefined) {
+      ActivePublicKey.encode(message.activePubkey, writer.uint32(10).fork()).ldelim();
     }
-    if (message.queuedPubKey !== undefined) {
-      QueuedPublicKey.encode(message.queuedPubKey, writer.uint32(18).fork()).ldelim();
+    if (message.queuedPubkey !== undefined) {
+      QueuedPublicKey.encode(message.queuedPubkey, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPubKeyResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPubkeyResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPubKeyResponse();
+    const message = createBaseQueryPubkeyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1266,14 +1315,14 @@ export const QueryPubKeyResponse = {
             break;
           }
 
-          message.activePubKey = ActivePublicKey.decode(reader, reader.uint32());
+          message.activePubkey = ActivePublicKey.decode(reader, reader.uint32());
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
-          message.queuedPubKey = QueuedPublicKey.decode(reader, reader.uint32());
+          message.queuedPubkey = QueuedPublicKey.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1284,35 +1333,344 @@ export const QueryPubKeyResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryPubKeyResponse {
+  fromJSON(object: any): QueryPubkeyResponse {
     return {
-      activePubKey: isSet(object.activePubKey) ? ActivePublicKey.fromJSON(object.activePubKey) : undefined,
-      queuedPubKey: isSet(object.queuedPubKey) ? QueuedPublicKey.fromJSON(object.queuedPubKey) : undefined,
+      activePubkey: isSet(object.activePubkey) ? ActivePublicKey.fromJSON(object.activePubkey) : undefined,
+      queuedPubkey: isSet(object.queuedPubkey) ? QueuedPublicKey.fromJSON(object.queuedPubkey) : undefined,
     };
   },
 
-  toJSON(message: QueryPubKeyResponse): unknown {
+  toJSON(message: QueryPubkeyResponse): unknown {
     const obj: any = {};
-    if (message.activePubKey !== undefined) {
-      obj.activePubKey = ActivePublicKey.toJSON(message.activePubKey);
+    if (message.activePubkey !== undefined) {
+      obj.activePubkey = ActivePublicKey.toJSON(message.activePubkey);
     }
-    if (message.queuedPubKey !== undefined) {
-      obj.queuedPubKey = QueuedPublicKey.toJSON(message.queuedPubKey);
+    if (message.queuedPubkey !== undefined) {
+      obj.queuedPubkey = QueuedPublicKey.toJSON(message.queuedPubkey);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryPubKeyResponse>, I>>(base?: I): QueryPubKeyResponse {
-    return QueryPubKeyResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<QueryPubkeyResponse>, I>>(base?: I): QueryPubkeyResponse {
+    return QueryPubkeyResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryPubKeyResponse>, I>>(object: I): QueryPubKeyResponse {
-    const message = createBaseQueryPubKeyResponse();
-    message.activePubKey = (object.activePubKey !== undefined && object.activePubKey !== null)
-      ? ActivePublicKey.fromPartial(object.activePubKey)
+  fromPartial<I extends Exact<DeepPartial<QueryPubkeyResponse>, I>>(object: I): QueryPubkeyResponse {
+    const message = createBaseQueryPubkeyResponse();
+    message.activePubkey = (object.activePubkey !== undefined && object.activePubkey !== null)
+      ? ActivePublicKey.fromPartial(object.activePubkey)
       : undefined;
-    message.queuedPubKey = (object.queuedPubKey !== undefined && object.queuedPubKey !== null)
-      ? QueuedPublicKey.fromPartial(object.queuedPubKey)
+    message.queuedPubkey = (object.queuedPubkey !== undefined && object.queuedPubkey !== null)
+      ? QueuedPublicKey.fromPartial(object.queuedPubkey)
       : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryPrivateIdentityRequest(): QueryPrivateIdentityRequest {
+  return { identity: "" };
+}
+
+export const QueryPrivateIdentityRequest = {
+  encode(message: QueryPrivateIdentityRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.identity !== "") {
+      writer.uint32(10).string(message.identity);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPrivateIdentityRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPrivateIdentityRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.identity = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryPrivateIdentityRequest {
+    return { identity: isSet(object.identity) ? String(object.identity) : "" };
+  },
+
+  toJSON(message: QueryPrivateIdentityRequest): unknown {
+    const obj: any = {};
+    if (message.identity !== "") {
+      obj.identity = message.identity;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryPrivateIdentityRequest>, I>>(base?: I): QueryPrivateIdentityRequest {
+    return QueryPrivateIdentityRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryPrivateIdentityRequest>, I>>(object: I): QueryPrivateIdentityRequest {
+    const message = createBaseQueryPrivateIdentityRequest();
+    message.identity = object.identity ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryPrivateIdentityResponse(): QueryPrivateIdentityResponse {
+  return { creator: "", identity: "", pubkey: "", privateDecryptionKeys: [] };
+}
+
+export const QueryPrivateIdentityResponse = {
+  encode(message: QueryPrivateIdentityResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.identity !== "") {
+      writer.uint32(18).string(message.identity);
+    }
+    if (message.pubkey !== "") {
+      writer.uint32(26).string(message.pubkey);
+    }
+    for (const v of message.privateDecryptionKeys) {
+      PrivateDecryptionKey.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPrivateIdentityResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPrivateIdentityResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.identity = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.pubkey = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.privateDecryptionKeys.push(PrivateDecryptionKey.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryPrivateIdentityResponse {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      identity: isSet(object.identity) ? String(object.identity) : "",
+      pubkey: isSet(object.pubkey) ? String(object.pubkey) : "",
+      privateDecryptionKeys: Array.isArray(object?.privateDecryptionKeys)
+        ? object.privateDecryptionKeys.map((e: any) => PrivateDecryptionKey.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: QueryPrivateIdentityResponse): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.identity !== "") {
+      obj.identity = message.identity;
+    }
+    if (message.pubkey !== "") {
+      obj.pubkey = message.pubkey;
+    }
+    if (message.privateDecryptionKeys?.length) {
+      obj.privateDecryptionKeys = message.privateDecryptionKeys.map((e) => PrivateDecryptionKey.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryPrivateIdentityResponse>, I>>(base?: I): QueryPrivateIdentityResponse {
+    return QueryPrivateIdentityResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryPrivateIdentityResponse>, I>>(object: I): QueryPrivateIdentityResponse {
+    const message = createBaseQueryPrivateIdentityResponse();
+    message.creator = object.creator ?? "";
+    message.identity = object.identity ?? "";
+    message.pubkey = object.pubkey ?? "";
+    message.privateDecryptionKeys = object.privateDecryptionKeys?.map((e) => PrivateDecryptionKey.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseQueryDecryptDataRequest(): QueryDecryptDataRequest {
+  return { pubkey: "", decryptionKey: "", encryptedData: "" };
+}
+
+export const QueryDecryptDataRequest = {
+  encode(message: QueryDecryptDataRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pubkey !== "") {
+      writer.uint32(10).string(message.pubkey);
+    }
+    if (message.decryptionKey !== "") {
+      writer.uint32(18).string(message.decryptionKey);
+    }
+    if (message.encryptedData !== "") {
+      writer.uint32(26).string(message.encryptedData);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDecryptDataRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDecryptDataRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.pubkey = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.decryptionKey = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.encryptedData = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryDecryptDataRequest {
+    return {
+      pubkey: isSet(object.pubkey) ? String(object.pubkey) : "",
+      decryptionKey: isSet(object.decryptionKey) ? String(object.decryptionKey) : "",
+      encryptedData: isSet(object.encryptedData) ? String(object.encryptedData) : "",
+    };
+  },
+
+  toJSON(message: QueryDecryptDataRequest): unknown {
+    const obj: any = {};
+    if (message.pubkey !== "") {
+      obj.pubkey = message.pubkey;
+    }
+    if (message.decryptionKey !== "") {
+      obj.decryptionKey = message.decryptionKey;
+    }
+    if (message.encryptedData !== "") {
+      obj.encryptedData = message.encryptedData;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryDecryptDataRequest>, I>>(base?: I): QueryDecryptDataRequest {
+    return QueryDecryptDataRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryDecryptDataRequest>, I>>(object: I): QueryDecryptDataRequest {
+    const message = createBaseQueryDecryptDataRequest();
+    message.pubkey = object.pubkey ?? "";
+    message.decryptionKey = object.decryptionKey ?? "";
+    message.encryptedData = object.encryptedData ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryDecryptDataResponse(): QueryDecryptDataResponse {
+  return { decryptedData: "" };
+}
+
+export const QueryDecryptDataResponse = {
+  encode(message: QueryDecryptDataResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.decryptedData !== "") {
+      writer.uint32(10).string(message.decryptedData);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDecryptDataResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDecryptDataResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.decryptedData = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryDecryptDataResponse {
+    return { decryptedData: isSet(object.decryptedData) ? String(object.decryptedData) : "" };
+  },
+
+  toJSON(message: QueryDecryptDataResponse): unknown {
+    const obj: any = {};
+    if (message.decryptedData !== "") {
+      obj.decryptedData = message.decryptedData;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryDecryptDataResponse>, I>>(base?: I): QueryDecryptDataResponse {
+    return QueryDecryptDataResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryDecryptDataResponse>, I>>(object: I): QueryDecryptDataResponse {
+    const message = createBaseQueryDecryptDataResponse();
+    message.decryptedData = object.decryptedData ?? "";
     return message;
   },
 };
@@ -1322,23 +1680,29 @@ export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
   /** Queries a EncryptedTx by index. */
-  EncryptedTx(request: QueryGetEncryptedTxRequest): Promise<QueryGetEncryptedTxResponse>;
+  EncryptedTx(request: QueryEncryptedTxRequest): Promise<QueryEncryptedTxResponse>;
   /** Queries a list of EncryptedTx items. */
-  EncryptedTxAll(request: QueryAllEncryptedTxRequest): Promise<QueryAllEncryptedTxResponse>;
+  EncryptedTxAll(request: QueryEncryptedTxAllRequest): Promise<QueryEncryptedTxAllResponse>;
   /** Queries a list of EncryptedTx items. */
   EncryptedTxAllFromHeight(
-    request: QueryAllEncryptedTxFromHeightRequest,
-  ): Promise<QueryAllEncryptedTxFromHeightResponse>;
+    request: QueryEncryptedTxAllFromHeightRequest,
+  ): Promise<QueryEncryptedTxAllFromHeightResponse>;
   /** Queries a list of LatestHeight items. */
   LatestHeight(request: QueryLatestHeightRequest): Promise<QueryLatestHeightResponse>;
   /** Queries a PepNonce by index. */
-  PepNonce(request: QueryGetPepNonceRequest): Promise<QueryGetPepNonceResponse>;
+  PepNonce(request: QueryPepNonceRequest): Promise<QueryPepNonceResponse>;
   /** Queries a list of PepNonce items. */
-  PepNonceAll(request: QueryAllPepNonceRequest): Promise<QueryAllPepNonceResponse>;
+  PepNonceAll(request: QueryPepNonceAllRequest): Promise<QueryPepNonceAllResponse>;
   /** Queries the public keys */
-  PubKey(request: QueryPubKeyRequest): Promise<QueryPubKeyResponse>;
-  KeyshareReq(request: QueryKeyshareRequest): Promise<QueryKeyshareResponse>;
-  KeyshareReqAll(request: QueryAllKeyshareRequest): Promise<QueryAllKeyshareResponse>;
+  Pubkey(request: QueryPubkeyRequest): Promise<QueryPubkeyResponse>;
+  /** Queries a General Identity request by identity */
+  GeneralIdentity(request: QueryGeneralIdentityRequest): Promise<QueryGeneralIdentityResponse>;
+  /** Queries a list of General Identity requests */
+  GeneralIdentityAll(request: QueryGeneralIdentityAllRequest): Promise<QueryGeneralIdentityAllResponse>;
+  /** Queries a Private Identity request item by identity */
+  PrivateIdentity(request: QueryPrivateIdentityRequest): Promise<QueryPrivateIdentityResponse>;
+  /** Queries a list of DecryptData items. */
+  DecryptData(request: QueryDecryptDataRequest): Promise<QueryDecryptDataResponse>;
 }
 
 export const QueryServiceName = "fairyring.pep.Query";
@@ -1355,9 +1719,11 @@ export class QueryClientImpl implements Query {
     this.LatestHeight = this.LatestHeight.bind(this);
     this.PepNonce = this.PepNonce.bind(this);
     this.PepNonceAll = this.PepNonceAll.bind(this);
-    this.PubKey = this.PubKey.bind(this);
-    this.KeyshareReq = this.KeyshareReq.bind(this);
-    this.KeyshareReqAll = this.KeyshareReqAll.bind(this);
+    this.Pubkey = this.Pubkey.bind(this);
+    this.GeneralIdentity = this.GeneralIdentity.bind(this);
+    this.GeneralIdentityAll = this.GeneralIdentityAll.bind(this);
+    this.PrivateIdentity = this.PrivateIdentity.bind(this);
+    this.DecryptData = this.DecryptData.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -1365,24 +1731,24 @@ export class QueryClientImpl implements Query {
     return promise.then((data) => QueryParamsResponse.decode(_m0.Reader.create(data)));
   }
 
-  EncryptedTx(request: QueryGetEncryptedTxRequest): Promise<QueryGetEncryptedTxResponse> {
-    const data = QueryGetEncryptedTxRequest.encode(request).finish();
+  EncryptedTx(request: QueryEncryptedTxRequest): Promise<QueryEncryptedTxResponse> {
+    const data = QueryEncryptedTxRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "EncryptedTx", data);
-    return promise.then((data) => QueryGetEncryptedTxResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) => QueryEncryptedTxResponse.decode(_m0.Reader.create(data)));
   }
 
-  EncryptedTxAll(request: QueryAllEncryptedTxRequest): Promise<QueryAllEncryptedTxResponse> {
-    const data = QueryAllEncryptedTxRequest.encode(request).finish();
+  EncryptedTxAll(request: QueryEncryptedTxAllRequest): Promise<QueryEncryptedTxAllResponse> {
+    const data = QueryEncryptedTxAllRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "EncryptedTxAll", data);
-    return promise.then((data) => QueryAllEncryptedTxResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) => QueryEncryptedTxAllResponse.decode(_m0.Reader.create(data)));
   }
 
   EncryptedTxAllFromHeight(
-    request: QueryAllEncryptedTxFromHeightRequest,
-  ): Promise<QueryAllEncryptedTxFromHeightResponse> {
-    const data = QueryAllEncryptedTxFromHeightRequest.encode(request).finish();
+    request: QueryEncryptedTxAllFromHeightRequest,
+  ): Promise<QueryEncryptedTxAllFromHeightResponse> {
+    const data = QueryEncryptedTxAllFromHeightRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "EncryptedTxAllFromHeight", data);
-    return promise.then((data) => QueryAllEncryptedTxFromHeightResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) => QueryEncryptedTxAllFromHeightResponse.decode(_m0.Reader.create(data)));
   }
 
   LatestHeight(request: QueryLatestHeightRequest): Promise<QueryLatestHeightResponse> {
@@ -1391,34 +1757,46 @@ export class QueryClientImpl implements Query {
     return promise.then((data) => QueryLatestHeightResponse.decode(_m0.Reader.create(data)));
   }
 
-  PepNonce(request: QueryGetPepNonceRequest): Promise<QueryGetPepNonceResponse> {
-    const data = QueryGetPepNonceRequest.encode(request).finish();
+  PepNonce(request: QueryPepNonceRequest): Promise<QueryPepNonceResponse> {
+    const data = QueryPepNonceRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "PepNonce", data);
-    return promise.then((data) => QueryGetPepNonceResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) => QueryPepNonceResponse.decode(_m0.Reader.create(data)));
   }
 
-  PepNonceAll(request: QueryAllPepNonceRequest): Promise<QueryAllPepNonceResponse> {
-    const data = QueryAllPepNonceRequest.encode(request).finish();
+  PepNonceAll(request: QueryPepNonceAllRequest): Promise<QueryPepNonceAllResponse> {
+    const data = QueryPepNonceAllRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "PepNonceAll", data);
-    return promise.then((data) => QueryAllPepNonceResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) => QueryPepNonceAllResponse.decode(_m0.Reader.create(data)));
   }
 
-  PubKey(request: QueryPubKeyRequest): Promise<QueryPubKeyResponse> {
-    const data = QueryPubKeyRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "PubKey", data);
-    return promise.then((data) => QueryPubKeyResponse.decode(_m0.Reader.create(data)));
+  Pubkey(request: QueryPubkeyRequest): Promise<QueryPubkeyResponse> {
+    const data = QueryPubkeyRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "Pubkey", data);
+    return promise.then((data) => QueryPubkeyResponse.decode(_m0.Reader.create(data)));
   }
 
-  KeyshareReq(request: QueryKeyshareRequest): Promise<QueryKeyshareResponse> {
-    const data = QueryKeyshareRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "KeyshareReq", data);
-    return promise.then((data) => QueryKeyshareResponse.decode(_m0.Reader.create(data)));
+  GeneralIdentity(request: QueryGeneralIdentityRequest): Promise<QueryGeneralIdentityResponse> {
+    const data = QueryGeneralIdentityRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "GeneralIdentity", data);
+    return promise.then((data) => QueryGeneralIdentityResponse.decode(_m0.Reader.create(data)));
   }
 
-  KeyshareReqAll(request: QueryAllKeyshareRequest): Promise<QueryAllKeyshareResponse> {
-    const data = QueryAllKeyshareRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "KeyshareReqAll", data);
-    return promise.then((data) => QueryAllKeyshareResponse.decode(_m0.Reader.create(data)));
+  GeneralIdentityAll(request: QueryGeneralIdentityAllRequest): Promise<QueryGeneralIdentityAllResponse> {
+    const data = QueryGeneralIdentityAllRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "GeneralIdentityAll", data);
+    return promise.then((data) => QueryGeneralIdentityAllResponse.decode(_m0.Reader.create(data)));
+  }
+
+  PrivateIdentity(request: QueryPrivateIdentityRequest): Promise<QueryPrivateIdentityResponse> {
+    const data = QueryPrivateIdentityRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "PrivateIdentity", data);
+    return promise.then((data) => QueryPrivateIdentityResponse.decode(_m0.Reader.create(data)));
+  }
+
+  DecryptData(request: QueryDecryptDataRequest): Promise<QueryDecryptDataResponse> {
+    const data = QueryDecryptDataRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "DecryptData", data);
+    return promise.then((data) => QueryDecryptDataResponse.decode(_m0.Reader.create(data)));
   }
 }
 

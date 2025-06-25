@@ -12,6 +12,7 @@ export interface Params {
   trustedAddresses: string[];
   slashFractionNoKeyshare: Uint8Array;
   slashFractionWrongKeyshare: Uint8Array;
+  avgBlockTime: number;
 }
 
 function createBaseParams(): Params {
@@ -22,6 +23,7 @@ function createBaseParams(): Params {
     trustedAddresses: [],
     slashFractionNoKeyshare: new Uint8Array(0),
     slashFractionWrongKeyshare: new Uint8Array(0),
+    avgBlockTime: 0,
   };
 }
 
@@ -44,6 +46,9 @@ export const Params = {
     }
     if (message.slashFractionWrongKeyshare.length !== 0) {
       writer.uint32(50).bytes(message.slashFractionWrongKeyshare);
+    }
+    if (message.avgBlockTime !== 0) {
+      writer.uint32(61).float(message.avgBlockTime);
     }
     return writer;
   },
@@ -97,6 +102,13 @@ export const Params = {
 
           message.slashFractionWrongKeyshare = reader.bytes();
           continue;
+        case 7:
+          if (tag !== 61) {
+            break;
+          }
+
+          message.avgBlockTime = reader.float();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -120,6 +132,7 @@ export const Params = {
       slashFractionWrongKeyshare: isSet(object.slashFractionWrongKeyshare)
         ? bytesFromBase64(object.slashFractionWrongKeyshare)
         : new Uint8Array(0),
+      avgBlockTime: isSet(object.avgBlockTime) ? Number(object.avgBlockTime) : 0,
     };
   },
 
@@ -143,6 +156,9 @@ export const Params = {
     if (message.slashFractionWrongKeyshare.length !== 0) {
       obj.slashFractionWrongKeyshare = base64FromBytes(message.slashFractionWrongKeyshare);
     }
+    if (message.avgBlockTime !== 0) {
+      obj.avgBlockTime = message.avgBlockTime;
+    }
     return obj;
   },
 
@@ -157,6 +173,7 @@ export const Params = {
     message.trustedAddresses = object.trustedAddresses?.map((e) => e) || [];
     message.slashFractionNoKeyshare = object.slashFractionNoKeyshare ?? new Uint8Array(0);
     message.slashFractionWrongKeyshare = object.slashFractionWrongKeyshare ?? new Uint8Array(0);
+    message.avgBlockTime = object.avgBlockTime ?? 0;
     return message;
   },
 };

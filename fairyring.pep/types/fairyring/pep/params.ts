@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Coin } from "../../cosmos/base/v1beta1/coin";
 
@@ -6,13 +7,21 @@ export const protobufPackage = "fairyring.pep";
 
 /** Params defines the parameters for the module. */
 export interface Params {
+  /** option (gogoproto.equal) = true; */
   keyshareChannelId: string;
   isSourceChain: boolean;
   trustedCounterParties: TrustedCounterParty[];
   trustedAddresses: string[];
   minGasPrice: Coin | undefined;
+  privateDecryptionKeyPrice: Coin | undefined;
+  maxContractGas: number;
 }
 
+/**
+ * TrustedCounterParty defines the structure to store the ibc info
+ * of the source chain (fairyring) to reliably fetch active keys and
+ * general/private decryption keys
+ */
 export interface TrustedCounterParty {
   clientId: string;
   connectionId: string;
@@ -26,6 +35,8 @@ function createBaseParams(): Params {
     trustedCounterParties: [],
     trustedAddresses: [],
     minGasPrice: undefined,
+    privateDecryptionKeyPrice: undefined,
+    maxContractGas: 0,
   };
 }
 
@@ -45,6 +56,12 @@ export const Params = {
     }
     if (message.minGasPrice !== undefined) {
       Coin.encode(message.minGasPrice, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.privateDecryptionKeyPrice !== undefined) {
+      Coin.encode(message.privateDecryptionKeyPrice, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.maxContractGas !== 0) {
+      writer.uint32(56).uint64(message.maxContractGas);
     }
     return writer;
   },
@@ -91,6 +108,20 @@ export const Params = {
 
           message.minGasPrice = Coin.decode(reader, reader.uint32());
           continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.privateDecryptionKeyPrice = Coin.decode(reader, reader.uint32());
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.maxContractGas = longToNumber(reader.uint64() as Long);
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -111,6 +142,10 @@ export const Params = {
         ? object.trustedAddresses.map((e: any) => String(e))
         : [],
       minGasPrice: isSet(object.minGasPrice) ? Coin.fromJSON(object.minGasPrice) : undefined,
+      privateDecryptionKeyPrice: isSet(object.privateDecryptionKeyPrice)
+        ? Coin.fromJSON(object.privateDecryptionKeyPrice)
+        : undefined,
+      maxContractGas: isSet(object.maxContractGas) ? Number(object.maxContractGas) : 0,
     };
   },
 
@@ -131,6 +166,12 @@ export const Params = {
     if (message.minGasPrice !== undefined) {
       obj.minGasPrice = Coin.toJSON(message.minGasPrice);
     }
+    if (message.privateDecryptionKeyPrice !== undefined) {
+      obj.privateDecryptionKeyPrice = Coin.toJSON(message.privateDecryptionKeyPrice);
+    }
+    if (message.maxContractGas !== 0) {
+      obj.maxContractGas = Math.round(message.maxContractGas);
+    }
     return obj;
   },
 
@@ -146,6 +187,11 @@ export const Params = {
     message.minGasPrice = (object.minGasPrice !== undefined && object.minGasPrice !== null)
       ? Coin.fromPartial(object.minGasPrice)
       : undefined;
+    message.privateDecryptionKeyPrice =
+      (object.privateDecryptionKeyPrice !== undefined && object.privateDecryptionKeyPrice !== null)
+        ? Coin.fromPartial(object.privateDecryptionKeyPrice)
+        : undefined;
+    message.maxContractGas = object.maxContractGas ?? 0;
     return message;
   },
 };
@@ -239,6 +285,25 @@ export const TrustedCounterParty = {
   },
 };
 
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
+
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
@@ -249,6 +314,18 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

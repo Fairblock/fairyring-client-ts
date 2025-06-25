@@ -3,6 +3,10 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "fairyring.keyshare";
 
+/**
+ * Commitments defines the list of commitments to verify the
+ * keyshares submitted by validators
+ */
 export interface Commitments {
   commitments: string[];
 }

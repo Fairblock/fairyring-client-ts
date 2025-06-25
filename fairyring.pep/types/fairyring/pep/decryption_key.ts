@@ -2,32 +2,40 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "fairyring.keyshare";
+export const protobufPackage = "fairyring.pep";
 
-export interface AggregatedKeyShare {
+/**
+ * DecryptionKey defines the structure to store
+ * the decryption key of a particular identity
+ */
+export interface DecryptionKey {
   height: number;
   data: string;
+  creator: string;
 }
 
-function createBaseAggregatedKeyShare(): AggregatedKeyShare {
-  return { height: 0, data: "" };
+function createBaseDecryptionKey(): DecryptionKey {
+  return { height: 0, data: "", creator: "" };
 }
 
-export const AggregatedKeyShare = {
-  encode(message: AggregatedKeyShare, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const DecryptionKey = {
+  encode(message: DecryptionKey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.height !== 0) {
       writer.uint32(8).uint64(message.height);
     }
     if (message.data !== "") {
       writer.uint32(18).string(message.data);
     }
+    if (message.creator !== "") {
+      writer.uint32(26).string(message.creator);
+    }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): AggregatedKeyShare {
+  decode(input: _m0.Reader | Uint8Array, length?: number): DecryptionKey {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAggregatedKeyShare();
+    const message = createBaseDecryptionKey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -45,6 +53,13 @@ export const AggregatedKeyShare = {
 
           message.data = reader.string();
           continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -54,14 +69,15 @@ export const AggregatedKeyShare = {
     return message;
   },
 
-  fromJSON(object: any): AggregatedKeyShare {
+  fromJSON(object: any): DecryptionKey {
     return {
       height: isSet(object.height) ? Number(object.height) : 0,
       data: isSet(object.data) ? String(object.data) : "",
+      creator: isSet(object.creator) ? String(object.creator) : "",
     };
   },
 
-  toJSON(message: AggregatedKeyShare): unknown {
+  toJSON(message: DecryptionKey): unknown {
     const obj: any = {};
     if (message.height !== 0) {
       obj.height = Math.round(message.height);
@@ -69,16 +85,20 @@ export const AggregatedKeyShare = {
     if (message.data !== "") {
       obj.data = message.data;
     }
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AggregatedKeyShare>, I>>(base?: I): AggregatedKeyShare {
-    return AggregatedKeyShare.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<DecryptionKey>, I>>(base?: I): DecryptionKey {
+    return DecryptionKey.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AggregatedKeyShare>, I>>(object: I): AggregatedKeyShare {
-    const message = createBaseAggregatedKeyShare();
+  fromPartial<I extends Exact<DeepPartial<DecryptionKey>, I>>(object: I): DecryptionKey {
+    const message = createBaseDecryptionKey();
     message.height = object.height ?? 0;
     message.data = object.data ?? "";
+    message.creator = object.creator ?? "";
     return message;
   },
 };
